@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
   "installCommand": "npm ci --include=dev",
-  "buildCommand": "npm run build && npm run diagnosticar",
+  "buildCommand": "npm run build",
   "devCommand": "npm run dev",
   "outputDirectory": ".next",
   "framework": "nextjs",
