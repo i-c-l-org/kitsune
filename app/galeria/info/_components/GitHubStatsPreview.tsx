@@ -6,12 +6,12 @@ import Card from "../../../components/ui/Card";
 import Badge from "../../../components/ui/Badge";
 
 const themes = [
-  { name: "dark", label: "🌙 Dark" },
-  { name: "light", label: "☀️ Light" },
-  { name: "neon", label: "⚡ Neon" },
-  { name: "sunset", label: "🌅 Sunset" },
-  { name: "ocean", label: "🌊 Ocean" },
-  { name: "forest", label: "🌲 Forest" },
+  { name: "dark", label: "Dark" },
+  { name: "light", label: "Light" },
+  { name: "neon", label: "Neon" },
+  { name: "sunset", label: "Sunset" },
+  { name: "ocean", label: "Ocean" },
+  { name: "forest", label: "Forest" },
 ];
 
 export default function GitHubStatsPreview(): ReactElement {
@@ -20,6 +20,7 @@ export default function GitHubStatsPreview(): ReactElement {
   const [copied, setCopied] = useState(false);
   const [width, setWidth] = useState("");
   const [height, setHeight] = useState("");
+  const [previewError, setPreviewError] = useState(false);
 
   const baseUrl = getBaseUrl();
 
@@ -138,15 +139,25 @@ export default function GitHubStatsPreview(): ReactElement {
       {/* Preview */}
       <div className="mb-8 overflow-x-auto rounded-lg border border-[var(--accent-teal)] bg-[rgb(15_23_42_/_50%)] p-4">
         <div className="flex justify-center">
-          <img
-            src={previewUrl}
-            alt="GitHub Stats Preview"
-            className="max-w-full"
-            onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-              // eslint-disable-next-line no-param-reassign
-              e.currentTarget.style.display = "none";
-            }}
-          />
+          <div className="relative">
+            <img
+              src={previewUrl}
+              alt="GitHub Stats Preview"
+              className="max-w-full"
+              onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                // eslint-disable-next-line no-param-reassign
+                e.currentTarget.style.display = "none";
+                setPreviewError(true);
+              }}
+            />
+            {previewError && (
+              <div className="absolute inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)]">
+                <span className="text-sm text-red-400">
+                  Falha ao carregar preview
+                </span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -170,7 +181,7 @@ export default function GitHubStatsPreview(): ReactElement {
               className="shrink-0 rounded px-2 py-1 text-xs font-semibold transition-all hover:bg-[var(--accent-teal)]"
               title="Copiar código"
             >
-              {copied ? "✓ Copiado" : "📋 Copiar"}
+              {copied ? "Copiado" : "Copiar"}
             </button>
           </li>
           <li className="mt-3">

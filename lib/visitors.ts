@@ -1,5 +1,9 @@
 import { Redis } from '@upstash/redis';
 
+// A small in‑memory store used when Upstash isn't configured. This allows
+// local development, testing and "safe failure" without crashing the app.
+const inMemoryStore: Record<string, number> = {};
+let inMemoryFallback: Redis | null = null;
 let redisSingleton: Redis | null = null;
 
 function readEnv(...names: string[]): string | undefined {
@@ -27,19 +31,40 @@ function readEnv(...names: string[]): string | undefined {
  * void redis.incr('visitor:count');
  * ```
  */
+/**
+ * Determines whether the Redis client is configured via environment
+ * variables. Useful for handlers that need to report status without
+ * triggering an exception.
+ */
+export function isVisitorsRedisConfigured(): boolean {
+  const url = readEnv('UPSTASH_REDIS_REST_URL', 'UPSTASH_REDIS_URL');
+  const token = readEnv('UPSTASH_REDIS_REST_TOKEN', 'UPSTASH_REDIS_TOKEN');
+  return url !== undefined && token !== undefined;
+}
+
 export function getVisitorsRedis(): Redis {
   if (redisSingleton !== null) return redisSingleton;
 
-  // Preferimos configurar explicitamente para:
-  // - suportar nomes alternativos
-  // - dar erro mais previsível quando faltar env
+  // environment values, if present
   const url = readEnv('UPSTASH_REDIS_REST_URL', 'UPSTASH_REDIS_URL');
   const token = readEnv('UPSTASH_REDIS_REST_TOKEN', 'UPSTASH_REDIS_TOKEN');
 
+  // if either value is missing we fall back to an in‑memory implementation
+  // rather than blowing up. This matches the "graceful degradation"
+  // guidance from the .skills best‑practices docs.
   if (url === undefined || token === undefined) {
-    throw new Error(
-      'Upstash Redis env not configured. Expected UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN.',
-    );
+    if (inMemoryFallback === null) {
+      inMemoryFallback = {
+        async get(key: string) {
+          return (inMemoryStore[key] ?? null) as unknown as any;
+        },
+        async incr(key: string) {
+          inMemoryStore[key] = (inMemoryStore[key] ?? 0) + 1;
+          return inMemoryStore[key] as unknown as any;
+        },
+      } as unknown as Redis;
+    }
+    return inMemoryFallback;
   }
 
   redisSingleton = new Redis({ url, token });

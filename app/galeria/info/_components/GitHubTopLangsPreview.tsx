@@ -6,12 +6,12 @@ import Card from "../../../components/ui/Card";
 import Badge from "../../../components/ui/Badge";
 
 const themes = [
-  { name: "dark", label: "🌙 Dark" },
-  { name: "light", label: "☀️ Light" },
-  { name: "neon", label: "⚡ Neon" },
-  { name: "sunset", label: "🌅 Sunset" },
-  { name: "ocean", label: "🌊 Ocean" },
-  { name: "forest", label: "🌲 Forest" },
+  { name: "dark", label: "Dark" },
+  { name: "light", label: "Light" },
+  { name: "neon", label: "Neon" },
+  { name: "sunset", label: "Sunset" },
+  { name: "ocean", label: "Ocean" },
+  { name: "forest", label: "Forest" },
 ];
 
 export default function GitHubTopLangsPreview(): ReactElement {
@@ -20,6 +20,7 @@ export default function GitHubTopLangsPreview(): ReactElement {
   const [copied, setCopied] = useState(false);
   const [width, setWidth] = useState("");
   const [height, setHeight] = useState("");
+  const [previewError, setPreviewError] = useState(false);
 
   const baseUrl = getBaseUrl();
 
@@ -36,7 +37,12 @@ export default function GitHubTopLangsPreview(): ReactElement {
   codeParams.set("theme", selectedTheme);
   const codeUrl = `${baseUrl}/api/github-langs/${username}?${codeParams.toString()}`;
 
-  const previewUrl = codeUrl;
+  // Preview always uses the dedicated preview endpoint so we don't
+  // depend on a real GitHub username; this avoids the card showing an
+  // empty image when the placeholder value is invalid.
+  const previewUrl =
+    `${baseUrl}/api/github-langs/preview/${selectedTheme}` +
+    (sizeQuery === "" ? "" : `?${sizeQuery}`);
 
   const handleCopy = (): void => {
     const markdown = `![GitHub Top Languages](${codeUrl})`;
@@ -135,7 +141,7 @@ export default function GitHubTopLangsPreview(): ReactElement {
 
       {/* Preview */}
       <div className="mb-8 overflow-x-auto rounded-lg border border-[var(--accent-teal)] bg-[rgb(15_23_42_/_50%)] p-4">
-        <div className="flex justify-center">
+        <div className="relative flex justify-center">
           <img
             src={previewUrl}
             alt="GitHub Top Languages Preview"
@@ -143,8 +149,16 @@ export default function GitHubTopLangsPreview(): ReactElement {
             onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
               // eslint-disable-next-line no-param-reassign
               e.currentTarget.style.display = "none";
+              setPreviewError(true);
             }}
           />
+          {previewError && (
+            <div className="absolute inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)]">
+              <span className="text-sm text-red-400">
+                Falha ao carregar preview
+              </span>
+            </div>
+          )}
         </div>
       </div>
 
@@ -168,7 +182,7 @@ export default function GitHubTopLangsPreview(): ReactElement {
               className="shrink-0 rounded px-2 py-1 text-xs font-semibold transition-all hover:bg-[var(--accent-teal)]"
               title="Copiar código"
             >
-              {copied ? "✓ Copiado" : "📋 Copiar"}
+              {copied ? "Copiado" : "Copiar"}
             </button>
           </li>
           <li className="mt-3">

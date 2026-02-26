@@ -8,9 +8,9 @@ const BLOG_TITLE = "Blog";
 const BLOG_DESCRIPTION =
   "Tutoriais, artigos e recursos sobre desenvolvimento web";
 
-export default function BlogPage(): React.ReactElement {
-  const posts = getAllPosts();
-  const categories = getAllCategories();
+export default async function BlogPage(): Promise<React.ReactElement> {
+  const posts = await getAllPosts();
+  const categories = await getAllCategories();
   return (
     <Container max="lg" className="prose prose-sm prose-invert px-0 py-10">
       <div className="mb-14 text-center">

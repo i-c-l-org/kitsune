@@ -118,8 +118,16 @@ export async function handleGitHubLangsRequest(
     });
   } catch (error) {
     console.error('Erro ao gerar SVG de linguagens:', error);
-    return new NextResponse('Erro ao buscar linguagens do GitHub', {
-      status: 500,
+    // return a preview-like SVG on failure so the card doesn't disappear
+    const config = parseCommonParams(searchParams);
+    const svg = generateLanguagesPreviewSVG(config.theme, config);
+    return new NextResponse(svg, {
+      headers: {
+        'Content-Type': 'image/svg+xml; charset=utf-8',
+        'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+        Pragma: 'no-cache',
+        Expires: '0',
+      },
     });
   }
 }
