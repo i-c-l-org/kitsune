@@ -3,8 +3,8 @@ import PostCard from "../../../components/ui/PostCard";
 import { getPostsByTag, getAllTags } from "@/lib/posts";
 import type { BlogTagPageProps } from "@/tipos/blog";
 
-export function generateStaticParams(): Array<{ tag: string }> {
-  const tags = getAllTags();
+export async function generateStaticParams(): Promise<Array<{ tag: string }>> {
+  const tags = await getAllTags();
   return tags.map((tag) => ({ tag }));
 }
 
@@ -21,7 +21,7 @@ export default async function TagPage({
   params,
 }: BlogTagPageProps): Promise<React.ReactElement> {
   const { tag } = await params;
-  const posts = getPostsByTag(tag);
+  const posts = await getPostsByTag(tag);
 
   return (
     <Container max="lg" className="prose prose-sm prose-invert px-0 py-10">
