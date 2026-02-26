@@ -1,7 +1,7 @@
 {
-  "name": "galeria-icl-oss",
+  "name": "galeria-kitsune",
   "version": "1.0.0",
-  "description": "Um projeto educativo desenvolvido por I.C.L OSS para pessoas que buscam recursos gratuitos pra seus perfis no GitHub",
+  "description": "Um projeto educativo desenvolvido por I.C.L ORG para pessoas que buscam recursos gratuitos pra seus perfis no GitHub",
   "license": "MIT",
   "type": "module",
   "engines": {
