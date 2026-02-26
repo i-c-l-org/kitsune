@@ -1,0 +1,148 @@
+/**
+ * Dados dos Banners da galeria
+ */
+
+import type { SVGItem } from './types';
+
+export const bannerItems: SVGItem[] = [
+  {
+    id: 'banner-1',
+    title: 'Banner Tech Verde',
+    filename: 'banner/capa-1.svg',
+    alt: 'Banner Tech Verde - Agressivo',
+    category: 'banner',
+  },
+  {
+    id: 'banner-2',
+    title: 'Banner Gradiente',
+    filename: 'banner/capa-2.svg',
+    alt: 'Banner com Gradiente Moderno',
+    category: 'banner',
+  },
+  {
+    id: 'banner-3',
+    title: 'Banner Minimalista',
+    filename: 'banner/capa-3.svg',
+    alt: 'Banner Minimalista Clean',
+    category: 'banner',
+  },
+  {
+    id: 'banner-4',
+    title: 'Banner Geométrico',
+    filename: 'banner/capa-4.svg',
+    alt: 'Banner com Formas Geométricas',
+    category: 'banner',
+  },
+  {
+    id: 'banner-5',
+    title: 'Banner Abstrato',
+    filename: 'banner/capa-5.svg',
+    alt: 'Banner Abstrato Colorido',
+    category: 'banner',
+  },
+  {
+    id: 'banner-6',
+    title: 'Banner Waves',
+    filename: 'banner/capa-6.svg',
+    alt: 'Banner com Ondas e Cores',
+    category: 'banner',
+  },
+  {
+    id: 'banner-dark-purple',
+    title: 'Banner Dark Purple',
+    filename: 'banner/capa-dark-1.svg',
+    alt: 'Banner Dark com tema Purple e Pink',
+    category: 'banner',
+  },
+  {
+    id: 'banner-dark-cyan',
+    title: 'Banner Dark Cyan',
+    filename: 'banner/capa-dark-2.svg',
+    alt: 'Banner Dark com tema Cyan e Blue',
+    category: 'banner',
+  },
+  {
+    id: 'banner-dark-orange',
+    title: 'Banner Dark Orange',
+    filename: 'banner/capa-dark-3.svg',
+    alt: 'Banner Dark com tema Orange e Amber',
+    category: 'banner',
+  },
+  {
+    id: 'banner-7',
+    title: 'Banner Terminal',
+    filename: 'banner/capa-7.svg',
+    alt: 'Banner estilo terminal com grid e brilho verde',
+    category: 'banner',
+  },
+  {
+    id: 'banner-8',
+    title: 'Banner Gradient Glass',
+    filename: 'banner/capa-8.svg',
+    alt: 'Banner com gradiente vibrante e efeito glass',
+    category: 'banner',
+  },
+  {
+    id: 'banner-9',
+    title: 'Banner Blueprint',
+    filename: 'banner/capa-9.svg',
+    alt: 'Banner com grid técnico (blueprint) e linhas de destaque',
+    category: 'banner',
+  },
+  {
+    id: 'banner-10',
+    title: 'I.C.L Circuit',
+    filename: 'banner/capa-10.svg',
+    alt: 'Banner I.C.L em verde escuro com padrão de circuito e destaque Open Source',
+    category: 'banner',
+  },
+  {
+    id: 'banner-11',
+    title: 'I.C.L Open Source',
+    filename: 'banner/capa-11.svg',
+    alt: 'Banner I.C.L minimalista em verde escuro com destaque Open Source',
+    category: 'banner',
+  },
+  {
+    id: 'banner-12',
+    title: 'I.C.L Hex',
+    filename: 'banner/capa-12.svg',
+    alt: 'Banner I.C.L em verde escuro com selo hexagonal OSS e chamadas Open Source',
+    category: 'banner',
+  },
+  {
+    id: 'banner-13',
+    title: 'Banner Neon Grid',
+    filename: 'banner/capa-13.svg',
+    alt: 'Banner futurista com grid neon, cartões em glass e chamada Build Ship Share',
+    category: 'banner',
+  },
+  {
+    id: 'banner-14',
+    title: 'Banner Aurora Sunset',
+    filename: 'banner/capa-14.svg',
+    alt: 'Banner degradê quente com formas fluidas e destaque para perfil criativo',
+    category: 'banner',
+  },
+  {
+    id: 'banner-15',
+    title: 'Banner Clean Focus',
+    filename: 'banner/capa-15.svg',
+    alt: 'Banner claro minimalista com cartões de metas e métricas para perfil profissional',
+    category: 'banner',
+  },
+  {
+    id: 'banner-16',
+    title: 'Banner Terminal Flow',
+    filename: 'banner/capa-16.svg',
+    alt: 'Banner dark estilo terminal com fluxo de código e badges de stack',
+    category: 'banner',
+  },
+  {
+    id: 'banner-17',
+    title: 'Banner Oceanic Wave',
+    filename: 'banner/capa-17.svg',
+    alt: 'Banner azul com ondas, glow e destaque para comunidade e projetos',
+    category: 'banner',
+  },
+];

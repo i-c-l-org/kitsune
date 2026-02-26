@@ -1,0 +1,277 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* === PALETA BASE: Preto Profundo + Azul-Petróleo/Verde-Água === */
+
+  /* Tons de Preto Profundo */
+  --black-50: #fafafa;
+  --black-100: #f5f5f5;
+  --black-200: #e5e5e5;
+  --black-300: #d4d4d4;
+  --black-400: #a3a3a3;
+  --black-500: #737373;
+  --black-600: #525252;
+  --black-700: #404040;
+  --black-800: #262626;
+  --black-900: #171717;
+  --black-950: #0a0a0a;
+
+  /* Paleta Azul-Petróleo / Verde-Água - Escala Harmoniosa */
+  --petrol-50: #e6f2f4;
+  --petrol-100: #cce5e9;
+  --petrol-200: #99ccd4;
+  --petrol-300: #66b2be;
+  --petrol-400: #4ea89a;
+  --petrol-500: #3a8a7f;
+  --petrol-600: #2d7d6e;
+  --petrol-700: #1f5f5a;
+  --petrol-800: #1a4d5c;
+  --petrol-900: #143d4a;
+  --petrol-950: #0d2a33;
+
+  /* Verde-Água Profundo (escala escura principal) */
+  --teal-deep: #1f5f5a;
+  --teal-deeper: #1a4d5c;
+  --teal-darkest: #0d2a33;
+
+  /* Tons de Accent (para destaques) */
+  --accent-blue: #1a4d5c;
+  --accent-green: #2d7d6e;
+  --accent-teal: #1f5f5a;
+  --accent-light: #4ea89a;
+
+  /* Tons de Destaque */
+  --gold: #f5d06b;
+  --amber-600: #d97706;
+  --orange-600: #ea580c;
+
+  /* Accent adicional */
+  --accent-purple: #a78bfa;
+
+  /* === TEXT COLORS === */
+  --text-primary: #e5e5e5;
+  --text-secondary: #a3a3a3;
+  --text-tertiary: #737373;
+  --text-bright: #fff;
+
+  /* === BACKGROUND & SURFACES === */
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #171717;
+  --bg-tertiary: #262626;
+  --bg-surface-1: #1a1a1a;
+  --bg-surface-2: #222;
+  --border-default: #333;
+  --border-light: #404040;
+
+  /* === ACCENT COLORS (Azul-Petróleo/Verde-Água) === */
+  --accent-primary: #1a4d5c;
+  --accent-secondary: #1f5f5a;
+  --accent-tertiary: #2d7d6e;
+  --accent-bright: #4ea89a;
+
+  /* === GRADIENTS === */
+  --gradient-hero: linear-gradient(
+    135deg,
+    #1a4d5c 0%,
+    #1f5f5a 50%,
+    #2d7d6e 100%
+  );
+  --gradient-button: linear-gradient(
+    135deg,
+    #2d7d6e 0%,
+    #1f5f5a 55%,
+    #4ea89a 100%
+  );
+  --gradient-secondary: linear-gradient(
+    135deg,
+    rgb(45 125 110 / 16%),
+    rgb(45 125 110 / 8%)
+  );
+  --gradient-card-overlay: linear-gradient(
+    135deg,
+    rgb(26 77 92 / 12%),
+    rgb(45 125 110 / 6%)
+  );
+  --gradient-text: linear-gradient(135deg, #4ea89a 0%, #2d7d6e 100%);
+
+  /* === SHADOWS === */
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 50%);
+  --shadow-md: 0 4px 6px rgb(0 0 0 / 60%);
+  --shadow-lg: 0 10px 15px rgb(0 0 0 / 70%);
+  --shadow-button: 0 6px 18px rgb(45 125 110 / 40%);
+  --shadow-button-hover: 0 12px 30px rgb(78 168 154 / 30%);
+  --shadow-card-hover:
+    0 0 20px rgb(45 125 110 / 30%), 0 20px 40px rgb(0 0 0 / 60%);
+  --shadow-card-hover-teal: 0 20px 40px rgb(45 125 110 / 30%);
+  --shadow-card-hover-svg:
+    0 0 20px rgb(78 168 154 / 40%), 0 20px 40px rgb(0 0 0 / 50%);
+  --shadow-glow: 0 0 40px rgb(45 125 110 / 20%);
+  --shadow-badge: 0 2px 8px rgb(0 0 0 / 40%);
+
+  /* === TRANSITIONS === */
+  --transition-soft: all 0.25s ease;
+  --transition-smooth: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* === SEMANTIC COLORS === */
+  --success: #2d7d6e;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --info: #1a4d5c;
+
+  /* === BADGE COLORS === */
+  --badge-purple-bg: rgb(167 139 250 / 15%);
+  --badge-purple-border: rgb(167 139 250 / 35%);
+  --badge-teal-bg: rgb(45 125 110 / 15%);
+  --badge-teal-border: rgb(45 125 110 / 35%);
+}
+
+html {
+  min-height: 100vh;
+  scroll-behavior: smooth;
+  width: 100%;
+}
+
+body {
+  background: radial-gradient(ellipse at top, #080808 0%, #010203 100%);
+  background-attachment: fixed;
+  background-color: #0a0a0a;
+  color: var(--text-primary);
+  font-family:
+    Consolas,
+    "Courier New",
+    monospace,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: clip;
+  position: relative;
+  width: 100%;
+}
+
+@media (width <=768px) {
+  html,
+  body {
+    overflow-x: hidden !important;
+  }
+}
+
+/* Efeito de profundidade */
+body::before {
+  background:
+    radial-gradient(
+      circle at 20% 50%,
+      rgb(45 125 110 / 3%) 0%,
+      transparent 50%
+    ),
+    radial-gradient(circle at 80% 80%, rgb(26 77 92 / 2%) 0%, transparent 50%),
+    radial-gradient(circle at 40% 20%, rgb(31 95 90 / 1%) 0%, transparent 50%);
+  content: "";
+  height: 100vh;
+  height: 100dvh;
+  left: 0;
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 0;
+}
+
+body::after {
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgb(255 255 255 / 0.5%) 0,
+    transparent 1px,
+    transparent 2px,
+    rgb(255 255 255 / 0.5%) 3px
+  );
+  content: "";
+  height: 100vh;
+  height: 100dvh;
+  left: 0;
+  opacity: 20%;
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+a {
+  color: var(--accent-tertiary);
+  position: relative;
+  text-decoration: none;
+  transition: var(--transition-soft);
+}
+
+a:hover {
+  color: var(--accent-light);
+  text-shadow: 0 0 8px rgb(78 168 154 / 40%);
+}
+
+/* Scrollbar personalizada - tema verde/preto */
+::-webkit-scrollbar {
+  height: 14px;
+  width: 14px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent-secondary);
+  border: 3px solid var(--bg-primary);
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-tertiary);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--bg-primary);
+}
+
+/* Seleção de texto */
+::selection {
+  background: var(--accent-tertiary);
+  color: var(--text-bright);
+}
+
+/* Garantir que conteúdo fique acima dos efeitos de fundo */
+main,
+header,
+footer,
+nav {
+  position: relative;
+  z-index: 2;
+}
+
+/* Classes custom para resolver conflitos de Tailwind */
+.category-nav-gap {
+  @apply gap-2 sm:gap-3;
+}
+
+.back-link-bg {
+  @apply bg-[rgb(26_77_92_/_15%)] hover:bg-[var(--accent-teal)];
+}
+
+.copy-button-bg {
+  @apply bg-[var(--accent-teal)] hover:bg-[var(--accent-cyan)];
+}
+
+.flex-responsive {
+  @apply flex flex-col gap-2 md:flex-row md:items-center md:justify-between;
+}

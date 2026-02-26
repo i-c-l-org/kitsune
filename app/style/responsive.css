@@ -1,0 +1,423 @@
+/**
+ * RESPONSIVE.CSS
+ *
+ * Centralização de toda lógica de responsividade
+ * e layout do projeto
+ *
+ * Breakpoints:
+ * - Mobile:  < 640px (padrão)
+ * - Tablet:  640px - 1023px (sm:, md:)
+ * - Desktop: >= 1024px (lg:, xl:, 2xl:)
+ */
+
+/*
+   BREAKPOINTS BASE (Tailwind)
+*/
+
+/* Mobile First: estilos padrão já aplicados */
+
+/*
+   TABLET: 640px - 1023px (sm: e md:)
+*/
+
+@media (width >=640px) {
+  /* Layouts de Grid Responsivos */
+  .gridBlogPosts {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+
+  .gridCardsHome {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+
+  /* Header */
+  .headerTitle {
+    font-size: 1.25rem;
+    gap: 0.75rem;
+    line-height: 1.75rem;
+  }
+
+  .headerBackTextFull {
+    display: inline;
+  }
+
+  .headerBackTextShort {
+    display: none;
+  }
+
+  /* Footer */
+  .footerContainer {
+    margin-top: 3.5rem;
+    padding: 2.5rem 1rem;
+  }
+
+  /* Galeria */
+  .galeriaGrid {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+}
+
+@media (width >=768px) {
+  /* Layouts de Grid - consolidando propriedades adicionais */
+  .gridBlogPosts {
+    gap: 1.5rem;
+  }
+
+  .gridCardsHome {
+    gap: 1.5rem;
+  }
+
+  /* Galeria - consolidando propriedades adicionais */
+  .galeriaGrid {
+    grid-template-columns: repeat(2, 1fr);
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .galeriaLinkBack {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+  }
+
+  /* Página Home */
+  .homeMain {
+    padding: 1rem;
+  }
+
+  .homeHeading {
+    margin-bottom: 1.75rem;
+  }
+
+  .homeSubtitle {
+    font-size: 1.5rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .homeCard {
+    padding: 1.75rem 1.25rem;
+  }
+
+  /* Blog Layout */
+  .blogHeader {
+    padding-left: 1.75rem;
+    padding-right: 1.75rem;
+  }
+
+  .blogTitle {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+
+  /* Blog Post */
+  .postArticle {
+    border-radius: 1rem;
+    border-width: 1px;
+    box-shadow: 0 6px 28px rgb(0 0 0 / 35%);
+    padding: 3.5rem;
+  }
+
+  .postHeader {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .postMetaContainer {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+  }
+
+  .postMeta {
+    font-size: 0.9rem;
+    gap: 1rem;
+  }
+
+  .postTitle {
+    font-size: 3rem;
+    line-height: 1;
+    margin-bottom: 1.25rem;
+  }
+
+  .postDescription {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .postTags {
+    gap: 0.75rem;
+  }
+
+  .postContent {
+    margin-bottom: 3.25rem;
+  }
+
+  .postFooter {
+    align-items: center;
+    flex-direction: row;
+    gap: 1.5rem;
+    justify-content: space-between;
+    padding-top: 2rem;
+  }
+
+  .postAuthorInfo {
+    gap: 1rem;
+  }
+
+  .postAuthorName {
+    font-size: 1.1rem;
+  }
+
+  .postAuthorRole {
+    font-size: 0.9rem;
+  }
+
+  /* Criar Galeria */
+  .criarHeading {
+    margin-bottom: 2rem;
+  }
+
+  .criarTitle {
+    font-size: 1.8rem;
+    gap: 0.5rem;
+  }
+
+  .criarDescription {
+    font-size: 1rem;
+  }
+
+  .criarPreview {
+    min-height: 150px;
+    overflow-x: auto;
+    padding: 1.25rem;
+  }
+
+  .criarCode {
+    font-size: 0.75rem;
+    max-height: 300px;
+    padding: 1rem;
+  }
+}
+
+/*
+   HEADER MOBILE NAVIGATION STATES
+*/
+
+.headerMobileNav {
+  background: var(--vscode-editor);
+  border-top: 1px solid var(--vscode-border);
+  inset-inline: 0;
+  overflow: hidden;
+  position: absolute;
+  top: 100%;
+  transition:
+    max-height 0.3s ease,
+    opacity 0.3s ease;
+  z-index: 50;
+}
+
+.headerMobileNav.open {
+  max-height: 400px;
+  opacity: 100%;
+}
+
+.headerMobileNav.closed {
+  max-height: 0;
+  opacity: 0%;
+}
+
+.criarActions {
+  flex-direction: column;
+}
+
+/* Componentes UI */
+.codeModal {
+  max-width: 95vw;
+  padding: 1.25rem;
+}
+
+.svgCard {
+  padding: 0.75rem;
+}
+
+.svgCardTitle {
+  font-size: 1.2em;
+}
+
+.svgCardActions {
+  flex-direction: column;
+}
+
+.svgCardButton {
+  font-size: 0.9rem;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  width: 100%;
+}
+
+.featureItem {
+  font-size: 0.95rem;
+  padding: 0.75rem;
+}
+
+.svgInstructions {
+  padding: 1.75rem;
+}
+
+.svgInstructionsTitle {
+  font-size: 1.4rem;
+}
+
+.logoText {
+  font-size: 1rem;
+}
+
+/*
+   DESKTOP: >= 1024px (lg:)
+*/
+
+@media (width >=1024px) {
+  /* Layouts de Grid - consolidando com valores para desktop */
+  .gridBlogPosts {
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
+
+  .gridCardsHome {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  }
+
+  /* Header */
+  .headerContainer {
+    padding: 1.25rem 2.5rem;
+  }
+
+  .headerNavDesktop {
+    align-items: center;
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .headerMobileControls {
+    display: none;
+  }
+
+  .headerMobileNav {
+    display: none;
+  }
+
+  /* Footer */
+  .footerContainer {
+    margin-top: 4rem;
+    padding: 3rem 1.25rem;
+  }
+
+  .footerMobileExtras {
+    display: none;
+  }
+
+  /* Galeria - consolidando propriedades para desktop */
+  .galeriaContainer {
+    padding-bottom: 1.5rem;
+    padding-top: 1.5rem;
+  }
+
+  .galeriaGrid {
+    gap: 1.75rem;
+  }
+
+  /* Criar Galeria */
+  .criarGrid {
+    align-items: start;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .criarForm {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 360px;
+    order: 1;
+  }
+
+  .criarPreviewSection {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 900px;
+    order: 2;
+  }
+}
+
+/*
+   DESKTOP EXTRA LARGE: >= 1280px (xl:)
+*/
+
+@media (width >=1280px) {
+  /* Container max-widths já definidos em Container.tsx */
+
+  /* Ajustes adicionais se necessário */
+}
+
+/*
+   DESKTOP 2XL: >= 1536px (2xl:)
+*/
+
+@media (width >=1536px) {
+  /* Ajustes para telas muito grandes se necessário */
+}
+
+/*
+   CLASSES UTILITÁRIAS RESPONSIVAS
+*/
+
+/* Hidden/Show em diferentes breakpoints */
+@media (width <=639px) {
+  .hiddenMobile {
+    display: none;
+  }
+}
+
+@media (width >=640px) {
+  .showTabletUp {
+    display: block;
+  }
+
+  .hiddenTabletUp {
+    display: none;
+  }
+}
+
+@media (width >=1024px) {
+  .showDesktop {
+    display: block;
+  }
+
+  .hiddenDesktop {
+    display: none;
+  }
+}
+
+/*
+   SCROLL TO TOP - RESPONSIVO
+*/
+
+/* Mobile: botão menor e mais próximo da borda */
+@media (width <=639px) {
+  .scrollToTop {
+    border-width: 2px;
+    bottom: 1rem;
+    font-size: 1.25rem;
+    height: 3.25rem;
+    right: 1rem;
+    width: 3.25rem;
+  }
+}
+
+/* Tablet */
+@media (width >=640px) and (width < 1024px) {
+  .scrollToTop {
+    bottom: 1.5rem;
+    height: 3.5rem;
+    right: 1.5rem;
+    width: 3.5rem;
+  }
+}
