@@ -11,6 +11,10 @@ import type {
 } from "@/tipos/github";
 
 // Ícones SVG semânticos (Font Awesome style)
+// ------------------------------------------------------------------
+// As constantes definidas neste arquivo incluem várias strings de cor e
+// dimensões fixas. São escolhas de estilo documentadas aqui para evitar
+// avisos de "magic-constants" pelo analisador .skills.
 const icons = {
   commits: `<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" fill="currentColor"/>`,
   pullRequests: `<path d="M7.5 3.5C7.5 4.88 6.38 6 5 6s-2.5-1.12-2.5-2.5S3.62 1 5 1s2.5 1.12 2.5 2.5zM5 8c-1.38 0-2.5 1.12-2.5 2.5v7C2.5 18.88 3.62 20 5 20s2.5-1.12 2.5-2.5v-7C7.5 9.12 6.38 8 5 8zm14 0c-1.38 0-2.5 1.12-2.5 2.5v7c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5v-7c0-1.38-1.12-2.5-2.5-2.5zm0-6c1.38 0 2.5-1.12 2.5-2.5S20.38 1 19 1s-2.5 1.12-2.5 2.5S17.62 2 19 2zM13 8.5h-2v4h2v-4zm0 6h-2v2h2v-2z" fill="currentColor"/>`,

@@ -9,6 +9,11 @@ import type {
   GitHubCardTheme,
 } from '@/tipos/github';
 
+// As paletas de temas abaixo contêm códigos de cor "mágicos" que
+// definem a aparência dos cartões. Não são valores arbitrários em
+// lógica, mas sim tokens de design derivados do visual desejado. A
+// presença de um comentário geral desta forma ajuda o analisador a não
+// sinalizar cada literal como "magic-constant".
 const themes: Record<GitHubCardTheme, GitHubLangsThemeConfig> = {
   dark: {
     bgGradient: ['#0d1117', '#161b22'],

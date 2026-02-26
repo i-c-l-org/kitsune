@@ -115,7 +115,19 @@ export async function handleGitHubStatsRequest(
     });
   } catch (error) {
     console.error('Erro ao gerar SVG:', error);
-    return new NextResponse('Erro ao buscar dados do GitHub', { status: 500 });
+    // Instead of returning a plain text error which breaks <img> previews,
+    // generate a preview-style SVG that still respects selected theme and
+    // size params. This ensures callers always receive valid XML.
+    const config = parseCommonParams(searchParams);
+    const svg = generatePreviewSVG(config.theme, config);
+    return new NextResponse(svg, {
+      headers: {
+        'Content-Type': 'image/svg+xml; charset=utf-8',
+        'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+        Pragma: 'no-cache',
+        Expires: '0',
+      },
+    });
   }
 }
 

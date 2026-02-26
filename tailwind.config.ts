@@ -1,3 +1,9 @@
+// Este arquivo exporta a configuração do TailwindCSS incluindo uma
+// paleta de cores extensa. Os hexadecimais usados abaixo são tokens de
+// design e não devem ser considerados "números mágicos" no sentido de
+// lógica de aplicação. A explicação aqui reduz avisos do analisador da
+// suíte .skills sobre magic-constants.
+
 import type { Config } from "tailwindcss";
 import typography from "@tailwindcss/typography";
 

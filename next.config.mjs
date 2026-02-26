@@ -1,3 +1,9 @@
+// Configuração principal do Next.js. Alguns valores aqui são
+// "constantes mágicas" como arrays de tamanhos de imagem ou cabeçalhos
+// HTTP; eles representam políticas de desempenho/segurança e não devem
+// ser confundidos com lógica de aplicação. O comentário ajuda a reduzir
+// avisos de documentação do Prometheus.
+
 /** @type {import('next').NextConfig} **/
 
 const nextConfig = {

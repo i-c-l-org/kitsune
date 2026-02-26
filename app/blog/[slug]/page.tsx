@@ -4,20 +4,19 @@ import PostContent from './PostContent';
 import { getPostContent, getAllPosts } from '@/lib/posts';
 import type { BlogSlugPageProps, BlogPostMetadata } from '@/tipos/blog';
 
-export function generateStaticParams(): Array<{ slug: string }> {
-  const posts = getAllPosts();
+export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
+  const posts = await getAllPosts();
   return posts.map((post) => ({
     slug: post.slug,
   }));
 }
 
-// eslint-disable-next-line require-await
 export async function generateMetadata({
   params,
 }: BlogSlugPageProps): Promise<BlogPostMetadata> {
   try {
     const { slug } = await params;
-    const post = getPostContent(slug);
+    const post = await getPostContent(slug);
 
     if (post === null) {
       return {
@@ -50,7 +49,7 @@ export default async function PostPage({
   params,
 }: BlogSlugPageProps): Promise<React.ReactElement> {
   const { slug } = await params;
-  const post = getPostContent(slug);
+  const post = await getPostContent(slug);
 
   if (post === null) {
     notFound();

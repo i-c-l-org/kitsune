@@ -12,11 +12,15 @@ const postsDirectory = path.join(process.cwd(), 'content/posts');
  * Retorna a lista de arquivos .mdx no diretório de posts
  * @returns Array com nomes dos arquivos de posts
  */
-function getPostFiles(): string[] {
-  if (!fs.existsSync(postsDirectory)) {
+async function getPostFiles(): Promise<string[]> {
+  try {
+    const entries = await fs.promises.readdir(postsDirectory);
+    return entries.filter((file) => file.endsWith('.mdx'));
+  } catch (err) {
+    // Se o diretório não existir ou houver erro de leitura, retornamos
+    // lista vazia em vez de propagar exceção.
     return [];
   }
-  return fs.readdirSync(postsDirectory).filter((file) => file.endsWith('.mdx'));
 }
 
 /**
@@ -24,10 +28,10 @@ function getPostFiles(): string[] {
  * @param filename - Nome do arquivo a ser parseado
  * @returns Objeto Post com metadados e conteúdo
  */
-function parsePostFile(filename: string): Post {
+async function parsePostFile(filename: string): Promise<Post> {
   const slug = filename.replace(/\.mdx$/, '');
   const fullPath = path.join(postsDirectory, filename);
-  const fileContents = fs.readFileSync(fullPath, 'utf8');
+  const fileContents = await fs.promises.readFile(fullPath, 'utf8');
   const { data, content } = matter(fileContents);
 
   return {
@@ -50,14 +54,16 @@ function parsePostFile(filename: string): Post {
  * Retorna todos os posts publicados, ordenados por data (mais recentes primeiro)
  * @returns Array de metadados dos posts
  */
-export function getAllPosts(): PostMetadata[] {
-  const files = getPostFiles();
-  const posts = files
-    .map((filename) => parsePostFile(filename))
+export async function getAllPosts(): Promise<PostMetadata[]> {
+  const files = await getPostFiles();
+  const posts = await Promise.all(
+    files.map((filename) => parsePostFile(filename)),
+  );
+  const published = posts
     .filter((post) => post.published === true)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-  return posts.map(({ ...metadata }) => metadata);
+  return published.map(({ ...metadata }) => metadata);
 }
 
 /**
@@ -65,10 +71,10 @@ export function getAllPosts(): PostMetadata[] {
  * @param slug - Identificador único do post (nome do arquivo sem extensão)
  * @returns Post completo com conteúdo, ou null se não encontrado
  */
-export function getPostBySlug(slug: string): Post | null {
+export async function getPostBySlug(slug: string): Promise<Post | null> {
   try {
     const filename = `${slug}.mdx`;
-    const post = parsePostFile(filename);
+    const post = await parsePostFile(filename);
     return post.published === true ? post : null;
   } catch {
     return null;
@@ -81,7 +87,7 @@ export function getPostBySlug(slug: string): Post | null {
  * @returns Post completo com conteúdo, ou null se não encontrado
  * @deprecated Use getPostBySlug diretamente
  */
-export function getPostContent(slug: string): Post | null {
+export async function getPostContent(slug: string): Promise<Post | null> {
   return getPostBySlug(slug);
 }
 
@@ -90,8 +96,10 @@ export function getPostContent(slug: string): Post | null {
  * @param category - Nome da categoria
  * @returns Array de posts da categoria especificada
  */
-export function getPostsByCategory(category: string): PostMetadata[] {
-  const allPosts = getAllPosts();
+export async function getPostsByCategory(
+  category: string,
+): Promise<PostMetadata[]> {
+  const allPosts = await getAllPosts();
   return allPosts.filter((post) => post.category === category);
 }
 
@@ -100,8 +108,8 @@ export function getPostsByCategory(category: string): PostMetadata[] {
  * @param tag - Nome da tag
  * @returns Array de posts que contêm a tag especificada
  */
-export function getPostsByTag(tag: string): PostMetadata[] {
-  const allPosts = getAllPosts();
+export async function getPostsByTag(tag: string): Promise<PostMetadata[]> {
+  const allPosts = await getAllPosts();
   return allPosts.filter((post) => post.tags.includes(tag));
 }
 
@@ -109,8 +117,8 @@ export function getPostsByTag(tag: string): PostMetadata[] {
  * Retorna lista única de todas as categorias usadas nos posts
  * @returns Array de categorias em ordem alfabética
  */
-export function getAllCategories(): string[] {
-  const allPosts = getAllPosts();
+export async function getAllCategories(): Promise<string[]> {
+  const allPosts = await getAllPosts();
   const categories = new Set(allPosts.map((post) => post.category));
   return Array.from(categories).sort();
 }
@@ -119,8 +127,8 @@ export function getAllCategories(): string[] {
  * Retorna lista única de todas as tags usadas nos posts
  * @returns Array de tags em ordem alfabética
  */
-export function getAllTags(): string[] {
-  const allPosts = getAllPosts();
+export async function getAllTags(): Promise<string[]> {
+  const allPosts = await getAllPosts();
   const tags = new Set(allPosts.flatMap((post) => post.tags));
   return Array.from(tags).sort();
 }

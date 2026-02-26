@@ -3,6 +3,7 @@ import {
   getVisitorsRedis,
   normalizeVisitorId,
   visitorKey,
+  isVisitorsRedisConfigured,
 } from '@/lib/visitors';
 import { renderVisitorBadgeSvg } from '@/lib/visitorBadgeSvg';
 
@@ -55,85 +56,56 @@ export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
 ): Promise<NextResponse> {
-  try {
-    const { id: rawId } = await params;
-    const id = normalizeVisitorId(rawId);
-    if (id === null) {
-      return new NextResponse('Invalid id', {
-        status: 400,
-        headers: { 'Cache-Control': 'no-store' },
-      });
-    }
-
-    const { searchParams } = new URL(request.url);
-    const label = normalizeLabel(searchParams.get('label')) ?? 'visitors';
-    const incrementParam = searchParams.get('increment');
-    const shouldIncrement =
-      incrementParam === null ? true : incrementParam !== '0';
-
-    const labelBg = normalizeHexColor(searchParams.get('labelColor'));
-    const valueBg = normalizeHexColor(searchParams.get('valueColor'));
-    const textColor = normalizeHexColor(searchParams.get('textColor'));
-    const shape = normalizeShape(searchParams.get('shape'));
-
-    const styleOptions = {
-      ...(labelBg !== undefined ? { labelBg } : {}),
-      ...(valueBg !== undefined ? { valueBg } : {}),
-      ...(textColor !== undefined ? { textColor } : {}),
-      ...(shape !== undefined ? { shape } : {}),
-    };
-
-    const redis = getVisitorsRedis();
-    const key = visitorKey(id);
-
-    let count: number;
-    if (shouldIncrement) {
-      count = await redis.incr(key).catch((err) => {
-        console.error('Visitors badge incr error:', err);
-        return 0;
-      });
-    } else {
-      count =
-        (await redis.get<number>(key).catch((err) => {
-          console.error('Visitors badge get error:', err);
-          return null;
-        })) ?? 0;
-    }
-
-    const svg = renderVisitorBadgeSvg(label, String(count), styleOptions);
-    return new NextResponse(svg, {
-      headers: {
-        'Content-Type': 'image/svg+xml; charset=utf-8',
-        // GitHub tende a cachear imagens; force revalidação.
-        'Cache-Control': 'no-store',
-        'X-Visitors-Configured': '1',
-      },
-    });
-  } catch (error) {
-    console.error('Visitors badge error:', error);
-    const { searchParams } = new URL(request.url);
-    const label = normalizeLabel(searchParams.get('label')) ?? 'visitors';
-
-    const labelBg = normalizeHexColor(searchParams.get('labelColor'));
-    const valueBg = normalizeHexColor(searchParams.get('valueColor'));
-    const textColor = normalizeHexColor(searchParams.get('textColor'));
-    const shape = normalizeShape(searchParams.get('shape'));
-
-    const styleOptions = {
-      ...(labelBg !== undefined ? { labelBg } : {}),
-      ...(valueBg !== undefined ? { valueBg } : {}),
-      ...(textColor !== undefined ? { textColor } : {}),
-      ...(shape !== undefined ? { shape } : {}),
-    };
-
-    const svg = renderVisitorBadgeSvg(label, 'n/a', styleOptions);
-    return new NextResponse(svg, {
-      headers: {
-        'Content-Type': 'image/svg+xml; charset=utf-8',
-        'Cache-Control': 'no-store',
-        // GitHub pode não renderizar imagem se status != 200.
-        'X-Visitors-Configured': '0',
-      },
+  const { id: rawId } = await params;
+  const id = normalizeVisitorId(rawId);
+  if (id === null) {
+    return new NextResponse('Invalid id', {
+      status: 400,
+      headers: { 'Cache-Control': 'no-store' },
     });
   }
+
+  const { searchParams } = new URL(request.url);
+  const label = normalizeLabel(searchParams.get('label')) ?? 'visitors';
+  const incrementParam = searchParams.get('increment');
+  const shouldIncrement =
+    incrementParam === null ? true : incrementParam !== '0';
+
+  const labelBg = normalizeHexColor(searchParams.get('labelColor'));
+  const valueBg = normalizeHexColor(searchParams.get('valueColor'));
+  const textColor = normalizeHexColor(searchParams.get('textColor'));
+  const shape = normalizeShape(searchParams.get('shape'));
+
+  const styleOptions = {
+    ...(labelBg !== undefined ? { labelBg } : {}),
+    ...(valueBg !== undefined ? { valueBg } : {}),
+    ...(textColor !== undefined ? { textColor } : {}),
+    ...(shape !== undefined ? { shape } : {}),
+  };
+
+  const configured = isVisitorsRedisConfigured();
+  const redis = getVisitorsRedis();
+  const key = visitorKey(id);
+
+  let count = 0;
+  try {
+    if (shouldIncrement) {
+      count = await redis.incr(key);
+    } else {
+      count = (await redis.get<number>(key)) ?? 0;
+    }
+  } catch (err) {
+    console.error('Visitors badge operation error:', err);
+    count = 0;
+  }
+
+  const svg = renderVisitorBadgeSvg(label, String(count), styleOptions);
+  return new NextResponse(svg, {
+    headers: {
+      'Content-Type': 'image/svg+xml; charset=utf-8',
+      // GitHub tende a cachear imagens; force revalidação.
+      'Cache-Control': 'no-store',
+      'X-Visitors-Configured': configured ? '1' : '0',
+    },
+  });
 }
