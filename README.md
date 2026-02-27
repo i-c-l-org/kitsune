@@ -16,7 +16,7 @@ Referências a materiais externos devem ser linkadas e reescritas com palavras p
 [![Version](https://img.shields.io/badge/Version-1.0.0-blue.svg)](./package.json)
 [![GitHub stars](https://img.shields.io/github/stars/i-c-l-5-5-5/kitsune?style=social)](https://github.com/i-c-l-5-5-5/kitsune)
 
-[Demo](https://galeria-tau-ten.vercel.app) · [Galeria](https://galeria-tau-ten.vercel.app/galeria) · [Blog](https://galeria-tau-ten.vercel.app/blog) · [Documentação](./docs/)
+[Demo](https://galeria-tau-ten.vercel.app) · [Galeria](https://galeria-tau-ten.vercel.app/galeria) · [Blog](https://galeria-tau-ten.vercel.app/blog) · [Documentação](./docs/) · [Temas](./docs/temas.md) · [API](./docs/api.md)
 
 </div>
 
@@ -50,7 +50,8 @@ Galeria I.C.L oferece uma coleção completa de SVGs, badges e banners prontos p
 - **Galeria de SVGs** — badges, banners e ícones por categoria
 - **APIs dinâmicas** — GitHub Stats, Top Languages, Visitor Counter
 - **Blog em MDX** — conteúdo educativo com SEO otimizado
-- **Temas personalizáveis** — dark, light, neon, sunset, ocean, forest
+- **11 Temas personalizáveis** — dark, light, neon, sunset, ocean, forest, cyberpunk, aurora, cherry, midnight, dracula
+- **Arquitetura escalável** — Strategy Pattern para fácil manutenção
 - **100% Open Source** — MIT License, código transparente
 
 ---
@@ -112,7 +113,7 @@ Acesse: http://localhost:3000
 | `height`  | `120`          | Altura em px        |
 | `theme`   | `dark`, `neon` | Tema visual do card |
 
-**Temas disponíveis:** dark · light · neon · sunset · ocean · forest
+**Temas disponíveis:** dark · light · neon · sunset · ocean · forest · cyberpunk · aurora · cherry · midnight · dracula
 
 > Documentação completa: [docs/](./docs)
 
@@ -187,9 +188,13 @@ galeria/
 │   ├── blog/         # Páginas do blog
 │   ├── galeria/      # Galeria interativa
 │   └── components/   # Componentes React
+├── src/
+│   ├── core/         # Interfaces e contratos
+│   ├── strategies/   # Implementações (themes, SVG generators)
+│   └── services/     # Serviços centrais
 ├── content/posts/     # Posts em MDX
 ├── docs/              # Documentação
-├── lib/               # Utilitários e geração de SVGs
+├── lib/               # Utilitários e geração de SVGs (legado)
 ├── public/            # Assets (SVGs, ícones, imagens)
 └── scripts/           # Automações
 ```

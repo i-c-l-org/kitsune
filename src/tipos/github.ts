@@ -8,7 +8,12 @@ export type GitHubCardTheme =
   | 'neon'
   | 'sunset'
   | 'ocean'
-  | 'forest';
+  | 'forest'
+  | 'cyberpunk'
+  | 'aurora'
+  | 'cherry'
+  | 'midnight'
+  | 'dracula';
 
 export interface GitHubStats {
   totalCommits: number;
