@@ -4,7 +4,7 @@ import {
   normalizeVisitorId,
   visitorKey,
   isVisitorsRedisConfigured,
-} from '@/lib/visitors';
+} from '@/services/visitors/visitors';
 import { renderVisitorBadgeSvg } from '@/lib/visitorBadgeSvg';
 
 function normalizeHexColor(value: string | null): string | undefined {

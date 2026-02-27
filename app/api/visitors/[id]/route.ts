@@ -4,7 +4,7 @@ import {
   normalizeVisitorId,
   visitorKey,
   isVisitorsRedisConfigured,
-} from '@/lib/visitors';
+} from '@/services/visitors/visitors';
 
 export const runtime = 'edge';
 

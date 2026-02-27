@@ -5,7 +5,7 @@
 import type { NextRequest } from 'next/server';
 // eslint-disable-next-line no-duplicate-imports
 import { NextResponse } from 'next/server';
-import { generateStatusSVG, getTheme } from '@/lib/statusBadgeSvg';
+import { generateStatusSVG, getTheme } from '@/services/status/statusBadgeSvg';
 import type { StatusBadgeTheme } from '@/tipos/statusBadge';
 
 const CACHE_DURATION_SECONDS = 3600; // 1 hour

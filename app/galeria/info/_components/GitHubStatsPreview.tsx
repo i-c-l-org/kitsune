@@ -61,7 +61,7 @@ export default function GitHubStatsPreview(): ReactElement {
           GitHub Stats SVG
         </h2>
         <p className="text-[var(--text-muted)]">
-          Previsualize seu status de commits, PRs e contribuições do GitHub.
+          Previsualize seu status de commits, PRs e contribuições.
         </p>
       </div>
 
