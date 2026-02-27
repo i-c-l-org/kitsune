@@ -39,6 +39,10 @@
       "@/lib/*": ["./lib/*"],
       "@/styles/*": ["./app/style/*"],
       "@/tipos/*": ["./src/tipos/*"],
+      "@/src/*": ["./src/*"],
+      "@/core/*": ["./src/core/*"],
+      "@/strategies/*": ["./src/strategies/*"],
+      "@/services/*": ["./src/services/*"],
     },
     // Plugins do Next.js
     "plugins": [

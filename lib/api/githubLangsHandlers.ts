@@ -1,48 +1,23 @@
 /**
- * @fileoverview Handlers para a API de linguagens do GitHub.
- * Gera SVGs com estatísticas de linguagens mais usadas por um usuário.
- * Observação: este handler aceita `?token=` na query para melhorar rate limit.
- * @module lib/api/githubLangsHandlers
+ * Handlers para API de linguagens do GitHub usando Strategy Pattern
  */
 
 import { NextResponse } from 'next/server';
+import { githubLangsStrategy } from '@/strategies/svg';
+import { themeRegistry } from '@/strategies/themes';
 import { fetchGitHubTopLanguages } from '@/lib/github-stats';
-import {
-  generateLanguagesPreviewSVG,
-  generateLanguagesSVG,
-} from '@/lib/github-langs-svg';
-import type { GitHubCardTheme, GitHubCommonParams } from '@/tipos/github';
+import type { GitHubCommonParams } from '@/tipos/github';
 
-export const dynamic = 'force-dynamic';
+const VALID_THEMES = themeRegistry.getThemeNames();
 
-/** Temas disponíveis para os cards de linguagens */
-const THEMES = [
-  'dark',
-  'light',
-  'neon',
-  'sunset',
-  'ocean',
-  'forest',
-] as const satisfies readonly GitHubCardTheme[];
-
-/**
- * Valida e normaliza o tema fornecido.
- * @param value - Valor do tema a ser validado
- * @returns Tema válido ou 'dark' como fallback
- */
-function parseTheme(value: string | null | undefined): GitHubCardTheme {
-  if (value === null || value === undefined) return 'dark';
+function parseTheme(value: string | null | undefined): string {
+  if (!value) return 'dark';
   const normalized = value.trim().toLowerCase();
-  return (THEMES as readonly string[]).includes(normalized)
-    ? (normalized as GitHubCardTheme)
+  return VALID_THEMES.includes(normalized as (typeof VALID_THEMES)[number])
+    ? normalized
     : 'dark';
 }
 
-/**
- * Extrai e valida parâmetros comuns da URL.
- * @param searchParams - Parâmetros de busca da URL
- * @returns Objeto com configurações validadas
- */
 function parseCommonParams(searchParams: URLSearchParams): GitHubCommonParams {
   const theme = parseTheme(searchParams.get('theme'));
   const borderRadius =
@@ -55,7 +30,7 @@ function parseCommonParams(searchParams: URLSearchParams): GitHubCommonParams {
   const heightParam = searchParams.get('height') ?? searchParams.get('h');
 
   return {
-    theme,
+    theme: theme as GitHubCommonParams['theme'],
     ...(borderRadius !== null && { borderRadius: parseInt(borderRadius) }),
     ...(showBorder !== null && { showBorder: showBorder === 'true' }),
     ...(borderWidth !== null && { borderWidth: parseInt(borderWidth) }),
@@ -66,12 +41,6 @@ function parseCommonParams(searchParams: URLSearchParams): GitHubCommonParams {
   };
 }
 
-/**
- * Obtém o nome de exibição do usuário.
- * @param searchParams - Parâmetros de busca da URL
- * @param defaultUsername - Nome de usuário padrão do GitHub
- * @returns Nome de exibição formatado
- */
 function getDisplayName(
   searchParams: URLSearchParams,
   defaultUsername: string,
@@ -83,30 +52,21 @@ function getDisplayName(
   return `@${defaultUsername}`;
 }
 
-/**
- * Handler para requisições de SVG de linguagens de um usuário.
- * @param request - Objeto Request com a requisição HTTP
- * @param params - Parâmetros da rota contendo o username
- * @returns Response com o SVG gerado ou erro
- */
+export const dynamic = 'force-dynamic';
+
 export async function handleGitHubLangsRequest(
   request: Request,
   { params }: { params: Promise<{ username: string }> },
 ): Promise<Response> {
   const { username } = await params;
   const { searchParams } = new URL(request.url);
-  const token =
-    searchParams.get('token') ?? searchParams.get('github_token') ?? undefined;
 
   try {
-    const languages = await fetchGitHubTopLanguages(
-      username,
-      token ?? undefined,
-    );
+    const languages = await fetchGitHubTopLanguages(username);
     const config = parseCommonParams(searchParams);
     const displayName = getDisplayName(searchParams, username);
 
-    const svg = generateLanguagesSVG(languages, displayName, config);
+    const svg = githubLangsStrategy.generate(languages, displayName, config);
 
     return new NextResponse(svg, {
       headers: {
@@ -118,9 +78,8 @@ export async function handleGitHubLangsRequest(
     });
   } catch (error) {
     console.error('Erro ao gerar SVG de linguagens:', error);
-    // return a preview-like SVG on failure so the card doesn't disappear
     const config = parseCommonParams(searchParams);
-    const svg = generateLanguagesPreviewSVG(config.theme, config);
+    const svg = githubLangsStrategy.generatePreview(config.theme, config);
     return new NextResponse(svg, {
       headers: {
         'Content-Type': 'image/svg+xml; charset=utf-8',
@@ -132,13 +91,6 @@ export async function handleGitHubLangsRequest(
   }
 }
 
-/**
- * Handler para requisições de preview de SVG de linguagens.
- * Gera um SVG de exemplo com dados fictícios para visualização do tema.
- * @param request - Objeto Request com a requisição HTTP
- * @param params - Parâmetros da rota contendo o theme
- * @returns Response com o SVG de preview ou erro
- */
 export async function handleGitHubLangsPreviewRequest(
   request: Request,
   { params }: { params: Promise<{ theme: string }> },
@@ -147,9 +99,9 @@ export async function handleGitHubLangsPreviewRequest(
     const { theme: themeParam } = await params;
     const { searchParams } = new URL(request.url);
     const config = parseCommonParams(searchParams);
-    const theme = parseTheme(themeParam ?? 'dark');
+    const theme = parseTheme(themeParam);
 
-    const svg = generateLanguagesPreviewSVG(theme, config);
+    const svg = githubLangsStrategy.generatePreview(theme, config);
 
     return new NextResponse(svg, {
       headers: {

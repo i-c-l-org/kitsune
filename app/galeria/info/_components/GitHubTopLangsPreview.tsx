@@ -12,14 +12,19 @@ const themes = [
   { name: "sunset", label: "Sunset" },
   { name: "ocean", label: "Ocean" },
   { name: "forest", label: "Forest" },
+  { name: "cyberpunk", label: "Cyberpunk" },
+  { name: "aurora", label: "Aurora" },
+  { name: "cherry", label: "Cherry" },
+  { name: "midnight", label: "Midnight" },
+  { name: "dracula", label: "Dracula" },
 ];
 
 export default function GitHubTopLangsPreview(): ReactElement {
   const [selectedTheme, setSelectedTheme] = useState("dark");
   const [username, setUsername] = useState("seu-usuario");
   const [copied, setCopied] = useState(false);
-  const [width, setWidth] = useState("");
-  const [height, setHeight] = useState("");
+  const [width, setWidth] = useState("600");
+  const [height, setHeight] = useState("320");
   const [previewError, setPreviewError] = useState(false);
 
   const baseUrl = getBaseUrl();
@@ -121,7 +126,7 @@ export default function GitHubTopLangsPreview(): ReactElement {
         <label className="mb-3 block text-sm font-semibold text-[var(--text-bright)]">
           Escolha um tema
         </label>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
           {themes.map((theme) => (
             <button
               key={theme.name}
@@ -192,7 +197,8 @@ export default function GitHubTopLangsPreview(): ReactElement {
           </li>
           <li className="mt-3">
             <strong className="text-[var(--text-bright)]">3.</strong> Escolha o
-            tema que prefere (dark, light, neon, sunset, ocean, forest)
+            tema que prefere (dark, light, neon, sunset, ocean, forest,
+            cyberpunk, aurora, cherry, midnight, dracula)
           </li>
           <li className="mt-3">
             <strong className="text-[var(--text-bright)]">4.</strong> (Opcional)

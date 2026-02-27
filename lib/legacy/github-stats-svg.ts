@@ -2,7 +2,7 @@
  * Gerador de SVG customizado para status do GitHub com gradientes e ícones
  */
 
-import { formatNumber } from "./github-stats";
+import { formatNumber } from "@/lib/github-stats";
 import type {
   GitHubStats,
   GitHubCardConfig,
@@ -83,6 +83,56 @@ const themes: Record<GitHubCardTheme, GitHubStatsThemeConfig> = {
     accentGradient: ["#52b788", "#2d6a4f"],
     borderColor: "rgba(82, 183, 136, 0.4)",
     iconColor: "#52b788",
+  },
+  cyberpunk: {
+    bgGradient: ["#0f0f1a", "#1a1a2e"],
+    cardBg: "rgba(26, 26, 46, 0.9)",
+    primaryColor: "#ff00ff",
+    secondaryColor: "#00ffff",
+    textColor: "#e0e0e0",
+    accentGradient: ["#ff00ff", "#00ffff"],
+    borderColor: "rgba(255, 0, 255, 0.4)",
+    iconColor: "#ff00ff",
+  },
+  aurora: {
+    bgGradient: ["#0a192f", "#112240"],
+    cardBg: "rgba(17, 34, 64, 0.9)",
+    primaryColor: "#64ffda",
+    secondaryColor: "#7fdbca",
+    textColor: "#ccd6f6",
+    accentGradient: ["#64ffda", "#48d1cc"],
+    borderColor: "rgba(100, 255, 218, 0.4)",
+    iconColor: "#64ffda",
+  },
+  cherry: {
+    bgGradient: ["#1a0a0a", "#2d1515"],
+    cardBg: "rgba(45, 21, 21, 0.9)",
+    primaryColor: "#ff6b9d",
+    secondaryColor: "#c44569",
+    textColor: "#ffe3e3",
+    accentGradient: ["#ff6b9d", "#ff8fab"],
+    borderColor: "rgba(255, 107, 157, 0.4)",
+    iconColor: "#ff6b9d",
+  },
+  midnight: {
+    bgGradient: ["#0a0a14", "#12121f"],
+    cardBg: "rgba(18, 18, 31, 0.9)",
+    primaryColor: "#a78bfa",
+    secondaryColor: "#818cf8",
+    textColor: "#e2e8f0",
+    accentGradient: ["#a78bfa", "#6366f1"],
+    borderColor: "rgba(167, 139, 250, 0.4)",
+    iconColor: "#a78bfa",
+  },
+  dracula: {
+    bgGradient: ["#1e1e2e", "#282839"],
+    cardBg: "rgba(40, 40, 57, 0.9)",
+    primaryColor: "#bd93f9",
+    secondaryColor: "#ff79c6",
+    textColor: "#f8f8f2",
+    accentGradient: ["#bd93f9", "#ff79c6"],
+    borderColor: "rgba(189, 147, 249, 0.4)",
+    iconColor: "#bd93f9",
   },
 };
 
