@@ -1,3 +1,10 @@
+---
+Proveniência e Autoria: Este documento integra o projeto Galeria Kitsune (licença MIT).
+Nada aqui implica cessão de direitos morais/autorais.
+Conteúdos de terceiros não licenciados de forma compatível não devem ser incluídos.
+Referências a materiais externos devem ser linkadas e reescritas com palavras próprias.
+---
+
 # Documentação de APIs
 
 Este documento lista todas as APIs disponíveis no projeto Galeria I.C.L.

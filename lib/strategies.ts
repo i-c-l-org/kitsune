@@ -6,5 +6,20 @@ export type {
   CardConfig,
 } from '@/core/interfaces/IThemeStrategy';
 export { svgGeneratorService } from '@/services/SVGGeneratorService';
-export { githubStatsStrategy } from '@/strategies/svg';
-export { githubLangsStrategy } from '@/strategies/svg';
+export {
+  githubStatsStrategy,
+  githubLangsStrategy,
+  visitorBadgeStrategy,
+  statusBadgeStrategy,
+} from '@/strategies/svg';
+export {
+  fetchGitHubStats,
+  fetchGitHubTopLanguages,
+  formatNumber,
+} from '@/services/github/github-stats';
+export {
+  getVisitorsRedis,
+  isVisitorsRedisConfigured,
+  normalizeVisitorId,
+  visitorKey,
+} from '@/services/visitors/visitors';

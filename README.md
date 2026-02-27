@@ -3,6 +3,8 @@ Nada aqui implica cessão de direitos morais/autorais.
 Conteúdos de terceiros não licenciados de forma compatível não devem ser incluídos.
 Referências a materiais externos devem ser linkadas e reescritas com palavras próprias.
 
+> o acrd de preview do status e top langs estao com diferença de tamanho porque o texto em baixo de um ocupa duas linhas enquanto o outro ocupa uma, depois resumo o texto pra um jeito que fique igual nos dois sem omitir informaçoes
+
 <div align="center">
 
 # 🎨 Galeria I.C.L

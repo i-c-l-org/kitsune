@@ -5,7 +5,7 @@
 import { NextResponse } from 'next/server';
 import { githubStatsStrategy } from '@/strategies/svg';
 import { themeRegistry } from '@/strategies/themes';
-import { fetchGitHubStats } from '@/lib/github-stats';
+import { fetchGitHubStats } from '@/services/github/github-stats';
 import type { GitHubCommonParams } from '@/tipos/github';
 
 const VALID_THEMES = themeRegistry.getThemeNames();

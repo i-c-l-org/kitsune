@@ -1,4 +1,4 @@
-import { VISITOR_BADGE_SVG_BASE } from '@/lib/visitorBadgeBase';
+import { VISITOR_BADGE_SVG_BASE } from '@/services/visitors/visitorBadgeBase';
 import type {
   VisitorBadgeShape,
   VisitorBadgeStyleOptions,

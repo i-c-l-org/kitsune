@@ -5,7 +5,7 @@
 import { NextResponse } from 'next/server';
 import { githubLangsStrategy } from '@/strategies/svg';
 import { themeRegistry } from '@/strategies/themes';
-import { fetchGitHubTopLanguages } from '@/lib/github-stats';
+import { fetchGitHubTopLanguages } from '@/services/github/github-stats';
 import type { GitHubCommonParams } from '@/tipos/github';
 
 const VALID_THEMES = themeRegistry.getThemeNames();
