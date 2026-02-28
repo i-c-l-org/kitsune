@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { QueryProvider } from '@/lib/providers/QueryProvider';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import ScrollToTop from './components/ScrollToTop';
@@ -8,8 +9,8 @@ import './style/globals.css';
 import './style/responsive.css';
 import './style/components.css';
 
-const SITE_TITLE_DEFAULT = 'Galeria I.C.L';
-const SITE_TITLE_TEMPLATE = '%s | Galeria I.C.L';
+const SITE_TITLE_DEFAULT = 'Galeria Kitsune';
+const SITE_TITLE_TEMPLATE = '%s | Galeria Kitsune';
 const SITE_DESCRIPTION =
   'Recursos gratuitos para seus perfis no GitHub - SVGs e Blog';
 const SITE_KEYWORDS = [
@@ -21,14 +22,14 @@ const SITE_KEYWORDS = [
   'icl',
   'desenvolvimento',
 ];
-const AUTHOR_NAME = 'I.C.L';
-const AUTHOR_URL = 'https://github.com/icl';
+const AUTHOR_NAME = 'Italo C Lopes';
+const AUTHOR_URL = 'https://github.com/i-c-l-org';
 const OG_TYPE = 'website';
 const OG_LOCALE = 'pt_BR';
-const OG_SITE_NAME = 'Galeria I.C.L';
+const OG_SITE_NAME = 'Galeria Kitsune';
 const OG_DESCRIPTION = 'Recursos gratuitos para seus perfis no GitHub';
 const TWITTER_CARD = 'summary_large_image';
-const TWITTER_TITLE = 'Galeria I.C.L';
+const TWITTER_TITLE = 'Galeria Kitsune';
 const TWITTER_DESCRIPTION = 'Recursos gratuitos para seus perfis no GitHub';
 // icon file moved into /icons folder
 const ICON_IMAGE = '/icons/i.c.l.jpg';
@@ -133,10 +134,12 @@ export default function RootLayout({
         <meta name="theme-color" content="#0a0a0a" />
       </head>
       <body className="m-0 min-h-screen p-0">
-        <Header />
-        {children}
-        <Footer />
-        <ScrollToTop />
+        <QueryProvider>
+          <Header />
+          {children}
+          <Footer />
+          <ScrollToTop />
+        </QueryProvider>
         <Analytics />
         <SpeedInsights />
       </body>

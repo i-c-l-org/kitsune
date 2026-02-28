@@ -1,0 +1,96 @@
+name: Setup Labels
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [setup-labels]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  labels:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const labels = [
+              // Priority labels
+              { name: 'priority/critical', color: 'FF0000', description: 'Critical priority issue' },
+              { name: 'priority/high', color: 'FF6B00', description: 'High priority issue' },
+              { name: 'priority/medium', color: 'FFC107', description: 'Medium priority issue' },
+              { name: 'priority/low', color: '4CAF50', description: 'Low priority issue' },
+
+              // Type labels
+              { name: 'bug', color: 'D73A4A', description: 'Something isn\'t working' },
+              { name: 'enhancement', color: 'A2EEEF', description: 'New feature or request' },
+              { name: 'feature', color: '84B6EB', description: 'New feature request' },
+              { name: 'documentation', color: '1D76DB', description: 'Documentation improvements' },
+              { name: 'question', color: 'D876E3', description: 'Question or support request' },
+              { name: 'security', color: 'B60205', description: 'Security vulnerability' },
+
+              // Status labels
+              { name: 'needs triage', color: 'E4E669', description: 'Needs triage' },
+              { name: 'needs更多信息', color: 'F9D71C', description: 'Needs more information' },
+              { name: 'wontfix', color: 'FFFFFF', description: 'This will not be worked on' },
+              { name: 'duplicate', color: 'CCCCCC', description: 'Duplicate issue' },
+              { name: 'invalid', color: 'CCCCCC', description: 'Invalid issue' },
+              { name: 'work-in-progress', color: 'FBCA04', description: 'Work in progress' },
+              { name: 'pinned', color: '5319E7', description: 'Pinned issue' },
+
+              // Help wanted
+              { name: 'help wanted', color: '008672', description: 'Help wanted' },
+              { name: 'good first issue', color: '7057FF', description: 'Good first issue for newcomers' },
+              { name: 'beginner-friendly', color: '9AE6B4', description: 'Beginner friendly task' },
+
+              // Size labels
+              { name: 'size/xs', color: '1D76DB', description: 'Extra small change (<50 lines)' },
+              { name: 'size/s', color: '1D76DB', description: 'Small change (50-100 lines)' },
+              { name: 'size/m', color: '1D76DB', description: 'Medium change (100-300 lines)' },
+              { name: 'size/l', color: '1D76DB', description: 'Large change (300-700 lines)' },
+              { name: 'size/xl', color: '1D76DB', description: 'Extra large change (700-1500 lines)' },
+              { name: 'size/xxl', color: '1D76DB', description: 'Huge change (>1500 lines)' },
+
+              // Contribution type
+              { name: 'dependencies', color: 'EDEFF0', description: 'Dependency updates' },
+              { name: 'refactoring', color: 'FEF2C0', description: 'Code refactoring' },
+              { name: 'ci-cd', color: '0598FA', description: 'CI/CD changes' },
+              { name: 'breaking', color: 'D93F0B', description: 'Breaking change' },
+
+              // Special
+              { name: 'sponsor', color: 'FFD700', description: 'Sponsor recognition' },
+              { name: 'release', color: '091E42', description: 'Release related' },
+              { name: 'skills', color: 'FF6B6B', description: 'Skills related' }
+            ];
+
+            for (const label of labels) {
+              try {
+                await github.rest.issues.createLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: label.name,
+                  color: label.color,
+                  description: label.description
+                });
+                console.log(`Created: ${label.name}`);
+              } catch (e) {
+                if (e.message.includes('already exists')) {
+                  // Update existing label
+                  await github.rest.issues.updateLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    name: label.name,
+                    color: label.color,
+                    description: label.description
+                  });
+                  console.log(`Updated: ${label.name}`);
+                } else {
+                  console.log(`Error creating ${label.name}: ${e.message}`);
+                }
+              }
+            }
+
+            console.log('Labels setup complete!');
