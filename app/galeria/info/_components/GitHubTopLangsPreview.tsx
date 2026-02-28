@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type ChangeEvent, type ReactElement } from "react";
-import { getBaseUrl } from "@/lib/getBaseUrl";
+import { useGitHubLangsPreview } from "@/lib/hooks";
 import Card from "../../../components/ui/Card";
 import Badge from "../../../components/ui/Badge";
 
@@ -25,29 +25,21 @@ export default function GitHubTopLangsPreview(): ReactElement {
   const [copied, setCopied] = useState(false);
   const [width, setWidth] = useState("600");
   const [height, setHeight] = useState("320");
-  const [previewError, setPreviewError] = useState(false);
 
-  const baseUrl = getBaseUrl();
+  const sizeWidth = width.trim() !== "" ? width.trim() : undefined;
+  const sizeHeight = height.trim() !== "" ? height.trim() : undefined;
 
-  const sizeParams = new URLSearchParams();
-  if (width.trim() !== "") {
-    sizeParams.set("width", width.trim());
-  }
-  if (height.trim() !== "") {
-    sizeParams.set("height", height.trim());
-  }
-  const sizeQuery = sizeParams.toString();
+  const {
+    data: svgContent,
+    isLoading,
+    error,
+  } = useGitHubLangsPreview(selectedTheme);
 
-  const codeParams = new URLSearchParams(sizeQuery);
+  const codeParams = new URLSearchParams();
+  if (sizeWidth) codeParams.set("width", sizeWidth);
+  if (sizeHeight) codeParams.set("height", sizeHeight);
   codeParams.set("theme", selectedTheme);
-  const codeUrl = `${baseUrl}/api/github-langs/${username}?${codeParams.toString()}`;
-
-  // Preview always uses the dedicated preview endpoint so we don't
-  // depend on a real GitHub username; this avoids the card showing an
-  // empty image when the placeholder value is invalid.
-  const previewUrl =
-    `${baseUrl}/api/github-langs/preview/${selectedTheme}` +
-    (sizeQuery === "" ? "" : `?${sizeQuery}`);
+  const codeUrl = `/api/github-langs/${username}?${codeParams.toString()}`;
 
   const handleCopy = (): void => {
     const markdown = `![GitHub Top Languages](${codeUrl})`;
@@ -55,6 +47,35 @@ export default function GitHubTopLangsPreview(): ReactElement {
     navigator.clipboard.writeText(markdown);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const renderPreview = () => {
+    if (isLoading) {
+      return (
+        <div className="flex h-40 items-center justify-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-[var(--accent-teal)] border-t-transparent" />
+        </div>
+      );
+    }
+
+    if (error) {
+      return (
+        <div className="flex h-40 items-center justify-center text-red-400">
+          <span className="text-sm">Falha ao carregar preview</span>
+        </div>
+      );
+    }
+
+    if (svgContent) {
+      return (
+        <div
+          className="max-w-full [&_svg]:max-w-full"
+          dangerouslySetInnerHTML={{ __html: svgContent }}
+        />
+      );
+    }
+
+    return null;
   };
 
   return (
@@ -69,7 +90,6 @@ export default function GitHubTopLangsPreview(): ReactElement {
         </p>
       </div>
 
-      {/* Input para username */}
       <div className="mb-8">
         <label className="mb-3 block text-sm font-semibold text-[var(--text-bright)]">
           Nome de usuário do GitHub
@@ -87,7 +107,6 @@ export default function GitHubTopLangsPreview(): ReactElement {
         </div>
       </div>
 
-      {/* Tamanho opcional */}
       <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2">
         <div>
           <label className="mb-2 block text-sm font-semibold text-[var(--text-bright)]">
@@ -121,7 +140,6 @@ export default function GitHubTopLangsPreview(): ReactElement {
         </div>
       </div>
 
-      {/* Seleção de tema */}
       <div className="mb-8">
         <label className="mb-3 block text-sm font-semibold text-[var(--text-bright)]">
           Escolha um tema
@@ -144,30 +162,10 @@ export default function GitHubTopLangsPreview(): ReactElement {
         </div>
       </div>
 
-      {/* Preview */}
       <div className="mb-8 overflow-x-auto rounded-lg border border-[var(--accent-teal)] bg-[rgb(15_23_42_/_50%)] p-4">
-        <div className="relative flex justify-center">
-          <img
-            src={previewUrl}
-            alt="GitHub Top Languages Preview"
-            className="max-w-full"
-            onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-              // eslint-disable-next-line no-param-reassign
-              e.currentTarget.style.display = "none";
-              setPreviewError(true);
-            }}
-          />
-          {previewError && (
-            <div className="absolute inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)]">
-              <span className="text-sm text-red-400">
-                Falha ao carregar preview
-              </span>
-            </div>
-          )}
-        </div>
+        <div className="flex justify-center">{renderPreview()}</div>
       </div>
 
-      {/* Instruções de uso */}
       <div className="mb-8 rounded-lg border border-[var(--accent-teal)] bg-[rgb(26_77_92_/_15%)] p-4">
         <h3 className="mb-3 font-semibold text-[var(--text-bright)]">
           Como usar:
@@ -207,7 +205,6 @@ export default function GitHubTopLangsPreview(): ReactElement {
         </ol>
       </div>
 
-      {/* Código Markdown */}
       <div>
         <h3 className="mb-2 font-semibold text-[var(--text-bright)]">
           Markdown Preview:
