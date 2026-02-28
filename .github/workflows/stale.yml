@@ -1,0 +1,66 @@
+name: "Close Stale Issues and PRs"
+
+on:
+  schedule:
+    - cron: "30 1 * * 1-5"
+
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v9
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+          # Issue settings
+          days-before-stale: 60
+          days-before-close: 7
+          stale-issue-label: stale
+          stale-issue-message: |
+            This issue has been automatically marked as stale because it has not had recent activity.
+
+            It will be closed in 7 days if no further activity occurs. Thank you for your contributions!
+
+            ---
+
+            > [TIP] If you want to keep this issue open, please comment with a relevant update showing that you still need this feature or are actively working on it.
+          close-issue-message: |
+            This issue has to inactivity. If you still need this been automatically closed due feature or want to reopen it, please feel free to do so.
+
+            ---
+
+            > [TIP] To prevent automatic closure in the future, ensure you engage with the issue by providing updates.
+
+          only-labels: ""
+          exempt-issue-labels: "pinned,security,bug,enhancement,feature,high-priority,documentation"
+
+          # PR settings
+          stale-pr-label: stale
+          stale-pr-message: |
+            This pull request has been automatically marked as stale because it has not had recent activity.
+
+            It will be closed in 7 days if no further activity occurs. Thank you for your contributions!
+
+            ---
+
+            > [TIP] If you want to keep this PR open, please comment with updates or address review comments.
+          close-pr-message: |
+            This pull request has been automatically closed due to inactivity. If you want to reopen it, please do so or contact maintainers.
+
+            ---
+
+            > [TIP] To prevent automatic closure, please address review comments or update the PR.
+          exempt-pr-labels: "pinned,security,do-not-merge,work-in-progress"
+          # Operations
+          remove-stale-when-updated: true
+          debug-only: false
+          ascending: false
+
+          # Label operations
+          operations-per-run: 100

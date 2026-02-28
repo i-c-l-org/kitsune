@@ -1,0 +1,45 @@
+name: Auto Approve Dependabot
+
+on: pull_request
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  auto-approve:
+    name: Auto Approve Dependabot
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+    steps:
+      - name: Approve Dependabot PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { pull_request } = context.payload;
+
+            // Check if it's a dependabot PR
+            if (pull_request.user.login === 'dependabot[bot]') {
+              // Get the updated dependencies
+              const { data: files } = await github.rest.pulls.listFiles({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: pull_request.number
+              });
+
+              const depPatterns = ['package.json', 'package-lock.json', 'yarn.lock', 'pnpm-lock.yaml', 'Gemfile', 'requirements.txt', 'go.sum'];
+              const isDepUpdate = files.some(f => depPatterns.some(p => f.filename.includes(p)));
+
+              if (isDepUpdate) {
+                // Auto approve
+                await github.rest.pulls.createReview({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: pull_request.number,
+                  event: 'APPROVE',
+                  body: '🤖 Auto-approved by automated workflow'
+                });
+
+                console.log('Dependabot PR auto-approved');
+              }
+            }

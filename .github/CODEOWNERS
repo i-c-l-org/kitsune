@@ -1,0 +1,37 @@
+# Code Owners
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Maintainers (have final approval on all changes)
+* @i-c-l-org/maintainers
+
+# Core Team (can approve most changes)
+# Add your core team members here
+# @username1
+# @username2
+
+# Skills - Require review from skills team
+skills/** @i-c-l-org/maintainers
+
+# CI/CD and GitHub Actions
+.github/workflows/* @i-c-l-org/maintainers
+.github/labeler.yml @i-c-l-org/maintainers
+.github/dependabot.yml @i-c-l-org/maintainers
+
+# Documentation
+docs/** @i-c-l-org/maintainers
+README.md @i-c-l-org/maintainers
+CONTRIBUTING.md @i-c-l-org/maintainers
+CHANGELOG.md @i-c-l-org/maintainers
+CODE_OF_CONDUCT.md @i-c-l-org/maintainers
+
+# Configuration files
+*.config.js @i-c-l-org/maintainers
+*.config.json @i-c-l-org/maintainers
+tsconfig*.json @i-c-l-org/maintainers
+vitest.config.* @i-c-l-org/maintainers
+eslint.config.js @i-c-l-org/maintainers
+
+# Security related
+SECURITY.md @i-c-l-org/maintainers
+.github/workflows/defender-for-devops.yml @i-c-l-org/maintainers
+.github/workflows/codeql.yml @i-c-l-org/maintainers

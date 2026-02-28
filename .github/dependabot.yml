@@ -1,0 +1,70 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: UTC
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: "[DEPS]"
+      include: scope
+    labels:
+      - dependencies
+      - npm
+    reviewers:
+      - i-c-l-org/maintainers
+    groups:
+      minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+      major:
+        patterns:
+          - "*"
+        update-types:
+          - major
+        exclude-patterns:
+          - "@types/*"
+    versioning-strategy: increase
+    ignore:
+      - dependency-name: "@types/node"
+        update-types:
+          - major
+      - dependency-name: typescript
+        update-types:
+          - major
+
+  - package-ecosystem: npm
+    directory: /skills/skills
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: UTC
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "[DEPS]"
+      include: scope
+    labels:
+      - dependencies
+      - skills
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: UTC
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "[CI]"
+      include: scope
+    labels:
+      - dependencies
+      - github-actions

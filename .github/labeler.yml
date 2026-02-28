@@ -1,0 +1,55 @@
+# Add labels to PRs based on file patterns
+
+"dependencies":
+  - "**/package.json"
+  - "**/package-lock.json"
+  - "**/yarn.lock"
+  - "**/pnpm-lock.yaml"
+
+"github-actions":
+  - ".github/workflows/**"
+  - ".github/actions/**"
+
+"documentation":
+  - "*.md"
+  - "docs/**"
+  - "!.github/**"
+
+"ci-cd":
+  - ".github/workflows/**"
+  - "eslint.config.js"
+  - "tsconfig*.json"
+  - "vitest.config.*"
+
+"refactoring":
+  - "src/**/*.ts"
+  - "skills/**/*.ts"
+  - "!**/*.test.ts"
+  - "!**/*.spec.ts"
+
+"tests":
+  - "**/*.test.ts"
+  - "**/*.spec.ts"
+  - "**/__tests__/**"
+
+"bug":
+  - "**/bug/**"
+  - "**/fix/**"
+  - "**/hotfix/**"
+
+"feature":
+  - "**/feature/**"
+  - "**/feat/**"
+  - "**/new/**"
+
+"breaking":
+  - "**/breaking/**"
+  - "**/major/**"
+
+"skills":
+  - "skills/**"
+
+"internal":
+  - ".prometheus/**"
+  - ".git/**"
+  - "relatorios/**"

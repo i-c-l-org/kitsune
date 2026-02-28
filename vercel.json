@@ -6,7 +6,5 @@
   "devCommand": "npm run dev",
   "outputDirectory": ".next",
   "framework": "nextjs",
-  "regions": [
-    "gru1"
-  ]
+  "regions": ["gru1"]
 }
