@@ -200,7 +200,7 @@ export default function GitHubStatsPreview(): ReactElement {
           </li>
           <li className="mt-3">
             <strong className="text-[var(--text-bright)]">4.</strong> Cole no
-            seu README e o SVG será atualizado automaticamente a cada hora
+            seu README. O SVG é atualizado automaticamente.
           </li>
         </ol>
       </div>
