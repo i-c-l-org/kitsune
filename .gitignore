@@ -2,6 +2,7 @@ node_modules
 .skills
 .prometheus
 .next
+.opencode
 next-env.d.ts
 tsconfig.tsbuildinfo
 .env.local
