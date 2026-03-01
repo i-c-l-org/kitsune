@@ -3,7 +3,6 @@
  */
 
 import type { MDXRemoteSerializeResult } from 'next-mdx-remote';
-
 export interface PostMetadata {
   slug: string;
   title: string;
@@ -17,23 +16,24 @@ export interface PostMetadata {
   readingTime?: string | undefined;
   published?: boolean;
 }
-
 export interface Post extends PostMetadata {
   content: string;
 }
-
 export interface BlogSlugPageProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{
+    slug: string;
+  }>;
 }
-
 export interface BlogTagPageProps {
-  params: Promise<{ tag: string }>;
+  params: Promise<{
+    tag: string;
+  }>;
 }
-
 export interface BlogCategoryPageProps {
-  params: Promise<{ category: string }>;
+  params: Promise<{
+    category: string;
+  }>;
 }
-
 export interface BlogPostMetadata {
   title: string;
   description?: string;
@@ -47,16 +47,13 @@ export interface BlogPostMetadata {
     tags: string[];
   };
 }
-
 export interface ContentRendererProps {
   content: MDXRemoteSerializeResult;
 }
-
 export interface PostContentProps {
   post: Post;
   mdxContent: MDXRemoteSerializeResult;
 }
-
 export interface PostCardProps {
   post: PostMetadata;
   className?: string;

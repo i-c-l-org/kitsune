@@ -340,4 +340,25 @@ export const ferramentasItems: SVGItem[] = [
     alt: 'Badge Rollup',
     category: 'skills',
   },
+  {
+    id: 'badge-mongodb',
+    title: 'MongoDB',
+    filename: 'badges/ferramentas/badge-mongodb.svg',
+    alt: 'Badge MongoDB',
+    category: 'skills',
+  },
+  {
+    id: 'badge-postgresql',
+    title: 'PostgreSQL',
+    filename: 'badges/ferramentas/badge-postgresql.svg',
+    alt: 'Badge PostgreSQL',
+    category: 'skills',
+  },
+  {
+    id: 'badge-elasticsearch',
+    title: 'Elasticsearch',
+    filename: 'badges/ferramentas/badge-elasticsearch.svg',
+    alt: 'Badge Elasticsearch',
+    category: 'skills',
+  },
 ];

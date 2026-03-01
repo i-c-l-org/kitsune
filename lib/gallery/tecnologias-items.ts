@@ -1170,4 +1170,32 @@ export const tecnologiasItems: SVGItem[] = [
     alt: 'Badge Jupyter',
     category: 'skills',
   },
+  {
+    id: 'badge-electron',
+    title: 'Electron',
+    filename: 'badges/tecnologias/badge-electron.svg',
+    alt: 'Badge Electron',
+    category: 'skills',
+  },
+  {
+    id: 'badge-jquery',
+    title: 'jQuery',
+    filename: 'badges/tecnologias/badge-jquery.svg',
+    alt: 'Badge jQuery',
+    category: 'skills',
+  },
+  {
+    id: 'badge-symfony',
+    title: 'Symfony',
+    filename: 'badges/tecnologias/badge-symfony.svg',
+    alt: 'Badge Symfony',
+    category: 'skills',
+  },
+  {
+    id: 'badge-wordpress',
+    title: 'WordPress',
+    filename: 'badges/tecnologias/badge-wordpress.svg',
+    alt: 'Badge WordPress',
+    category: 'skills',
+  },
 ];

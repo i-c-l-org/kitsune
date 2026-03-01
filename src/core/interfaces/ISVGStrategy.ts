@@ -1,27 +1,24 @@
 import type { CardConfig, ThemeStrategy } from './IThemeStrategy';
-
 export interface SVGGenerationContext {
   username: string;
   config: CardConfig;
-  theme: ThemeStrategy;
+  TEMA: ThemeStrategy;
 }
-
 export interface SVGStrategy {
   readonly type: string;
-  generate(data: unknown, username: string, config?: CardConfig): string;
-  generatePreview(theme: string, config?: Partial<CardConfig>): string;
+  generate(DADOS: unknown, username: string, config?: CardConfig): string;
+  generatePreview(TEMA: string, config?: Partial<CardConfig>): string;
 }
-
 export interface ISVGGeneratorService {
   generate(
     type: string,
-    data: unknown,
+    DADOS: unknown,
     username: string,
     config?: CardConfig,
   ): string;
   generatePreview(
     type: string,
-    theme: string,
+    TEMA: string,
     config?: Partial<CardConfig>,
   ): string;
   getAvailableThemes(): string[];

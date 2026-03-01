@@ -1,9 +1,15 @@
 "use client";
 
-import { useState, type ChangeEvent, type ReactElement } from "react";
+import {
+  useState,
+  useCallback,
+  type ChangeEvent,
+  type ReactElement,
+} from "react";
 import { useGitHubLangsPreview } from "@/lib/hooks";
 import Card from "../../../components/ui/Card";
-import Badge from "../../../components/ui/Badge";
+import Button from "../../../components/ui/Button";
+import type { ThemeCardProps } from "@/tipos/ui";
 
 const themes = [
   { name: "dark", label: "Dark" },
@@ -19,49 +25,47 @@ const themes = [
   { name: "dracula", label: "Dracula" },
 ];
 
-export default function GitHubTopLangsPreview(): ReactElement {
-  const [selectedTheme, setSelectedTheme] = useState("dark");
-  const [username, setUsername] = useState("seu-usuario");
+function ThemeCard({
+  themeName,
+  themeLabel,
+  username,
+  width,
+  height,
+}: ThemeCardProps): ReactElement {
   const [copied, setCopied] = useState(false);
-  const [width, setWidth] = useState("600");
-  const [height, setHeight] = useState("320");
-
-  const sizeWidth = width.trim() !== "" ? width.trim() : undefined;
-  const sizeHeight = height.trim() !== "" ? height.trim() : undefined;
 
   const {
     data: svgContent,
     isLoading,
     error,
-  } = useGitHubLangsPreview(selectedTheme);
+  } = useGitHubLangsPreview(themeName);
 
   const codeParams = new URLSearchParams();
-  if (sizeWidth) codeParams.set("width", sizeWidth);
-  if (sizeHeight) codeParams.set("height", sizeHeight);
-  codeParams.set("theme", selectedTheme);
+  if (width) codeParams.set("width", width);
+  if (height) codeParams.set("height", height);
+  codeParams.set("theme", themeName);
   const codeUrl = `/api/github-langs/${username}?${codeParams.toString()}`;
 
-  const handleCopy = (): void => {
+  const handleCopy = useCallback((): void => {
     const markdown = `![GitHub Top Languages](${codeUrl})`;
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     navigator.clipboard.writeText(markdown);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-  };
+  }, [codeUrl]);
 
   const renderPreview = () => {
     if (isLoading) {
       return (
-        <div className="flex h-40 items-center justify-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-[var(--accent-teal)] border-t-transparent" />
+        <div className="flex h-32 items-center justify-center">
+          <div className="h-6 w-6 animate-spin rounded-full border-3 border-[var(--accent-teal)] border-t-transparent" />
         </div>
       );
     }
 
     if (error) {
       return (
-        <div className="flex h-40 items-center justify-center text-red-400">
-          <span className="text-sm">Falha ao carregar preview</span>
+        <div className="flex h-32 items-center justify-center text-red-400">
+          <span className="text-xs">Falha ao carregar</span>
         </div>
       );
     }
@@ -69,7 +73,7 @@ export default function GitHubTopLangsPreview(): ReactElement {
     if (svgContent) {
       return (
         <div
-          className="max-w-full [&_svg]:max-w-full"
+          className="w-full"
           dangerouslySetInnerHTML={{ __html: svgContent }}
         />
       );
@@ -77,6 +81,44 @@ export default function GitHubTopLangsPreview(): ReactElement {
 
     return null;
   };
+
+  return (
+    <Card className="flex flex-col gap-3 p-4">
+      <div className="flex items-center justify-between">
+        <h3 className="text-base font-semibold text-[var(--text-bright)]">
+          {themeLabel}
+        </h3>
+      </div>
+
+      <div className="overflow-hidden rounded-md border border-[var(--border-default)] bg-[rgb(0_0_0_/_30%)]">
+        {renderPreview()}
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <code className="overflow-x-auto rounded bg-[rgb(0_0_0_/_30%)] px-2 py-1 text-xs text-[var(--accent-cyan)]">
+          {codeUrl}
+        </code>
+        <Button
+          variant="primary"
+          size="sm"
+          onClick={handleCopy}
+          className="w-full"
+        >
+          <i className="fas fa-copy mr-2" />
+          {copied ? "Copiado!" : "Copiar Código"}
+        </Button>
+      </div>
+    </Card>
+  );
+}
+
+export default function GitHubTopLangsPreview(): ReactElement {
+  const [username, setUsername] = useState("seu-usuario");
+  const [width, setWidth] = useState("600");
+  const [height, setHeight] = useState("320");
+
+  const sizeWidth = width.trim() !== "" ? width.trim() : undefined;
+  const sizeHeight = height.trim() !== "" ? height.trim() : undefined;
 
   return (
     <Card as="article" className="homeCard cardHome flex flex-col gap-6 p-6">
@@ -90,7 +132,7 @@ export default function GitHubTopLangsPreview(): ReactElement {
         </p>
       </div>
 
-      <div className="mb-8">
+      <div className="mb-4">
         <label className="mb-3 block text-sm font-semibold text-[var(--text-bright)]">
           Nome de usuário do GitHub
         </label>
@@ -107,7 +149,7 @@ export default function GitHubTopLangsPreview(): ReactElement {
         </div>
       </div>
 
-      <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
         <div>
           <label className="mb-2 block text-sm font-semibold text-[var(--text-bright)]">
             Largura (px ou %)
@@ -140,83 +182,24 @@ export default function GitHubTopLangsPreview(): ReactElement {
         </div>
       </div>
 
-      <div className="mb-8">
-        <label className="mb-3 block text-sm font-semibold text-[var(--text-bright)]">
-          Escolha um tema
-        </label>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-          {themes.map((theme) => (
-            <button
-              key={theme.name}
-              type="button"
-              onClick={() => setSelectedTheme(theme.name)}
-              className={`rounded-lg border-2 px-3 py-2 text-sm font-semibold transition-all ${
-                selectedTheme === theme.name
-                  ? "border-[var(--accent-cyan)] bg-[var(--accent-teal)] text-white"
-                  : "border-[var(--accent-teal)] bg-transparent text-[var(--text-muted)] hover:border-[var(--accent-cyan)] hover:text-[var(--accent-cyan)]"
-              }`}
-            >
-              {theme.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="mb-8 overflow-x-auto rounded-lg border border-[var(--accent-teal)] bg-[rgb(15_23_42_/_50%)] p-4">
-        <div className="flex justify-center">{renderPreview()}</div>
-      </div>
-
-      <div className="mb-8 rounded-lg border border-[var(--accent-teal)] bg-[rgb(26_77_92_/_15%)] p-4">
-        <h3 className="mb-3 font-semibold text-[var(--text-bright)]">
-          Como usar:
+      <div className="mb-2">
+        <h3 className="mb-4 text-lg font-semibold text-[var(--text-bright)]">
+          <i className="fas fa-palette mr-2" />
+          Temas disponíveis
         </h3>
-        <ol className="space-y-2 text-sm text-[var(--text-muted)]">
-          <li>
-            <strong className="text-[var(--text-bright)]">1.</strong> Adicione
-            este código no seu README.md do GitHub:
-          </li>
-          <li className="ml-6 flex items-center gap-3 rounded bg-[rgb(15_23_42_/_50%)] px-3 py-2 font-mono text-xs">
-            <code className="flex-1 overflow-x-auto">
-              ![GitHub Top Languages]({codeUrl})
-            </code>
-            <button
-              type="button"
-              onClick={handleCopy}
-              className="shrink-0 rounded px-2 py-1 text-xs font-semibold transition-all hover:bg-[var(--accent-teal)]"
-              title="Copiar código"
-            >
-              {copied ? "Copiado" : "Copiar"}
-            </button>
-          </li>
-          <li className="mt-3">
-            <strong className="text-[var(--text-bright)]">2.</strong> Substitua{" "}
-            <code className="text-[var(--accent-cyan)]">seu-usuario</code> pelo
-            seu username do GitHub
-          </li>
-          <li className="mt-3">
-            <strong className="text-[var(--text-bright)]">3.</strong> Escolha o
-            tema que prefere (dark, light, neon, sunset, ocean, forest,
-            cyberpunk, aurora, cherry, midnight, dracula)
-          </li>
-          <li className="mt-3">
-            <strong className="text-[var(--text-bright)]">4.</strong> (Opcional)
-            Ajuste largura e altura para encaixar no seu layout
-          </li>
-        </ol>
       </div>
 
-      <div>
-        <h3 className="mb-2 font-semibold text-[var(--text-bright)]">
-          Markdown Preview:
-        </h3>
-        <div className="mb-3 overflow-x-auto rounded bg-[rgb(0_0_0_/_30%)] p-3">
-          <code className="text-xs text-[var(--accent-cyan)]">{`![GitHub Top Languages](${codeUrl})`}</code>
-        </div>
-        <div className="mt-2">
-          <Badge>
-            <i className="fas fa-code iconWithMarginRight" /> Copiar Markdown
-          </Badge>
-        </div>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {themes.map((theme) => (
+          <ThemeCard
+            key={theme.name}
+            themeName={theme.name}
+            themeLabel={theme.label}
+            username={username}
+            width={sizeWidth}
+            height={sizeHeight}
+          />
+        ))}
       </div>
     </Card>
   );

@@ -5,7 +5,7 @@ export type {
   ThemeColors,
   CardConfig,
 } from '@/core/interfaces/IThemeStrategy';
-export { svgGeneratorService } from '@/services/SVGGeneratorService';
+export { SERVICO_GERADOR_SVG as svgGeneratorService } from '@/services/SVGGeneratorService';
 export {
   githubStatsStrategy,
   githubLangsStrategy,

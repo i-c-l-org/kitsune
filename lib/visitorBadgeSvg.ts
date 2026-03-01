@@ -1,4 +1,4 @@
-import { VISITOR_BADGE_SVG_BASE } from '@/services/visitors/visitorBadgeBase';
+import { BASE_SVG_BADGE_VISITANTE } from '@/services/visitors/visitorBadgeBase';
 import type {
   VisitorBadgeShape,
   VisitorBadgeStyleOptions,
@@ -61,7 +61,7 @@ export function renderVisitorBadgeSvg(
   const textColor = options?.textColor ?? '#fff';
   const rx = resolveRx(options);
 
-  return VISITOR_BADGE_SVG_BASE.replace('__ARIA_LABEL__', ariaLabel)
+  return BASE_SVG_BADGE_VISITANTE.replace('__ARIA_LABEL__', ariaLabel)
     .replace('__LABEL__', safeLabel)
     .replace('__VALUE__', safeValue)
     .replaceAll('__LABEL_BG__', labelBg)

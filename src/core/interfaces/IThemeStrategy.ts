@@ -3,12 +3,11 @@ export interface ThemeColors {
   cardBg: string;
   primaryColor: string;
   secondaryColor: string;
-  textColor: string;
+  COR_TEXTO: string;
   accentGradient: [string, string];
   borderColor: string;
   iconColor?: string;
 }
-
 export type ThemeName =
   | 'dark'
   | 'light'
@@ -21,18 +20,18 @@ export type ThemeName =
   | 'cherry'
   | 'midnight'
   | 'dracula';
-
 export interface CardConfig {
   theme: ThemeName;
-  borderRadius?: number;
-  showBorder?: boolean;
-  borderWidth?: number;
-  width?: number;
-  height?: number;
+  // legacy alias
+  TEMA?: ThemeName;
+  RAIOS_BORDA?: number;
+  MOSTRAR_BORDA?: boolean;
+  LARGURA_BORDA?: number;
+  LARGURA?: number;
+  ALTURA?: number;
 }
-
 export interface ThemeStrategy {
-  readonly name: ThemeName;
-  readonly colors: ThemeColors;
+  readonly NOME: ThemeName;
+  readonly CORES: ThemeColors;
   getColors(): ThemeColors;
 }

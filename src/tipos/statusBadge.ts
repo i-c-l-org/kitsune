@@ -7,7 +7,7 @@ export interface StatusBadgeTheme {
   cardBg: string;
   primaryColor: string;
   secondaryColor: string;
-  textColor: string;
+  COR_TEXTO: string;
   accentGradient: [string, string];
   borderColor: string;
 }

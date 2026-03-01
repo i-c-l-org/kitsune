@@ -14,72 +14,67 @@ export type GitHubCardTheme =
   | 'cherry'
   | 'midnight'
   | 'dracula';
-
 export interface GitHubStats {
-  totalCommits: number;
+  TOTAL_COMMITS: number;
   totalPullRequests: number;
   totalContributions: number;
   followers: number;
   publicRepos: number;
 }
-
 export interface GitHubLanguageStat {
-  name: string;
-  value: number;
-  percentage: number;
+  NOME: string;
+  VALOR: number;
+  PERCENTUAL: number;
   color: string;
 }
-
 export interface SVGStyleConfig {
   bgColor?: string;
   borderColor?: string;
   primaryColor?: string;
   secondaryColor?: string;
-  textColor?: string;
+  COR_TEXTO?: string;
   accentColor?: string;
   theme?: GitHubCardTheme;
+  // legacy alias
+  TEMA?: GitHubCardTheme;
 }
-
 export interface GitHubCardBaseConfig extends SVGStyleConfig {
-  borderRadius?: number;
-  showBorder?: boolean;
-  borderWidth?: number;
-  width?: number;
-  height?: number;
+  RAIOS_BORDA?: number;
+  MOSTRAR_BORDA?: boolean;
+  LARGURA_BORDA?: number;
+  LARGURA?: number;
+  ALTURA?: number;
 }
-
 export interface GitHubCardConfig extends GitHubCardBaseConfig {
   iconStyle?: 'default' | 'outlined' | 'filled';
 }
-
 export interface GitHubLangsCardConfig extends GitHubCardBaseConfig {}
-
 export interface GitHubCommonParams {
   theme: GitHubCardTheme;
-  borderRadius?: number;
-  showBorder?: boolean;
-  borderWidth?: number;
-  width?: number;
-  height?: number;
+  // legacy alias
+  TEMA?: GitHubCardTheme;
+  RAIOS_BORDA?: number;
+  MOSTRAR_BORDA?: boolean;
+  LARGURA_BORDA?: number;
+  LARGURA?: number;
+  ALTURA?: number;
 }
-
 export interface GitHubStatsThemeConfig {
   bgGradient: [string, string];
   cardBg: string;
   primaryColor: string;
   secondaryColor: string;
-  textColor: string;
+  COR_TEXTO: string;
   accentGradient: [string, string];
   borderColor: string;
   iconColor: string;
 }
-
 export interface GitHubLangsThemeConfig {
   bgGradient: [string, string];
   cardBg: string;
   primaryColor: string;
   secondaryColor: string;
-  textColor: string;
+  COR_TEXTO: string;
   accentGradient: [string, string];
   borderColor: string;
 }

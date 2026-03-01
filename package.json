@@ -21,7 +21,7 @@
     "fix-types": "prometheus fix-types",
     "otimizar": "prometheus otimizar-svg --write",
     "name": "prometheus names",
-    "rename": "prometheus renames",
+    "rename": "prometheus rename",
     "scan": "prometheus licencas scan",
     "scan:root": "prometheus licencas scan --root .",
     "notices": "prometheus licencas notices generate",

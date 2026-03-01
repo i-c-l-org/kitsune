@@ -13,11 +13,10 @@ export type { GitHubStats };
  * - MAX_REPOS_TO_PROCESS: limite de repositórios processados para operações custo-intenso
  * - DEFAULT_GITHUB_GRAPHQL_URL: endpoint GraphQL do GitHub
  */
-const DEFAULT_REPOS_PER_PAGE = 100;
-const MAX_REPOS_TO_PROCESS = 30;
-const DEFAULT_GITHUB_GRAPHQL_URL = 'https://api.github.com/graphql';
-
-const LANGUAGE_COLORS: Record<string, string> = {
+const REPOS_POR_PAGINA_PADRAO = 100;
+const MAXIMO_REPOS_PARA_PROCESSAR = 30;
+const URL_PADRAO_GRAPHQL_GITHUB = 'https://api.github.com/graphql';
+const CORES_DAS_LINGUAS: Record<string, string> = {
   JavaScript: '#f1e05a',
   TypeScript: '#3178c6',
   Python: '#3572A5',
@@ -39,58 +38,73 @@ const LANGUAGE_COLORS: Record<string, string> = {
   HTML: '#e34c26',
   CSS: '#563d7c',
 };
-
-function pickLanguageColor(name: string): string {
-  return LANGUAGE_COLORS[name] ?? '#58a6ff';
+function pickLanguageColor(NOME: string): string {
+  return CORES_DAS_LINGUAS[NOME] ?? '#58a6ff';
 }
-
-const FALLBACK_LANGUAGES: GitHubLanguageStat[] = [
+const LINGUAS_FALLBACK: GitHubLanguageStat[] = [
   {
-    name: 'TypeScript',
-    value: 320,
-    percentage: 32,
+    NOME: 'TypeScript',
+    VALOR: 320,
+    PERCENTUAL: 32,
     color: pickLanguageColor('TypeScript'),
   },
   {
-    name: 'JavaScript',
-    value: 260,
-    percentage: 26,
+    NOME: 'JavaScript',
+    VALOR: 260,
+    PERCENTUAL: 26,
     color: pickLanguageColor('JavaScript'),
   },
   {
-    name: 'Python',
-    value: 180,
-    percentage: 18,
+    NOME: 'Python',
+    VALOR: 180,
+    PERCENTUAL: 18,
     color: pickLanguageColor('Python'),
   },
-  { name: 'Go', value: 140, percentage: 14, color: pickLanguageColor('Go') },
-  { name: 'CSS', value: 100, percentage: 10, color: pickLanguageColor('CSS') },
+  {
+    NOME: 'Go',
+    VALOR: 140,
+    PERCENTUAL: 14,
+    color: pickLanguageColor('Go'),
+  },
+  {
+    NOME: 'CSS',
+    VALOR: 100,
+    PERCENTUAL: 10,
+    color: pickLanguageColor('CSS'),
+  },
 ];
-
 interface GitHubGraphQLError {
   message: string;
 }
-
 interface GitHubGraphQLUser {
-  followers?: { totalCount?: number | null } | null;
+  followers?: {
+    totalCount?: number | null;
+  } | null;
   repositories?: {
     totalCount?: number | null;
     nodes?: Array<{
       defaultBranchRef?: {
         target?: {
-          history?: { totalCount?: number | null } | null;
+          history?: {
+            totalCount?: number | null;
+          } | null;
         } | null;
       } | null;
     }> | null;
   } | null;
-  pullRequests?: { totalCount?: number | null } | null;
+  pullRequests?: {
+    totalCount?: number | null;
+  } | null;
   contributionsCollection?: {
-    contributionCalendar?: { totalContributions?: number | null } | null;
+    contributionCalendar?: {
+      totalContributions?: number | null;
+    } | null;
   } | null;
 }
-
 interface GitHubGraphQLResponse {
-  data?: { user?: GitHubGraphQLUser | null } | null;
+  DADOS?: {
+    USUARIO?: GitHubGraphQLUser | null;
+  } | null;
   errors?: GitHubGraphQLError[] | null;
 }
 
@@ -125,18 +139,16 @@ interface GitHubGraphQLResponse {
  * ```
  */
 export async function fetchGitHubStats(username: string): Promise<GitHubStats> {
-  const token = process.env['GITHUB_TOKEN'];
-
+  const TOKEN = process.env['GITHUB_TOKEN'];
   try {
     console.error(`📡 Fetching GitHub stats for ${username}...`);
-
-    const query = `
+    const CONSULTA = `
       query {
         user(login: "${username}") {
           followers {
             totalCount
           }
-          repositories(first: ${DEFAULT_REPOS_PER_PAGE}, ownerAffiliations: OWNER, isFork: false) {
+          repositories(first: ${REPOS_POR_PAGINA_PADRAO}, ownerAffiliations: OWNER, isFork: false) {
             totalCount
             nodes {
               defaultBranchRef {
@@ -165,97 +177,92 @@ export async function fetchGitHubStats(username: string): Promise<GitHubStats> {
         }
       }
     `;
-
-    const headers: Record<string, string> = {
+    const CABECALHOS: Record<string, string> = {
       'Content-Type': 'application/json',
       Accept: 'application/vnd.github.v3+json',
     };
 
     // Token é OPCIONAL - melhora apenas rate limit
-    const tokenTrimmed = typeof token === 'string' ? token.trim() : '';
-    if (tokenTrimmed.length > 0) {
-      headers['Authorization'] = `Bearer ${tokenTrimmed}`;
+    const TOKEN_CORTADO = typeof TOKEN === 'string' ? TOKEN.trim() : '';
+    if (TOKEN_CORTADO.length > 0) {
+      CABECALHOS['Authorization'] = `Bearer ${TOKEN_CORTADO}`;
       console.error('✓ Using GitHub token for authentication');
     } else {
       console.error(
         '⚠ No GitHub token available - using unauthenticated requests (60 req/hour limit)',
       );
     }
-
-    let response: Response;
+    let RESPOSTA: Response;
     try {
       // eslint-disable-next-line no-undef
-      response = await fetch(DEFAULT_GITHUB_GRAPHQL_URL, {
+      RESPOSTA = await fetch(URL_PADRAO_GRAPHQL_GITHUB, {
         method: 'POST',
-        headers,
-        body: JSON.stringify({ query }),
+        headers: CABECALHOS,
+        body: JSON.stringify({
+          CONSULTA,
+        }),
         cache: 'no-store',
       });
     } catch (error) {
       console.error('❌ Erro ao chamar GitHub GraphQL API:', error);
-      const fallback = await fetchGitHubStatsRest(username);
-      return fallback;
+      const fallbackResponse = await fetchGitHubStatsRest(username);
+      return fallbackResponse;
     }
-
-    if (!response.ok) {
-      console.error(`❌ GitHub GraphQL API error: ${response.status}`);
-      const fallback = await fetchGitHubStatsRest(username);
-      return fallback;
+    if (!RESPOSTA.ok) {
+      console.error(`❌ GitHub GraphQL API error: ${RESPOSTA.status}`);
+      const fallbackResponse = await fetchGitHubStatsRest(username);
+      return fallbackResponse;
     }
-
-    let data: GitHubGraphQLResponse;
+    let DADOS: GitHubGraphQLResponse;
     try {
-      data = (await response.json()) as GitHubGraphQLResponse;
+      DADOS = (await RESPOSTA.json()) as GitHubGraphQLResponse;
     } catch (error) {
       console.error('❌ Erro ao fazer parse do JSON (GraphQL):', error);
-      const fallback = await fetchGitHubStatsRest(username);
-      return fallback;
+      const fallbackResponse = await fetchGitHubStatsRest(username);
+      return fallbackResponse;
     }
 
     // Verifica se houve erro na resposta GraphQL
-    if (Array.isArray(data.errors) && data.errors.length > 0) {
+    if (Array.isArray(DADOS.errors) && DADOS.errors.length > 0) {
       console.error(
         '❌ GraphQL errors:',
-        data.errors[0]?.message ?? 'Unknown error',
+        DADOS.errors[0]?.message ?? 'Unknown error',
       );
-      const fallback = await fetchGitHubStatsRest(username);
-      return fallback;
+      const fallbackResponse = await fetchGitHubStatsRest(username);
+      return fallbackResponse;
     }
-
-    const user = data.data?.user;
-
-    if (user === null || user === undefined) {
+    const USUARIO = DADOS.DADOS?.USUARIO;
+    if (USUARIO === null || USUARIO === undefined) {
       console.error(`❌ Usuário "${username}" não encontrado no GraphQL`);
-      const fallback = await fetchGitHubStatsRest(username);
-      return fallback;
+      const fallbackResponse = await fetchGitHubStatsRest(username);
+      return fallbackResponse;
     }
 
     // Calcula total de commits
-    let totalCommits = 0;
-    const repoNodes = user.repositories?.nodes ?? null;
-    if (Array.isArray(repoNodes)) {
-      for (const repo of repoNodes) {
-        const commits = repo.defaultBranchRef?.target?.history?.totalCount ?? 0;
-        totalCommits += commits;
+    let TOTAL_COMMITS = 0;
+    const NOS_REPO = USUARIO.repositories?.nodes ?? null;
+    if (Array.isArray(NOS_REPO)) {
+      for (const REPOSITORIO of NOS_REPO) {
+        const COMMITS =
+          REPOSITORIO.defaultBranchRef?.target?.history?.totalCount ?? 0;
+        TOTAL_COMMITS += COMMITS;
       }
     }
-
-    const stats: GitHubStats = {
-      totalCommits: Number.isFinite(totalCommits) ? totalCommits : 0,
-      totalPullRequests: user.pullRequests?.totalCount ?? 0,
+    const ESTATISTICAS: GitHubStats = {
+      TOTAL_COMMITS: Number.isFinite(TOTAL_COMMITS) ? TOTAL_COMMITS : 0,
+      totalPullRequests: USUARIO.pullRequests?.totalCount ?? 0,
       totalContributions:
-        user.contributionsCollection?.contributionCalendar
+        USUARIO.contributionsCollection?.contributionCalendar
           ?.totalContributions ?? 0,
-      followers: user.followers?.totalCount ?? 0,
-      publicRepos: user.repositories?.totalCount ?? 0,
+      followers: USUARIO.followers?.totalCount ?? 0,
+      publicRepos: USUARIO.repositories?.totalCount ?? 0,
     };
-
-    console.error(`✓ Stats retrieved via GraphQL:`, stats);
-    return stats;
+    console.error(`✓ Stats retrieved via GraphQL:`, ESTATISTICAS);
+    return ESTATISTICAS;
   } catch (error) {
     console.error(`❌ Erro ao buscar stats do GitHub (GraphQL):`, error);
-    const fallback = await fetchGitHubStatsRest(username);
-    return fallback;
+    const fallbackResponse = await fetchGitHubStatsRest(username);
+    return fallbackResponse;
   }
 }
 
@@ -268,7 +275,7 @@ async function fetchGitHubStatsRest(username: string): Promise<GitHubStats> {
     console.error(`📡 Fetching GitHub stats via REST API for ${username}...`);
 
     // eslint-disable-next-line no-undef
-    const userResponse = await fetch(
+    const RESPOSTA_USUARIO = await fetch(
       `https://api.github.com/users/${username}`,
       {
         headers: {
@@ -277,18 +284,16 @@ async function fetchGitHubStatsRest(username: string): Promise<GitHubStats> {
         cache: 'no-store',
       },
     );
-
-    if (!userResponse.ok) {
-      throw new Error(`HTTP ${userResponse.status}`);
+    if (!RESPOSTA_USUARIO.ok) {
+      throw new Error(`HTTP ${RESPOSTA_USUARIO.status}`);
     }
-
-    const userData = await userResponse.json();
+    const DADOS_USUARIO = await RESPOSTA_USUARIO.json();
     console.error(
-      `✓ User data retrieved: ${username} has ${userData.public_repos} public repos and ${userData.followers} followers`,
+      `✓ User data retrieved: ${username} has ${DADOS_USUARIO.public_repos} public repos and ${DADOS_USUARIO.followers} followers`,
     );
 
     // eslint-disable-next-line no-undef
-    const reposResponse = await fetch(
+    const RESPOSTA_REPOS = await fetch(
       `https://api.github.com/users/${username}/repos?per_page=100&type=owner&sort=updated`,
       {
         headers: {
@@ -297,31 +302,32 @@ async function fetchGitHubStatsRest(username: string): Promise<GitHubStats> {
         cache: 'no-store',
       },
     );
-
-    if (!reposResponse.ok) {
-      throw new Error(`HTTP ${reposResponse.status}`);
+    if (!RESPOSTA_REPOS.ok) {
+      throw new Error(`HTTP ${RESPOSTA_REPOS.status}`);
     }
-
-    const repos = await reposResponse.json();
-    console.error(`✓ Found ${repos.length} repositories for ${username}`);
+    const REPOSITORIOS = await RESPOSTA_REPOS.json();
+    console.error(
+      `✓ Found ${REPOSITORIOS.length} repositories for ${username}`,
+    );
 
     // Estimativa de commits (menos precisa)
-    let totalCommits = 0;
-    for (const repo of repos.slice(0, MAX_REPOS_TO_PROCESS)) {
+    let TOTAL_COMMITS = 0;
+    for (const REPOSITORIO of REPOSITORIOS.slice(
+      0,
+      MAXIMO_REPOS_PARA_PROCESSAR,
+    )) {
       // Aproximação baseada no tamanho do repo
-      totalCommits += (repo.size ?? 0) / 50;
+      TOTAL_COMMITS += (REPOSITORIO.size ?? 0) / 50;
     }
-
-    const stats: GitHubStats = {
-      totalCommits: Math.max(Math.round(totalCommits), 0),
-      totalPullRequests: Math.max(Math.round(repos.length * 0.8), 0),
-      totalContributions: Math.max(repos.length * 10, 0),
-      followers: userData.followers ?? 0,
-      publicRepos: userData.public_repos ?? 0,
+    const ESTATISTICAS: GitHubStats = {
+      TOTAL_COMMITS: Math.max(Math.round(TOTAL_COMMITS), 0),
+      totalPullRequests: Math.max(Math.round(REPOSITORIOS.length * 0.8), 0),
+      totalContributions: Math.max(REPOSITORIOS.length * 10, 0),
+      followers: DADOS_USUARIO.followers ?? 0,
+      publicRepos: DADOS_USUARIO.public_repos ?? 0,
     };
-
-    console.error(`✓ Stats calculated:`, stats);
-    return stats;
+    console.error(`✓ Stats calculated:`, ESTATISTICAS);
+    return ESTATISTICAS;
   } catch (error) {
     console.error(
       `❌ Erro ao buscar stats do GitHub (REST API) para ${username}:`,
@@ -329,7 +335,7 @@ async function fetchGitHubStatsRest(username: string): Promise<GitHubStats> {
     );
     // Retorna valores zerados
     return {
-      totalCommits: 0,
+      TOTAL_COMMITS: 0,
       totalPullRequests: 0,
       totalContributions: 0,
       followers: 0,
@@ -337,23 +343,24 @@ async function fetchGitHubStatsRest(username: string): Promise<GitHubStats> {
     };
   }
 }
-
 export async function fetchGitHubTopLanguages(
   username: string,
-  token?: string,
+  TOKEN?: string,
 ): Promise<GitHubLanguageStat[]> {
   try {
     console.error(`📡 Fetching top languages for ${username}...`);
 
     // Usa token passado como parâmetro ou variável de ambiente
-    const authToken = (token ?? process.env['GITHUB_TOKEN'] ?? '').trim();
-
-    const headers: Record<string, string> = {
+    const TOKEN_AUTENTICACAO = (
+      TOKEN ??
+      process.env['GITHUB_TOKEN'] ??
+      ''
+    ).trim();
+    const CABECALHOS: Record<string, string> = {
       Accept: 'application/vnd.github.v3+json',
     };
-
-    if (authToken.length > 0) {
-      headers['Authorization'] = `Bearer ${authToken}`;
+    if (TOKEN_AUTENTICACAO.length > 0) {
+      CABECALHOS['Authorization'] = `Bearer ${TOKEN_AUTENTICACAO}`;
       console.error('✓ Using GitHub token for authentication');
     } else {
       console.error(
@@ -362,95 +369,90 @@ export async function fetchGitHubTopLanguages(
     }
 
     // eslint-disable-next-line no-undef
-    const reposResponse = await fetch(
+    const RESPOSTA_REPOS = await fetch(
       `https://api.github.com/users/${username}/repos?per_page=100&type=owner&sort=updated`,
       {
-        headers,
+        headers: CABECALHOS,
         cache: 'no-store',
       },
     );
-
-    if (!reposResponse.ok) {
-      throw new Error(`GitHub API error: ${reposResponse.status}`);
+    if (!RESPOSTA_REPOS.ok) {
+      throw new Error(`GitHub API error: ${RESPOSTA_REPOS.status}`);
     }
-
-    const repos = await reposResponse.json();
-    console.error(`✓ Found ${repos.length} repositories for ${username}`);
-
-    const languageTotals = new Map<string, number>();
+    const REPOSITORIOS = await RESPOSTA_REPOS.json();
+    console.error(
+      `✓ Found ${REPOSITORIOS.length} repositories for ${username}`,
+    );
+    const TOTAIS_LINGUA = new Map<string, number>();
 
     // Processa até 30 repositórios para reduzir chamadas à API
-    const reposToProcess = (repos as Array<{ languages_url?: string }>).slice(
-      0,
-      MAX_REPOS_TO_PROCESS,
-    );
+    const REPOS_PARA_PROCESSAR = (
+      REPOSITORIOS as Array<{
+        languages_url?: string;
+      }>
+    ).slice(0, MAXIMO_REPOS_PARA_PROCESSAR);
     console.error(
-      `📊 Processing ${reposToProcess.length} repositories for language analysis...`,
+      `📊 Processing ${REPOS_PARA_PROCESSAR.length} repositories for language analysis...`,
     );
-
-    for (const repo of reposToProcess) {
-      if (repo.languages_url === undefined) {
+    for (const REPOSITORIO of REPOS_PARA_PROCESSAR) {
+      if (REPOSITORIO.languages_url === undefined) {
         continue;
       }
-
       try {
         // eslint-disable-next-line no-undef
-        const langResponse = await fetch(repo.languages_url, {
-          headers,
+        const RESPOSTA_LINGUA = await fetch(REPOSITORIO.languages_url, {
+          headers: CABECALHOS,
           cache: 'no-store',
         });
-
-        if (!langResponse.ok) {
+        if (!RESPOSTA_LINGUA.ok) {
           continue;
         }
-
-        const langData = (await langResponse
-          .json()
-          .catch(() => ({}))) as Record<string, number>;
-        for (const [lang, bytes] of Object.entries(langData)) {
-          const safeBytes = Number.isFinite(bytes) ? Math.max(bytes, 1) : 0;
-          if (safeBytes === 0) continue;
-          languageTotals.set(lang, (languageTotals.get(lang) ?? 0) + safeBytes);
+        const DADOS_LINGUA = (await RESPOSTA_LINGUA.json().catch(
+          () => ({}),
+        )) as Record<string, number>;
+        for (const [lang, bytes] of Object.entries(DADOS_LINGUA)) {
+          const BYTES_SEGUROS = Number.isFinite(bytes) ? Math.max(bytes, 1) : 0;
+          if (BYTES_SEGUROS === 0) continue;
+          TOTAIS_LINGUA.set(
+            lang,
+            (TOTAIS_LINGUA.get(lang) ?? 0) + BYTES_SEGUROS,
+          );
         }
       } catch (langError) {
         console.error('Erro ao buscar linguagens do repositório:', langError);
       }
     }
-
-    const total = Array.from(languageTotals.values()).reduce(
-      (acc, value) => acc + value,
+    const TOTAL = Array.from(TOTAIS_LINGUA.values()).reduce(
+      (acc, VALOR) => acc + VALOR,
       0,
     );
-
-    if (total === 0) {
+    if (TOTAL === 0) {
       console.warn(`⚠ No languages found for ${username}, using fallback`);
-      return FALLBACK_LANGUAGES;
+      return LINGUAS_FALLBACK;
     }
-
-    const top = Array.from(languageTotals.entries())
+    const TOPO = Array.from(TOTAIS_LINGUA.entries())
       .sort(([, a], [, b]) => b - a)
       .slice(0, 5)
-      .map(([name, value]) => {
-        const percentage = Math.round((value / total) * 1000) / 10; // uma casa decimal
+      .map(([NOME, VALOR]) => {
+        const PERCENTUAL = Math.round((VALOR / TOTAL) * 1000) / 10; // uma casa decimal
         return {
-          name,
-          value,
-          percentage,
-          color: pickLanguageColor(name),
+          NOME,
+          VALOR,
+          PERCENTUAL,
+          color: pickLanguageColor(NOME),
         } satisfies GitHubLanguageStat;
       });
-
     console.error(
       `✓ Top languages retrieved:`,
-      top.map((l) => `${l.name} (${l.percentage}%)`).join(', '),
+      TOPO.map((l) => `${l.NOME} (${l.PERCENTUAL}%)`).join(', '),
     );
-    return top;
+    return TOPO;
   } catch (error) {
     console.error(
       `❌ Erro ao buscar linguagens do GitHub para ${username}:`,
       error,
     );
-    return FALLBACK_LANGUAGES;
+    return LINGUAS_FALLBACK;
   }
 }
 
