@@ -134,4 +134,32 @@ export const langsItems: SVGItem[] = [
     alt: 'Badge Clojure',
     category: 'skills',
   },
+  {
+    id: 'badge-vba',
+    title: 'VBA',
+    filename: 'badges/langs/badge-vba.svg',
+    alt: 'Badge VBA',
+    category: 'skills',
+  },
+  {
+    id: 'badge-assembly',
+    title: 'Assembly',
+    filename: 'badges/langs/badge-assembly.svg',
+    alt: 'Badge Assembly',
+    category: 'skills',
+  },
+  {
+    id: 'badge-scheme',
+    title: 'Scheme',
+    filename: 'badges/langs/badge-scheme.svg',
+    alt: 'Badge Scheme',
+    category: 'skills',
+  },
+  {
+    id: 'badge-d',
+    title: 'D',
+    filename: 'badges/langs/badge-d.svg',
+    alt: 'Badge D',
+    category: 'skills',
+  },
 ];

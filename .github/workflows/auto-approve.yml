@@ -10,6 +10,10 @@ jobs:
   auto-approve:
     name: Auto Approve Dependabot
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: auto-approve-${{ github.ref }}
+      cancel-in-progress: true
     if: github.actor == 'dependabot[bot]'
     steps:
       - name: Approve Dependabot PR

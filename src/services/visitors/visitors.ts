@@ -2,15 +2,14 @@ import { Redis } from '@upstash/redis';
 
 // A small in‑memory store used when Upstash isn't configured. This allows
 // local development, testing and "safe failure" without crashing the app.
-const inMemoryStore: Record<string, number> = {};
-let inMemoryFallback: Redis | null = null;
-let redisSingleton: Redis | null = null;
-
+const ARMAZENAMENTO_EM_MEMORIA: Record<string, number> = {};
+let FALLBACK_EM_MEMORIA: Redis | null = null;
+let SINGLETON_REDIS: Redis | null = null;
 function readEnv(...names: string[]): string | undefined {
-  for (const name of names) {
-    const value = process.env[name];
-    if (value !== undefined && value !== null && value.trim() !== '')
-      return value;
+  for (const NOME of names) {
+    const VALOR = process.env[NOME];
+    if (VALOR !== undefined && VALOR !== null && VALOR.trim() !== '')
+      return VALOR;
   }
   return undefined;
 }
@@ -37,50 +36,49 @@ function readEnv(...names: string[]): string | undefined {
  * triggering an exception.
  */
 export function isVisitorsRedisConfigured(): boolean {
-  const url = readEnv('UPSTASH_REDIS_REST_URL', 'UPSTASH_REDIS_URL');
-  const token = readEnv('UPSTASH_REDIS_REST_TOKEN', 'UPSTASH_REDIS_TOKEN');
-  return url !== undefined && token !== undefined;
+  const URL = readEnv('UPSTASH_REDIS_REST_URL', 'UPSTASH_REDIS_URL');
+  const TOKEN = readEnv('UPSTASH_REDIS_REST_TOKEN', 'UPSTASH_REDIS_TOKEN');
+  return URL !== undefined && TOKEN !== undefined;
 }
-
 export function getVisitorsRedis(): Redis {
-  if (redisSingleton !== null) return redisSingleton;
+  if (SINGLETON_REDIS !== null) return SINGLETON_REDIS;
 
   // environment values, if present
-  const url = readEnv('UPSTASH_REDIS_REST_URL', 'UPSTASH_REDIS_URL');
-  const token = readEnv('UPSTASH_REDIS_REST_TOKEN', 'UPSTASH_REDIS_TOKEN');
+  const URL = readEnv('UPSTASH_REDIS_REST_URL', 'UPSTASH_REDIS_URL');
+  const TOKEN = readEnv('UPSTASH_REDIS_REST_TOKEN', 'UPSTASH_REDIS_TOKEN');
 
   // if either value is missing we fall back to an in‑memory implementation
   // rather than blowing up. This matches the "graceful degradation"
   // guidance from the .skills best‑practices docs.
-  if (url === undefined || token === undefined) {
-    if (inMemoryFallback === null) {
-      inMemoryFallback = {
+  if (URL === undefined || TOKEN === undefined) {
+    if (FALLBACK_EM_MEMORIA === null) {
+      FALLBACK_EM_MEMORIA = {
         async get(key: string) {
-          return (inMemoryStore[key] ?? null) as unknown as any;
+          return (ARMAZENAMENTO_EM_MEMORIA[key] ?? null) as unknown as any;
         },
         async incr(key: string) {
-          inMemoryStore[key] = (inMemoryStore[key] ?? 0) + 1;
-          return inMemoryStore[key] as unknown as any;
+          ARMAZENAMENTO_EM_MEMORIA[key] =
+            (ARMAZENAMENTO_EM_MEMORIA[key] ?? 0) + 1;
+          return ARMAZENAMENTO_EM_MEMORIA[key] as unknown as any;
         },
       } as unknown as Redis;
     }
-    return inMemoryFallback;
+    return FALLBACK_EM_MEMORIA;
   }
-
-  redisSingleton = new Redis({ url, token });
-  return redisSingleton;
+  SINGLETON_REDIS = new Redis({
+    url: URL,
+    token: TOKEN,
+  });
+  return SINGLETON_REDIS;
 }
-
 export function normalizeVisitorId(rawId: string): string | null {
-  const id = rawId.trim();
+  const IDENTIFICADOR = rawId.trim();
 
   // ids curtos e previsíveis para evitar abuso/keys gigantes.
-  if (id.length < 1 || id.length > 64) return null;
-  if (!/^[a-zA-Z0-9_-]+$/.test(id)) return null;
-
-  return id;
+  if (IDENTIFICADOR.length < 1 || IDENTIFICADOR.length > 64) return null;
+  if (!/^[a-zA-Z0-9_-]+$/.test(IDENTIFICADOR)) return null;
+  return IDENTIFICADOR;
 }
-
-export function visitorKey(id: string): string {
-  return `visitors:${id}`;
+export function visitorKey(IDENTIFICADOR: string): string {
+  return `visitors:${IDENTIFICADOR}`;
 }

@@ -3,7 +3,6 @@
  */
 
 export type VisitorBadgeShape = 'rounded' | 'square' | 'pill';
-
 export interface VisitorBadgeStyleOptions {
   labelBg?: string;
   valueBg?: string;

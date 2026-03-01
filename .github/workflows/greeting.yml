@@ -14,6 +14,10 @@ permissions:
 jobs:
   greet:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: greeting-${{ github.ref }}
+      cancel-in-progress: true
     steps:
       - name: Greet new contributors
         uses: actions/github-script@v7

@@ -12,6 +12,10 @@ jobs:
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
+    timeout-minutes: 120
+    concurrency:
+      group: codeql-analyze-${{ github.ref }}
+      cancel-in-progress: true
     permissions:
       security-events: write
       packages: read

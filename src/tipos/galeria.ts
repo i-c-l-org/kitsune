@@ -12,7 +12,6 @@ export type CategoryType =
   | 'ferramentas'
   | 'tecnologias'
   | 'visitors';
-
 export type GalleryRouteSlug =
   | ''
   | 'banners'
@@ -24,7 +23,6 @@ export type GalleryRouteSlug =
   | 'decorativos'
   | 'info'
   | 'visitors';
-
 export interface SVGItem {
   id: string;
   title: string;
@@ -32,27 +30,23 @@ export interface SVGItem {
   alt: string;
   category: CategoryType;
 }
-
 export interface CategoryInfo {
   title: string;
   icon: string;
   description: string;
 }
-
 export interface GalleryCategory {
   slug: GalleryRouteSlug;
   label: string;
   icon: string;
   count?: number;
 }
-
 export interface GalleryGridProps {
   items: SVGItem[];
   title?: string;
   icon?: string;
   description?: string;
 }
-
 export interface SearchInputProps {
   value: string;
   onChange: (value: string) => void;
