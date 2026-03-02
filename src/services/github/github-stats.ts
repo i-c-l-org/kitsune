@@ -330,7 +330,8 @@ async function fetchGitHubStatsRest(username: string): Promise<GitHubStats> {
     return ESTATISTICAS;
   } catch (error) {
     console.error(
-      `❌ Erro ao buscar stats do GitHub (REST API) para ${username}:`,
+      '❌ Erro ao buscar stats do GitHub (REST API) para',
+      username,
       error,
     );
     // Retorna valores zerados
