@@ -91,6 +91,46 @@ export async function handleGitHubStatsRequest(
   }
 }
 
+export async function handleGitHubStatsQueryRequest(
+  request: Request,
+): Promise<Response> {
+  const { searchParams } = new URL(request.url);
+  const username = searchParams.get('username');
+
+  if (!username) {
+    return new NextResponse('Username is required', { status: 400 });
+  }
+
+  try {
+    const stats = await fetchGitHubStats(username);
+    const config = parseCommonParams(searchParams);
+    const displayName = getDisplayName(searchParams, username);
+
+    const svg = githubStatsStrategy.generate(stats, displayName, config);
+
+    return new NextResponse(svg, {
+      headers: {
+        'Content-Type': 'image/svg+xml; charset=utf-8',
+        'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+        Pragma: 'no-cache',
+        Expires: '0',
+      },
+    });
+  } catch (error) {
+    console.error('Erro ao gerar SVG:', error);
+    const config = parseCommonParams(searchParams);
+    const svg = githubStatsStrategy.generatePreview(config.theme, config);
+    return new NextResponse(svg, {
+      headers: {
+        'Content-Type': 'image/svg+xml; charset=utf-8',
+        'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+        Pragma: 'no-cache',
+        Expires: '0',
+      },
+    });
+  }
+}
+
 export async function handleGitHubStatsPreviewRequest(
   request: Request,
   { params }: { params: Promise<{ theme: string }> },

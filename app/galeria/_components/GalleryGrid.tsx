@@ -4,7 +4,7 @@
  * Grid de exibição da galeria — gerencia ações de copiar, download e visualização.
  */
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import SVGCard from '../../components/ui/SVGCard';
 import CodeModal from '../../components/ui/CodeModal';
 import SVGGalleryNotification from '../../components/ui/SVGGalleryNotification';
@@ -21,10 +21,22 @@ export default function GalleryGrid({
   const [notification, setNotification] = useState<string>('');
   const [showModal, setShowModal] = useState<boolean>(false);
   const [currentCode, setCurrentCode] = useState<string>('');
+  const notificationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (notificationTimeoutRef.current) {
+        clearTimeout(notificationTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const showNotificationMessage = (message: string): void => {
+    if (notificationTimeoutRef.current) {
+      clearTimeout(notificationTimeoutRef.current);
+    }
     setNotification(message);
-    setTimeout(() => {
+    notificationTimeoutRef.current = setTimeout(() => {
       setNotification('');
     }, NOTIFICATION_TIMEOUT);
   };

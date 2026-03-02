@@ -25,8 +25,6 @@ const VERCEL_PRODUCTION = 'production';
 const HTTPS_PREFIX = 'https://';
 const LOCALHOST_URL = 'http://localhost:3000';
 
-let warnedAboutCanonical = false;
-
 export function getBaseUrl(): string {
   const envUrl = process.env[ENV_SITE_URL];
   const vercelEnv = process.env[ENV_VERCEL_ENV];
@@ -53,12 +51,6 @@ export function getBaseUrl(): string {
     // Fallback: não derruba o build/deploy se a env canônica não estiver setada.
     // Atenção: isso pode gerar URLs com o deployment URL ao invés do domínio final.
     if (vercelUrl !== undefined && vercelUrl !== null && vercelUrl !== '') {
-      if (!warnedAboutCanonical) {
-        console.warn(
-          '[getBaseUrl] NEXT_PUBLIC_CANONICAL_URL não configurada em produção; usando VERCEL_URL como fallback.',
-        );
-        warnedAboutCanonical = true;
-      }
       return `${HTTPS_PREFIX}${vercelUrl}`;
     }
 

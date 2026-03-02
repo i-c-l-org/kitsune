@@ -1,13 +1,8 @@
 import type { SVGStrategy } from "@/core/interfaces/ISVGStrategy";
 import type { CardConfig, ThemeName } from "@/core/interfaces/IThemeStrategy";
+import type { GitHubStats } from "@/tipos/github";
 import { REGISTRO_DE_TEMAS } from "@/strategies/themes";
-interface GitHubStats {
-  TOTAL_COMMITS: number;
-  totalPullRequests: number;
-  totalContributions: number;
-  followers: number;
-  publicRepos: number;
-}
+
 function formatNumber(VALOR: number): string {
   if (VALOR >= 1000000) {
     return (VALOR / 1000000).toFixed(1) + "M";

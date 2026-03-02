@@ -1,19 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 import { getBaseUrl } from '@/lib/getBaseUrl';
-
-interface UseGitHubLangsOptions {
-  username: string;
-  theme?: string;
-  enabled?: boolean;
-}
+import type { UseGitHubLangsOptions } from '@/tipos/hooks';
 
 async function fetchGitHubLangs(
   username: string,
   theme: string,
 ): Promise<string> {
   const baseUrl = getBaseUrl();
+  const params = new URLSearchParams({ username, theme });
   const response = await fetch(
-    `${baseUrl}/api/github-langs/${username}?theme=${theme}`,
+    `${baseUrl}/api/github-langs?${params.toString()}`,
   );
 
   if (!response.ok) {

@@ -57,3 +57,15 @@ export type {
 } from './ui';
 export type { FitMode, CacheEntry } from './svg';
 export type { StatusBadgeTheme } from './statusBadge';
+export type { UseGitHubStatsOptions, UseGitHubLangsOptions } from './hooks';
+export type {
+  CardConfig,
+  ThemeName,
+  ThemeColors,
+  ThemeStrategy,
+} from './theme';
+export type {
+  SVGGenerationContext,
+  SVGStrategy,
+  ISVGGeneratorService,
+} from './svg-strategy';

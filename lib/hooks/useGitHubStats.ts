@@ -1,21 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { getBaseUrl } from '@/lib/getBaseUrl';
+import type { GitHubStats } from '@/tipos/github';
+import type { UseGitHubStatsOptions } from '@/tipos/hooks';
 
-export interface GitHubStats {
-  totalCommits: number;
-  totalPRs: number;
-  totalIssues: number;
-  totalRepos: number;
-  rank: string;
-}
-
-interface UseGitHubStatsOptions {
-  username: string;
-  theme?: string;
-  width?: string;
-  height?: string;
-  enabled?: boolean;
-}
+export type { GitHubStats };
 
 async function fetchGitHubStats(
   username: string,
@@ -25,12 +13,13 @@ async function fetchGitHubStats(
 ): Promise<string> {
   const baseUrl = getBaseUrl();
   const params = new URLSearchParams();
+  params.set('username', username);
   params.set('theme', theme);
   if (width) params.set('width', width);
   if (height) params.set('height', height);
 
   const response = await fetch(
-    `${baseUrl}/api/github-stats/${username}?${params.toString()}`,
+    `${baseUrl}/api/github-stats?${params.toString()}`,
   );
 
   if (!response.ok) {

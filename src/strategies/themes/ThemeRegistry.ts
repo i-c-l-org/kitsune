@@ -138,12 +138,11 @@ class ThemeRegistry {
     this.strategies.set(ESTRATEGIA.NOME, ESTRATEGIA);
   }
   get(themeName: ThemeName): ThemeStrategy {
-    const ESTRATEGIA = this.strategies.get(themeName);
-    if (!ESTRATEGIA) {
-      console.warn(`Theme '${themeName}' not found, using 'dark' as fallback`);
+    const estrategia = this.strategies.get(themeName);
+    if (!estrategia) {
       return this.get('dark');
     }
-    return ESTRATEGIA;
+    return estrategia;
   }
   getAll(): ThemeStrategy[] {
     return Array.from(this.strategies.values());

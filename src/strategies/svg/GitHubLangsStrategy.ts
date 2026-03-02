@@ -4,13 +4,9 @@ import type {
   ThemeColors,
   ThemeName,
 } from "@/core/interfaces/IThemeStrategy";
+import type { GitHubLanguageStat } from "@/tipos/github";
 import { REGISTRO_DE_TEMAS } from "@/strategies/themes";
-interface GitHubLanguageStat {
-  NOME: string;
-  VALOR: number;
-  PERCENTUAL: number;
-  color: string;
-}
+
 function formatPercent(VALOR: number): string {
   return `${VALOR.toFixed(1)}%`;
 }

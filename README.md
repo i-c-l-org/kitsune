@@ -131,7 +131,7 @@ Acesse: http://localhost:3000
 - `UPSTASH_REDIS_REST_URL` — URL do Redis para contador de visitantes
 - `UPSTASH_REDIS_REST_TOKEN` — token de autenticação do Redis
 
-**Para desenvolvimento:** coloque em `.env.local`  
+**Para desenvolvimento:** coloque em `.env.local`
 **Para produção:** configure no Vercel > Settings > Environment Variables
 
 ---
