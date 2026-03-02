@@ -38,7 +38,6 @@ export async function generateMetadata({
       },
     };
   } catch (error) {
-    console.error('Erro ao gerar metadata do post:', error);
     return {
       title: 'Post',
     };
@@ -59,7 +58,6 @@ export default async function PostPage({
   try {
     mdxContent = await serialize(post.content);
   } catch (error) {
-    console.error('Erro ao serializar MDX do post:', error);
     notFound();
   }
 

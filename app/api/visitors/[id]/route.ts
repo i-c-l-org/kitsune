@@ -37,7 +37,6 @@ export async function GET(
       count = (await redis.get<number>(key)) ?? 0;
     }
   } catch (err) {
-    console.error('Visitors counter operation error:', err);
     count = 0;
   }
 

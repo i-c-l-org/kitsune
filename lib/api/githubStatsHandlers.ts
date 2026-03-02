@@ -77,7 +77,6 @@ export async function handleGitHubStatsRequest(
       },
     });
   } catch (error) {
-    console.error('Erro ao gerar SVG:', error);
     const config = parseCommonParams(searchParams);
     const svg = githubStatsStrategy.generatePreview(config.theme, config);
     return new NextResponse(svg, {
@@ -117,7 +116,6 @@ export async function handleGitHubStatsQueryRequest(
       },
     });
   } catch (error) {
-    console.error('Erro ao gerar SVG:', error);
     const config = parseCommonParams(searchParams);
     const svg = githubStatsStrategy.generatePreview(config.theme, config);
     return new NextResponse(svg, {
@@ -152,7 +150,6 @@ export async function handleGitHubStatsPreviewRequest(
       },
     });
   } catch (error) {
-    console.error('Erro ao gerar preview do GitHub stats:', error);
     return new NextResponse('Erro ao gerar preview', { status: 500 });
   }
 }

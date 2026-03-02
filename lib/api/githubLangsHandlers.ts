@@ -77,7 +77,6 @@ export async function handleGitHubLangsRequest(
       },
     });
   } catch (error) {
-    console.error('Erro ao gerar SVG de linguagens:', error);
     const config = parseCommonParams(searchParams);
     const svg = githubLangsStrategy.generatePreview(config.theme, config);
     return new NextResponse(svg, {
@@ -112,7 +111,6 @@ export async function handleGitHubLangsPreviewRequest(
       },
     });
   } catch (error) {
-    console.error('Erro ao gerar preview de linguagens:', error);
     return new NextResponse('Erro ao gerar preview', { status: 500 });
   }
 }
