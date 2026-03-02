@@ -2,10 +2,7 @@
  * Tipos relacionados às estratégias de geração de SVG
  */
 
-import type {
-  CardConfig,
-  ThemeStrategy,
-} from '@/core/interfaces/IThemeStrategy';
+import type { CardConfig, ThemeStrategy } from './theme';
 export interface SVGGenerationContext {
   username: string;
   config: CardConfig;

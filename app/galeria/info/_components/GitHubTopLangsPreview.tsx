@@ -3,6 +3,8 @@
 import {
   useState,
   useCallback,
+  useEffect,
+  useRef,
   type ChangeEvent,
   type ReactElement,
 } from "react";
@@ -33,12 +35,21 @@ function ThemeCard({
   height,
 }: ThemeCardProps): ReactElement {
   const [copied, setCopied] = useState(false);
+  const copyTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const {
     data: svgContent,
     isLoading,
     error,
   } = useGitHubLangsPreview(themeName);
+
+  useEffect(() => {
+    return () => {
+      if (copyTimeoutRef.current) {
+        clearTimeout(copyTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const codeParams = new URLSearchParams();
   if (width) codeParams.set("width", width);
@@ -50,7 +61,10 @@ function ThemeCard({
     const markdown = `![GitHub Top Languages](${codeUrl})`;
     navigator.clipboard.writeText(markdown);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    if (copyTimeoutRef.current) {
+      clearTimeout(copyTimeoutRef.current);
+    }
+    copyTimeoutRef.current = setTimeout(() => setCopied(false), 2000);
   }, [codeUrl]);
 
   const renderPreview = () => {
@@ -83,18 +97,16 @@ function ThemeCard({
   };
 
   return (
-    <Card className="flex flex-col gap-3 p-4">
-      <div className="flex items-center justify-between">
-        <h3 className="text-base font-semibold text-[var(--text-bright)]">
-          {themeLabel}
-        </h3>
+    <Card className="svgCard cardSvg animateFadeInUp flex flex-col gap-3 p-4">
+      <div className="svgCardTitle text-xl font-mono font-semibold text-[var(--text-bright)]">
+        {themeLabel}
       </div>
 
-      <div className="overflow-hidden rounded-md border border-[var(--border-default)] bg-[rgb(0_0_0_/_30%)]">
+      <div className="bg-black maxH300 mb-3 overflow-hidden rounded-md border border-[var(--border-default)]">
         {renderPreview()}
       </div>
 
-      <div className="flex flex-col gap-2">
+      <div className="svgCardActions flex flex-col gap-2">
         <code className="overflow-x-auto rounded bg-[rgb(0_0_0_/_30%)] px-2 py-1 text-xs text-[var(--accent-cyan)]">
           {codeUrl}
         </code>
@@ -121,7 +133,7 @@ export default function GitHubTopLangsPreview(): ReactElement {
   const sizeHeight = height.trim() !== "" ? height.trim() : undefined;
 
   return (
-    <Card as="article" className="homeCard cardHome flex flex-col gap-6 p-6">
+    <div className="flex flex-col gap-6">
       <div>
         <h2 className="mb-2 text-2xl font-semibold text-[var(--text-bright)]">
           <i className="fas fa-chart-bar mr-3" />
@@ -189,7 +201,7 @@ export default function GitHubTopLangsPreview(): ReactElement {
         </h3>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="galeriaGrid mx-auto grid w-full grid-cols-1 gap-5 px-4 pb-9 md:grid-cols-2">
         {themes.map((theme) => (
           <ThemeCard
             key={theme.name}
@@ -201,6 +213,6 @@ export default function GitHubTopLangsPreview(): ReactElement {
           />
         ))}
       </div>
-    </Card>
+    </div>
   );
 }

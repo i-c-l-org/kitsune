@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect, useRef } from 'react';
 import Card from '../../../components/ui/Card';
 import Button from '../../../components/ui/Button';
 import CodeModal from '../../../components/ui/CodeModal';
@@ -41,10 +41,25 @@ export default function VisitorsBadgeGrid(): React.ReactElement {
   const [notification, setNotification] = useState<string>('');
   const [showModal, setShowModal] = useState<boolean>(false);
   const [currentCode, setCurrentCode] = useState<string>('');
+  const notificationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (notificationTimeoutRef.current) {
+        clearTimeout(notificationTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const showNotificationMessage = (message: string): void => {
+    if (notificationTimeoutRef.current) {
+      clearTimeout(notificationTimeoutRef.current);
+    }
     setNotification(message);
-    setTimeout(() => setNotification(''), 3000);
+    notificationTimeoutRef.current = setTimeout(
+      () => setNotification(''),
+      3000,
+    );
   };
 
   const visitorIdPlaceholder = 'seu-usuario';
