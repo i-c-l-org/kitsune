@@ -5,7 +5,7 @@ import { getButtonClasses } from "../components/ui/buttonStyles";
 
 export const metadata: Metadata = {
   title: "Blog - Galeria I.C.L",
-  description: "Blog com artigos e tutoriais",
+  description: "Blog com meus pensamentos e reflexoes.",
 };
 
 export default function BlogLayout({
