@@ -27,6 +27,20 @@ const themes = [
   { name: "dracula", label: "Dracula" },
 ];
 
+const themeBackgroundMap: Record<string, string> = {
+  dark: "bg-[#0d1117]",
+  light: "bg-[#ffffff]",
+  neon: "bg-[#0a0e27]",
+  sunset: "bg-[#1a0f1f]",
+  ocean: "bg-[#0f1419]",
+  forest: "bg-[#0d1b0f]",
+  cyberpunk: "bg-[#0a0a1a]",
+  aurora: "bg-[#0f1620]",
+  cherry: "bg-[#1a0f1a]",
+  midnight: "bg-[#0a0f2c]",
+  dracula: "bg-[#282a36]",
+};
+
 function ThemeCard({
   themeName,
   themeLabel,
@@ -71,7 +85,7 @@ function ThemeCard({
     if (isLoading) {
       return (
         <div className="flex h-24 items-center justify-center md:h-32">
-          <div className="h-5 w-5 animate-spin rounded-full border-2 border-[var(--accent-teal)] border-t-transparent md:h-6 md:w-6 md:border-3" />
+          <div className="h-5 w-5 animate-spin rounded-full border-2 border-t-transparent border-[var(--accent-teal)] md:h-6 md:w-6 md:border-[3px]" />
         </div>
       );
     }
@@ -87,7 +101,7 @@ function ThemeCard({
     if (svgContent) {
       return (
         <div
-          className="w-full [&_svg]:max-w-full [&_svg]:h-auto"
+          className="svgPreviewContainer svgPreviewAutoHeight"
           dangerouslySetInnerHTML={{ __html: svgContent }}
         />
       );
@@ -96,25 +110,29 @@ function ThemeCard({
     return null;
   };
 
+  const bgColor = themeBackgroundMap[themeName] || "bg-[#0d1117]";
+
   return (
-    <Card className="svgCard cardSvg animateFadeInUp flex flex-col gap-2 p-3 md:gap-3 md:p-4">
-      <div className="svgCardTitle text-base font-mono font-semibold text-[var(--text-bright)] truncate md:text-xl">
+    <Card className="relative rounded-lg border border-[var(--border-default)] bg-[var(--bg-tertiary)] p-4 transition-all hover:border-[var(--accent-light)] hover:shadow-[var(--shadow-card-hover-svg)] hover:-translate-y-1">
+      <div className="mb-2 font-mono text-base font-semibold text-[var(--text-bright)] md:mb-3 md:text-lg">
         {themeLabel}
       </div>
 
-      <div className="bg-black max-h-[200px] mb-2 overflow-hidden rounded-md border border-[var(--border-default)] md:max-h-[300px] md:mb-3">
+      <div
+        className={`${bgColor} relative mb-3 overflow-hidden rounded-md border border-[var(--border-default)] md:mb-4`}
+      >
         {renderPreview()}
       </div>
 
-      <div className="svgCardActions flex flex-col gap-2">
-        <code className="overflow-x-auto rounded bg-[rgb(0_0_0_/_30%)] px-2 py-1 text-[10px] text-[var(--accent-cyan)] break-all md:text-xs">
+      <div className="flex flex-col gap-2">
+        <code className="overflow-x-auto rounded bg-[rgb(0_0_0_/_30%)] px-2 py-1 text-xs text-[var(--accent-light)] md:text-sm">
           {codeUrl}
         </code>
         <Button
           variant="primary"
           size="sm"
           onClick={handleCopy}
-          className="w-full text-xs md:text-sm"
+          className="w-full rounded-md bg-[var(--accent-teal)] px-3 py-2 text-xs font-medium text-white transition-all hover:bg-[var(--accent-dark)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-cyan)] focus:ring-offset-2 focus:ring-offset-[var(--bg-primary)] md:text-sm"
         >
           <i className="fas fa-copy mr-1 md:mr-2" />
           {copied ? "Copiado!" : "Copiar Código"}
@@ -133,14 +151,15 @@ export default function GitHubTopLangsPreview(): ReactElement {
   const sizeHeight = height.trim() !== "" ? height.trim() : undefined;
 
   return (
-    <div className="flex flex-col gap-4 md:gap-6 mt-8 md:mt-12">
+    <div className="flex flex-col gap-4 md:gap-6 mt-0">
       <div>
         <h2 className="mb-2 text-xl font-semibold text-[var(--text-bright)] md:text-2xl">
           <i className="fas fa-chart-bar mr-2 md:mr-3" />
           GitHub Top Languages
         </h2>
         <p className="text-sm text-[var(--text-muted)] md:text-base">
-          Mostra as 5 linguagens mais usadas nos seus repositórios públicos
+          Mostra as 5 linguagens mais usadas nos seus repositórios públicos com
+          visual atrativo.
         </p>
       </div>
 
@@ -155,7 +174,7 @@ export default function GitHubTopLangsPreview(): ReactElement {
             setUsername(e.currentTarget.value)
           }
           placeholder="seu-usuario"
-          className="w-full rounded-lg border border-[var(--accent-teal)] bg-[rgb(15_23_42_/_50%)] px-3 py-2 text-sm text-[var(--text-bright)] placeholder-[var(--text-muted)] focus:border-[var(--accent-cyan)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-cyan)] focus:ring-opacity-30 md:px-4 md:text-base"
+          className="w-full rounded-lg border border-[var(--accent-teal)] bg-[rgb(15_23_42)] px-4 py-2 text-sm text-[var(--text-bright)] placeholder-[var(--text-muted)] transition-colors focus:border-[var(--accent-cyan)] focus:outline-none focus:ring-1 focus:ring-[var(--accent-cyan)] md:text-base"
         />
       </div>
 
@@ -172,7 +191,7 @@ export default function GitHubTopLangsPreview(): ReactElement {
               setWidth(e.currentTarget.value)
             }
             placeholder="600"
-            className="w-full rounded-lg border border-[var(--accent-teal)] bg-[rgb(15_23_42_/_50%)] px-3 py-2 text-sm text-[var(--text-bright)] placeholder-[var(--text-muted)] focus:border-[var(--accent-cyan)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-cyan)] focus:ring-opacity-30 md:px-4 md:text-base"
+            className="w-full rounded-lg border border-[var(--accent-teal)] bg-[rgb(15_23_42)] px-3 py-2 text-sm text-[var(--text-bright)] placeholder-[var(--text-muted)] transition-colors focus:border-[var(--accent-cyan)] focus:outline-none focus:ring-1 focus:ring-[var(--accent-cyan)]"
           />
         </div>
         <div>
@@ -187,7 +206,7 @@ export default function GitHubTopLangsPreview(): ReactElement {
               setHeight(e.currentTarget.value)
             }
             placeholder="320"
-            className="w-full rounded-lg border border-[var(--accent-teal)] bg-[rgb(15_23_42_/_50%)] px-3 py-2 text-sm text-[var(--text-bright)] placeholder-[var(--text-muted)] focus:border-[var(--accent-cyan)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-cyan)] focus:ring-opacity-30 md:px-4 md:text-base"
+            className="w-full rounded-lg border border-[var(--accent-teal)] bg-[rgb(15_23_42)] px-3 py-2 text-sm text-[var(--text-bright)] placeholder-[var(--text-muted)] transition-colors focus:border-[var(--accent-cyan)] focus:outline-none focus:ring-1 focus:ring-[var(--accent-cyan)]"
           />
         </div>
       </div>
@@ -197,9 +216,13 @@ export default function GitHubTopLangsPreview(): ReactElement {
           <i className="fas fa-palette mr-1 md:mr-2" />
           Temas disponíveis
         </h3>
+        <p className="text-xs text-[var(--text-muted)] md:text-sm">
+          Escolha entre 11 temas diferentes para customizar o visual do seu
+          card.
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 lg:gap-5 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 lg:gap-5">
         {themes.map((theme) => (
           <ThemeCard
             key={theme.name}
