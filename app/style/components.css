@@ -617,3 +617,381 @@ SCROLL TO TOP BUTTON
 .scrollToTop i {
   pointer-events: none;
 }
+
+/*
+PREVIEW COMPONENTS - GITHUB STATS & TOP LANGS
+*/
+
+/* Container sections para preview */
+.previewSection {
+  position: relative;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-default);
+  background: var(--bg-secondary);
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.previewSection::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 0.75rem;
+  background: var(--gradient-secondary);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.previewSection > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Cards de tema dentro dos previews */
+.themeCard {
+  border: 1px solid var(--border-default);
+  border-radius: 0.5rem;
+  background: var(--bg-tertiary);
+  padding: 1rem;
+  transition: all 0.3s ease;
+}
+
+.themeCard:hover {
+  border-color: var(--accent-light);
+  box-shadow: var(--shadow-card-hover-svg);
+  transform: translateY(-4px);
+}
+
+/* Título do tema */
+.themeName {
+  font-family: Consolas, "Courier New", monospace;
+  font-weight: 600;
+  color: var(--text-bright);
+  font-size: 1rem;
+}
+
+@media (width >=768px) {
+  .themeName {
+    font-size: 1.125rem;
+  }
+}
+
+/* Área de preview da imagem do tema */
+.themePreviewArea {
+  border-radius: 0.375rem;
+  border: 1px solid var(--border-default);
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+  transition: background-color 0.3s ease;
+}
+
+@media (width >=768px) {
+  .themePreviewArea {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Código URL do tema */
+.themeCodeDisplay {
+  font-size: 0.625rem;
+  background: rgb(0 0 0 / 30%);
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+  color: var(--accent-light);
+  word-break: break-all;
+  overflow-x: auto;
+  margin-bottom: 0.5rem;
+}
+
+@media (width >=768px) {
+  .themeCodeDisplay {
+    font-size: 0.75rem;
+    padding: 0.625rem;
+    margin-bottom: 0.75rem;
+  }
+}
+
+/* Botão de copiar código do tema */
+.themeCopyButton {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 0.75rem;
+  background: var(--accent-teal);
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.themeCopyButton:hover {
+  background: var(--accent-light);
+  box-shadow: var(--shadow-button-hover);
+}
+
+@media (width >=768px) {
+  .themeCopyButton {
+    font-size: 0.875rem;
+    padding: 0.625rem;
+  }
+}
+
+/* Grid de temas */
+.themesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+@media (width >=640px) {
+  .themesGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (width >=768px) {
+  .themesGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+@media (width >=1024px) {
+  .themesGrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+/* Input fields para preview */
+.previewInput {
+  width: 100%;
+  border: 1px solid var(--accent-teal);
+  background: rgb(15 23 42 / 50%);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--text-bright);
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.previewInput::placeholder {
+  color: var(--text-secondary);
+}
+
+.previewInput:focus {
+  outline: none;
+  border-color: var(--accent-light);
+  box-shadow: 0 0 0 2px rgb(78 168 154 / 20%);
+}
+
+@media (width >=768px) {
+  .previewInput {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+  }
+}
+
+/* Label dos inputs */
+.previewLabel {
+  display: block;
+  font-weight: 600;
+  color: var(--text-bright);
+  font-size: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+@media (width >=768px) {
+  .previewLabel {
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+  }
+}
+
+/* Heading dos previews */
+.previewHeading {
+  font-weight: 600;
+  color: var(--text-bright);
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+@media (width >=768px) {
+  .previewHeading {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+}
+
+.previewDescription {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+@media (width >=768px) {
+  .previewDescription {
+    font-size: 1rem;
+  }
+}
+
+/*
+PREVIEW COMPONENT CLASSES - Classes específicas para componentes de preview
+*/
+
+/* Preview section wrapper */
+.previewPageSection {
+  @apply py-4 sm:py-6;
+}
+
+/* Back link styles */
+.back-link-bg {
+  @apply bg-[rgb(26_77_92_/_15%)] hover:bg-[var(--accent-teal)];
+}
+
+.previewBackLink {
+  @apply inline-flex gap-2 items-center rounded-md border border-[var(--accent-teal)] px-3 py-2 sm:px-5 sm:py-2.5 text-sm font-medium text-[var(--accent-cyan)] no-underline transition-all hover:-translate-x-1 hover:text-white;
+  @apply back-link-bg;
+}
+
+/* Preview page title */
+.previewPageTitle {
+  @apply mb-2 text-2xl font-bold text-[var(--text-bright)] sm:text-3xl lg:text-4xl;
+}
+
+.previewPageTitleIcon {
+  @apply mr-2 sm:mr-3;
+}
+
+/* Preview page subtitle */
+.previewPageSubtitle {
+  @apply text-sm text-[var(--text-muted)] sm:text-base;
+}
+
+/* Preview section heading */
+.previewSectionHeading {
+  @apply mb-3 text-2xl font-bold text-[var(--text-bright)] sm:mb-4 sm:text-3xl lg:text-4xl;
+}
+
+.previewSectionHeadingIcon {
+  @apply mr-2 sm:mr-3;
+}
+
+/* Preview cards container */
+.previewCardsContainer {
+  @apply space-y-10 sm:space-y-16;
+}
+
+/* Preview section wrapper with gradient */
+.previewGradientWrapper {
+  @apply relative;
+}
+
+.previewGradientBg {
+  @apply absolute inset-0 rounded-xl blur-xl -z-10;
+  background: linear-gradient(
+    to right,
+    rgb(26 77 92 / 0.1),
+    rgb(34 211 238 / 0.1)
+  );
+}
+
+.previewGradientBgAlt {
+  @apply absolute inset-0 rounded-xl blur-xl -z-10;
+  background: linear-gradient(
+    to right,
+    rgb(34 211 238 / 0.1),
+    rgb(26 77 92 / 0.1)
+  );
+}
+
+.previewGradientCard {
+  @apply rounded-xl p-6 backdrop-blur-sm sm:p-8;
+  border: 1px solid rgb(26 77 92 / 0.3);
+  background: linear-gradient(
+    to bottom right,
+    rgb(48 54 60 / 0.5),
+    rgb(48 54 60 / 0.3)
+  );
+}
+
+.previewGradientCardAlt {
+  @apply rounded-xl p-6 backdrop-blur-sm sm:p-8;
+  border: 1px solid rgb(34 211 238 / 0.3);
+  background: linear-gradient(
+    to bottom right,
+    rgb(48 54 60 / 0.5),
+    rgb(48 54 60 / 0.3)
+  );
+}
+
+/* Divider with gradient */
+.previewDivider {
+  @apply flex justify-center items-center;
+}
+
+.previewDividerLine {
+  @apply h-px flex-1;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgb(26 77 92 / 0.3),
+    transparent
+  );
+}
+
+.previewDividerIcon {
+  @apply px-4 text-xs text-[var(--text-muted)] sm:text-sm;
+}
+
+/* Flex utilities for preview components */
+.previewFlexCol {
+  @apply flex flex-col gap-4 md:gap-6;
+}
+
+.previewFormGroup {
+  @apply mb-2 md:mb-4;
+}
+
+.previewGrid2 {
+  @apply mb-4 grid grid-cols-2 gap-2 md:mb-6 md:gap-4;
+}
+
+.previewSectionTitle {
+  @apply mb-2;
+}
+
+.previewSectionTitleText {
+  @apply mb-3 text-base font-semibold text-[var(--text-bright)] md:mb-4 md:text-lg;
+}
+
+.previewSectionTitleIcon {
+  @apply mr-1 md:mr-2;
+}
+
+/* Loading/Error states */
+.previewLoadingState {
+  @apply flex h-24 items-center justify-center md:h-32;
+}
+
+.previewLoadingSpinner {
+  @apply h-5 w-5 animate-spin rounded-full border-2 border-t-transparent border-[var(--accent-teal)] md:h-6 md:w-6 md:border-[3px];
+}
+
+.previewErrorState {
+  @apply flex h-24 items-center justify-center text-red-400 md:h-32;
+}
+
+/* SVG Preview container */
+.svgPreviewContainer {
+  @apply w-full;
+}
+
+.svgPreviewAutoHeight {
+  @apply [&_svg]:h-auto [&_svg]:max-w-full;
+}
+
+/* Label sizes */
+.labelSizeSm {
+  @apply text-xs md:text-sm;
+}

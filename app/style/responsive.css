@@ -421,3 +421,33 @@
     width: 3.5rem;
   }
 }
+
+/* Preview Components - Responsivo */
+@media (width >=640px) {
+  .themesGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .themePreviewArea {
+    margin-bottom: 1rem;
+  }
+}
+
+@media (width >=768px) {
+  .previewSection {
+    padding: 2rem;
+  }
+
+  .themesGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+@media (width >=1024px) {
+  .themesGrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+}
