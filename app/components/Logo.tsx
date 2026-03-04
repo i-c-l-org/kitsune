@@ -6,6 +6,7 @@ import type { LogoProps } from '@/tipos/ui';
 
 // Texto padrão do logo da aplicação
 const LOGO_TEXT = 'I.C.L';
+const LOGO_TEXT_PARTS = LOGO_TEXT.split(' ');
 
 export default function Logo({
   size = 48,
@@ -26,7 +27,7 @@ export default function Logo({
       />
       {showText && (
         <span className="logoText text-xl font-normal tracking-wide text-[var(--text-primary)]">
-          {LOGO_TEXT.split(' ').map((part, index) =>
+          {LOGO_TEXT_PARTS.map((part, index) =>
             index === 1 ? <strong key={part}>{part}</strong> : part + ' ',
           )}
         </span>

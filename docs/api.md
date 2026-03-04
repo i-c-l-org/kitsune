@@ -23,18 +23,23 @@ GET /api/github-stats/[username]
 
 **Parâmetros de Query:**
 
-| Parâmetro      | Tipo    | Padrão | Descrição       |
-| -------------- | ------- | ------ | --------------- |
-| `theme`        | string  | "dark" | Tema visual     |
-| `width`        | number  | 600    | Largura em px   |
-| `height`       | number  | 320    | Altura em px    |
-| `borderRadius` | number  | 12     | Raio dos cantos |
-| `showBorder`   | boolean | true   | Mostrar borda   |
+| Parâmetro      | Tipo    | Padrão | Descrição                                             |
+| -------------- | ------- | ------ | ----------------------------------------------------- |
+| `theme`        | string  | "dark" | Tema visual                                           |
+| `width`        | number  | 600    | Largura em px                                         |
+| `height`       | number  | 320    | Altura em px                                          |
+| `borderRadius` | number  | 12     | Raio dos cantos                                       |
+| `showBorder`   | boolean | true   | Mostrar borda                                         |
+| `compat`       | string  | -      | Use `github` para renderização mais estável no README |
 
 **Exemplo:**
 
 ```
 /api/github-stats/seu-usuario?theme=ocean&width=600
+```
+
+```
+/api/github-stats/seu-usuario?theme=ocean&width=600&compat=github
 ```
 
 **Preview:**
@@ -57,16 +62,21 @@ GET /api/github-langs/[username]
 
 **Parâmetros de Query:**
 
-| Parâmetro | Tipo   | Padrão | Descrição     |
-| --------- | ------ | ------ | ------------- |
-| `theme`   | string | "dark" | Tema visual   |
-| `width`   | number | 600    | Largura em px |
-| `height`  | number | 320    | Altura em px  |
+| Parâmetro | Tipo   | Padrão | Descrição                                             |
+| --------- | ------ | ------ | ----------------------------------------------------- |
+| `theme`   | string | "dark" | Tema visual                                           |
+| `width`   | number | 600    | Largura em px                                         |
+| `height`  | number | 320    | Altura em px                                          |
+| `compat`  | string | -      | Use `github` para renderização mais estável no README |
 
 **Exemplo:**
 
 ```
 /api/github-langs/seu-usuario?theme=neon
+```
+
+```
+/api/github-langs/seu-usuario?theme=neon&compat=github
 ```
 
 **Preview:**
@@ -78,6 +88,30 @@ GET /api/github-langs/[username]
 ---
 
 ## APIs de Visitantes
+
+### Visitor Counter (JSON)
+
+Retorna o contador de visitantes em JSON.
+
+**Endpoint:**
+
+```
+GET /api/visitors/[id]
+```
+
+**Parâmetros de Query:**
+
+| Parâmetro   | Tipo   | Padrão | Descrição                              |
+| ----------- | ------ | ------ | -------------------------------------- |
+| `increment` | string | `1`    | Use `0` para consultar sem incrementar |
+
+**Exemplo:**
+
+```
+/api/visitors/meu-id?increment=0
+```
+
+---
 
 ### Visitor Counter Badge
 
@@ -91,19 +125,47 @@ GET /api/visitors/[id]/badge.svg
 
 **Parâmetros de Query:**
 
-| Parâmetro | Tipo   | Padrão      | Descrição      |
-| --------- | ------ | ----------- | -------------- |
-| `label`   | string | "Visitors"  | Texto do badge |
-| `color`   | string | cor do tema | Cor do texto   |
-| `bgcolor` | string | cor do tema | Cor de fundo   |
+| Parâmetro    | Tipo   | Padrão     | Descrição                                    |
+| ------------ | ------ | ---------- | -------------------------------------------- |
+| `label`      | string | `visitors` | Texto do badge                               |
+| `increment`  | string | `1`        | Use `0` para gerar/consultar sem incrementar |
+| `labelColor` | string | `#111`     | Cor de fundo da parte esquerda (hex)         |
+| `valueColor` | string | `#222`     | Cor de fundo da parte direita (hex)          |
+| `textColor`  | string | `#fff`     | Cor do texto (hex)                           |
+| `shape`      | string | `rounded`  | Formato: `rounded`, `square` ou `pill`       |
 
 **Exemplo:**
 
 ```
-/api/visitors/meu-id/badge.svg?label=Visualizações&color=fff
+/api/visitors/meu-id/badge.svg?label=Visualizacoes&shape=pill&labelColor=111111&valueColor=2563eb&textColor=ffffff
 ```
 
 ---
+
+## API de Traffic GitHub
+
+### Clones Oficiais (14 dias)
+
+Retorna badge SVG com dados oficiais de clones do GitHub Traffic (`count` e `uniques`).
+
+**Endpoint:**
+
+```
+GET /api/github-traffic/clones/badge.svg
+```
+
+**Parâmetros de Query:**
+
+| Parâmetro | Tipo   | Padrão        | Descrição           |
+| --------- | ------ | ------------- | ------------------- |
+| `owner`   | string | `i-c-l-5-5-5` | Dono do repositório |
+| `repo`    | string | `kitsune`     | Nome do repositório |
+
+**Exemplo:**
+
+```
+/api/github-traffic/clones/badge.svg?owner=i-c-l-5-5-5&repo=kitsune
+```
 
 ## APIs de SVG
 

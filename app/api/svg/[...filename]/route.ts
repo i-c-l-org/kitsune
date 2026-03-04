@@ -1,4 +1,4 @@
-import fs from 'fs';
+import { readFile, readdir, stat } from 'fs/promises';
 import path from 'path';
 import { type NextRequest, NextResponse } from 'next/server';
 import { isValidDimension, manipulateSvgDimensions } from '../svgManipulator';
@@ -24,10 +24,19 @@ function isSafeSvgRequestPath(filename: string): boolean {
   return true;
 }
 
-function findSvgPath(filename: string): string | null {
+async function fileExists(filePath: string): Promise<boolean> {
+  try {
+    const fileStat = await stat(filePath);
+    return fileStat.isFile();
+  } catch {
+    return false;
+  }
+}
+
+async function findSvgPath(filename: string): Promise<string | null> {
   // caminho direto (permite subpastas na URL)
   const direct = path.join(SVG_ROOT, filename);
-  if (fs.existsSync(direct) && fs.statSync(direct).isFile()) return direct;
+  if (await fileExists(direct)) return direct;
 
   // busca por basename dentro de public/svg (recursiva, BFS)
   const target = path.basename(filename);
@@ -39,14 +48,14 @@ function findSvgPath(filename: string): string | null {
     if (cur === undefined) break;
     let entries: string[];
     try {
-      entries = fs.readdirSync(cur);
+      entries = await readdir(cur);
     } catch {
       continue;
     }
     for (const entry of entries) {
       const full = path.join(cur, entry);
       try {
-        const st = fs.statSync(full);
+        const st = await stat(full);
         if (st.isDirectory()) {
           stack.push(full);
         } else if (st.isFile() && entry === target) {
@@ -84,18 +93,21 @@ export async function GET(
     if (heightParam !== null && heightInfo.ok === false)
       return new NextResponse('Invalid height parameter', { status: 400 });
 
-    const svgPath = findSvgPath(filename);
+    const svgPath = await findSvgPath(filename);
     if (svgPath === null)
       return new NextResponse('SVG not found', { status: 404 });
 
-    const stat = fs.statSync(svgPath);
+    const fileStat = await stat(svgPath);
     const cached = svgCache.get(svgPath);
-    const isFresh = cached?.mtimeMs === stat.mtimeMs;
+    const isFresh = cached?.mtimeMs === fileStat.mtimeMs;
     const baseContent = isFresh
       ? cached.content
-      : fs.readFileSync(svgPath, 'utf-8');
+      : await readFile(svgPath, 'utf-8');
     if (!isFresh) {
-      svgCache.set(svgPath, { content: baseContent, mtimeMs: stat.mtimeMs });
+      svgCache.set(svgPath, {
+        content: baseContent,
+        mtimeMs: fileStat.mtimeMs,
+      });
     }
 
     let svgContent = baseContent;

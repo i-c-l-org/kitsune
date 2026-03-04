@@ -1,263 +1,228 @@
-Proveniência e Autoria: Este documento integra o projeto Galeria I.C.L (licença MIT).
+Proveniência e Autoria: Este documento integra o projeto Galeria Kitsune (licença MIT).
 Nada aqui implica cessão de direitos morais/autorais.
 Conteúdos de terceiros não licenciados de forma compatível não devem ser incluídos.
 Referências a materiais externos devem ser linkadas e reescritas com palavras próprias.
 
-> o acrd de preview do status e top langs estao com diferença de tamanho porque o texto em baixo de um ocupa duas linhas enquanto o outro ocupa uma, depois resumo o texto pra um jeito que fique igual nos dois sem omitir informaçoes
-
 <div align="center">
 
-# 🎨 Galeria I.C.L
+# Galeria Kitsune
 
-**Plataforma open-source de badges, SVGs e banners para perfis GitHub**
+Plataforma open-source para gerar e servir SVGs (badges, banners e cards de GitHub) com foco em uso em README/perfil.
 
 [![CI](https://github.com/i-c-l-5-5-5/kitsune/actions/workflows/ci.yml/badge.svg)](https://github.com/i-c-l-5-5-5/kitsune/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
-[![Node](https://img.shields.io/badge/Node-24.x-green.svg)](https://nodejs.org)
-[![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black.svg)](https://vercel.com)
-[![Version](https://img.shields.io/badge/Version-1.0.0-blue.svg)](./package.json)
-[![GitHub stars](https://img.shields.io/github/stars/i-c-l-5-5-5/kitsune?style=social)](https://github.com/i-c-l-5-5-5/kitsune)
+[![Node](https://img.shields.io/badge/Node-%3E%3D24.12.0-green.svg)](https://nodejs.org)
+[![Clones 14d](https://kitsune-galeria.vercel.app/api/github-traffic/clones/badge.svg?owner=i-c-l-5-5-5&repo=kitsune)](https://github.com/i-c-l-5-5-5/kitsune/graphs/traffic)
 
-[Demo](https://galeria-tau-ten.vercel.app) · [Galeria](https://galeria-tau-ten.vercel.app/galeria) · [Blog](https://galeria-tau-ten.vercel.app/blog) · [Documentação](./docs/) · [Temas](./docs/temas.md) · [API](./docs/api.md)
+[Demo](https://kitsune-galeria.vercel.app) · [Galeria](https://kitsune-galeria.vercel.app/galeria) · [Blog](https://kitsune-galeria.vercel.app/blog) · [API](./docs/api.md) · [Arquitetura](./docs/arquitetura.md)
 
 </div>
 
 ---
 
-## Sumário
+## Visão Geral
 
-- [Sobre](#sobre)
-- [Recursos Principais](#recursos-principais)
-- [Início Rápido](#início-rápido)
-- [Uso](#uso)
-- [Configuração](#configuração)
-- [Desenvolvimento](#desenvolvimento)
-- [Estrutura do Projeto](#estrutura-do-projeto)
-- [Contribuição](#contribuição)
-- [Troubleshooting](#troubleshooting)
-- [Roadmap](#roadmap)
-- [Licença](#licença)
-- [Contato](#contato)
+O projeto é um app **Next.js 16 (App Router)** que combina:
 
----
+- Coleção estática de SVGs em `public/svg`
+- APIs dinâmicas para cards GitHub e contador de visitantes
+- Galeria web para preview, cópia de markdown e download
+- Blog em MDX + Decap CMS
 
-## Sobre
+## Estado Atual (Snapshot)
 
-Galeria I.C.L oferece uma coleção completa de SVGs, badges e banners prontos para personalizar perfis GitHub. Com APIs dinâmicas para estatísticas e uma galeria interativa, o projeto combina performance, acessibilidade e código aberto.
+- Runtime principal: **Node.js >= 24.12.0**
+- Framework: **Next.js 16.1.6** + **React 19**
+- Temas de cards: `dark`, `light`, `neon`, `sunset`, `ocean`, `forest`, `cyberpunk`, `aurora`, `cherry`, `midnight`, `dracula`
+- Endpoints ativos para SVG: `api/svg`, `api/github-stats`, `api/github-langs`, `api/visitors`, `api/status-badge`
 
----
+## Funcionalidades
 
-## Recursos Principais
+### 1) Galeria de SVGs
 
-- **Galeria de SVGs** — badges, banners e ícones por categoria
-- **APIs dinâmicas** — GitHub Stats, Top Languages, Visitor Counter
-- **Blog em MDX** — conteúdo educativo com SEO otimizado
-- **11 Temas personalizáveis** — dark, light, neon, sunset, ocean, forest, cyberpunk, aurora, cherry, midnight, dracula
-- **Arquitetura escalável** — Strategy Pattern para fácil manutenção
-- **100% Open Source** — MIT License, código transparente
+Categorias atuais na UI (`/galeria`):
 
----
+- `banners`
+- `decorativos`
+- `ferramentas`
+- `github-stats`
+- `info`
+- `langs`
+- `skills`
+- `social`
+- `tecnologias`
+- `visitors`
 
-## Início Rápido
+### 2) APIs Dinâmicas
+
+- **GitHub Stats Card** (SVG)
+- **GitHub Top Languages Card** (SVG)
+- **Visitor Counter** (JSON e badge SVG)
+- **Status Badge** (SVG)
+- **Manipulação de SVG estático** via `/api/svg/[...filename]`
+
+## Endpoints Principais
+
+### SVG estático/manipulado
+
+- `GET /api/svg/[...filename]`
+- Query suportada: `width|w`, `height|h`, `fit`
+
+Exemplo:
+
+```md
+![Badge TS](https://kitsune-galeria.vercel.app/api/svg/badges/langs/badge-typescript.svg)
+```
+
+### GitHub Stats (SVG)
+
+- `GET /api/github-stats/[username]`
+- `GET /api/github-stats?username=<username>`
+- `GET /api/github-stats/preview/[theme]`
+
+Exemplo recomendado para README do GitHub:
+
+```md
+![GitHub Stats](https://kitsune-galeria.vercel.app/api/github-stats/seu-usuario?theme=ocean&width=600&compat=github)
+```
+
+### GitHub Top Languages (SVG)
+
+- `GET /api/github-langs/[username]`
+- `GET /api/github-langs/preview/[theme]`
+
+Exemplo recomendado para README do GitHub:
+
+```md
+![Top Langs](https://kitsune-galeria.vercel.app/api/github-langs/seu-usuario?theme=neon&compat=github)
+```
+
+### Visitors
+
+- `GET /api/visitors/[id]` (JSON)
+- `GET /api/visitors/[id]/badge.svg` (SVG)
+
+Exemplo:
+
+```md
+![Visitors](https://kitsune-galeria.vercel.app/api/visitors/icl/badge.svg?label=visitors)
+```
+
+### Status Badge
+
+- `GET /api/status-badge?theme=ocean&variant=default`
+
+## Instalação e Execução
 
 ### Pré-requisitos
 
-- Node.js 24.x
-- npm ou yarn
+- Node.js `>=24.12.0`
+- npm
 
-### Instalação
+### Setup local
 
 ```bash
 git clone https://github.com/i-c-l-5-5-5/kitsune.git
 cd kitsune
 npm install
-cp .env.example .env.local  # opcional
+cp .env.example .env.local
 npm run dev
 ```
 
-Acesse: http://localhost:3000
+Aplicação local: `http://localhost:3000`
 
----
+## Variáveis de Ambiente
 
-## Uso
+Definidas no `.env.example`:
 
-### Exemplos rápidos
+- `NEXT_PUBLIC_SITE_URL` (recomendado, URL pública base para links/markdown)
+- `NEXT_PUBLIC_CANONICAL_URL` (recomendado em produção, domínio canônico)
+- `GITHUB_TOKEN` (opcional, aumenta rate limit da API do GitHub)
+- `UPSTASH_REDIS_REST_URL` (opcional, para contador persistente)
+- `UPSTASH_REDIS_REST_TOKEN` (opcional, para contador persistente)
 
-**Badge SVG:**
+Notas:
 
-```md
-![Badge](https://galeria-tau-ten.vercel.app/api/svg/badges/skills/langs/badge-typescript.svg)
-```
+- Sem Upstash configurado, o contador de visitantes usa fallback em memória.
+- Sem `GITHUB_TOKEN`, o projeto ainda funciona, sujeito ao limite público da API do GitHub.
 
-**Banner:**
+Guia completo de publicação/configuração:
 
-```md
-![Banner](https://galeria-tau-ten.vercel.app/api/svg/banner/capa-1.svg?width=100%)
-```
+- [docs/deploy-env.md](./docs/deploy-env.md)
 
-**Contador de visitantes:**
+## Checklist de Go Live
 
-```md
-![Visitors](https://galeria-tau-ten.vercel.app/api/visitors/icl/badge.svg)
-```
+Antes de publicar em produção, valide:
 
-**Estatísticas GitHub:**
+1. `NEXT_PUBLIC_SITE_URL` e `NEXT_PUBLIC_CANONICAL_URL` apontando para o domínio final.
+2. `GITHUB_TOKEN` configurado no ambiente de produção.
+3. (`Opcional`) `UPSTASH_REDIS_REST_URL` e `UPSTASH_REDIS_REST_TOKEN` configurados para persistir visitantes.
+4. Build local passando: `npm run build`.
+5. Tipagem passando: `npm run type-check`.
+6. Testes passando: `npm run test`.
+7. Endpoint de stats respondendo: `/api/github-stats/<usuario>`.
+8. Endpoint de top langs respondendo: `/api/github-langs/<usuario>`.
+9. Badge de clones oficial respondendo: `/api/github-traffic/clones/badge.svg?owner=i-c-l-5-5-5&repo=kitsune`.
+10. Visitors com persistência validado via header `X-Visitors-Configured` (`1` quando Upstash ativo).
 
-```md
-![GitHub Stats](https://galeria-tau-ten.vercel.app/api/github-stats/icl?theme=dark&width=600)
-```
+## Scripts
 
-### Parâmetros comuns
+Principais scripts atualmente no `package.json`:
 
-| Parâmetro | Exemplo        | Descrição           |
-| --------- | -------------- | ------------------- |
-| `width`   | `300` ou `80%` | Largura em px ou %  |
-| `height`  | `120`          | Altura em px        |
-| `theme`   | `dark`, `neon` | Tema visual do card |
-
-**Temas disponíveis:** dark · light · neon · sunset · ocean · forest · cyberpunk · aurora · cherry · midnight · dracula
-
-> Documentação completa: [docs/](./docs)
-
----
-
-## Configuração
-
-### Variáveis de ambiente
-
-**Recomendadas para produção:**
-
-- `GITHUB_TOKEN` — aumenta limites de requisição da API GitHub (evita erro 429)
-- `UPSTASH_REDIS_REST_URL` — URL do Redis para contador de visitantes
-- `UPSTASH_REDIS_REST_TOKEN` — token de autenticação do Redis
-
-**Para desenvolvimento:** coloque em `.env.local`
-**Para produção:** configure no Vercel > Settings > Environment Variables
-
----
-
-## Desenvolvimento
-
-### Scripts principais
-
-| Comando                | Descrição                                        |
-| ---------------------- | ------------------------------------------------ |
-| `npm run dev`          | Servidor local (porta 3000)                      |
-| `npm run build`        | Build de produção                                |
-| `npm run start`        | Serve o build em produção                        |
-| `npm run test`         | Roda os testes usando Vitest                     |
-| `npm run formatar`     | Formata e corrige código automaticamente         |
-| `npm run type-check`   | Verifica tipagem do TypeScript                   |
-| `npm run diagnosticar` | Roda diagnóstico geral do projeto via Prometheus |
-| `npm run decap-server` | Inicia proxy local do Decap CMS (acesso offline) |
-
-> Veja todos os scripts em [package.json](./package.json)
-
----
-
-## Gerenciamento de Conteúdo (CMS)
-
-O projeto utiliza o **Decap CMS** para o gerenciamento fácil das postagens do Blog. Ele não requer banco de dados externo e salva os arquivos com extensão `.mdx` diretamente no seu repositório do GitHub.
-
-### Acessando o CMS Localmente (Offline)
-
-Para criar ou editar conteúdos no seu próprio computador, sem precisar fazer commits manuais:
-
-1. Em um terminal, inicie o servidor principal do Next.js:
-   ```bash
-   npm run dev
-   ```
-2. Em um **segundo terminal**, na mesma pasta, inicie o proxy do CMS local:
-   ```bash
-   npm run decap-server
-   ```
-3. Abra o navegador no endereço: **`http://localhost:3000/admin/index.html`**
-
-### Acessando o CMS em Produção (Online)
-
-Após realizar o deploy (ex: na Vercel), o CMS ficará acessível no seu domínio público através da rota `/admin/index.html` (ex: `https://seu-site.com/admin/index.html`).
-
-**Importante:** Para realizar login no ambiente de produção (online), o painel abrirá a janela de login do GitHub. É necessário configurar um **GitHub OAuth App** (nas configurações de developer da sua conta GitHub) e conectar junto às variáveis de ambiente, de acordo com a documentação do Decap CMS.
-
----
+- `npm run dev` — desenvolvimento
+- `npm run build` — build de produção
+- `npm run start` — inicia app em produção
+- `npm run type-check` — checagem TypeScript
+- `npm run lint` — lint (ESLint)
+- `npm run test` — testes (Vitest)
+- `npm run test:coverage` — cobertura
+- `npm run formatar` — formatação/correções via Prometheus
+- `npm run diagnosticar` — diagnóstico via Prometheus
+- `npm run otimizar` — otimização de SVG via Prometheus
+- `npm run decap-server` — proxy local do Decap CMS
 
 ## Estrutura do Projeto
 
-```
-galeria/
-├── app/               # Next.js App Router
-│   ├── api/          # Endpoints (SVG, Stats, Visitors)
-│   ├── blog/         # Páginas do blog
-│   ├── galeria/      # Galeria interativa
-│   └── components/   # Componentes React
-├── src/
-│   ├── core/         # Interfaces e contratos
-│   ├── strategies/   # Implementações (themes, SVG generators)
-│   └── services/     # Serviços centrais
-├── content/posts/     # Posts em MDX
-├── docs/              # Documentação
-├── lib/               # Utilitários e geração de SVGs (legado)
-├── public/            # Assets (SVGs, ícones, imagens)
-└── scripts/           # Automações
+```text
+app/
+  api/              # Rotas API (SVG, GitHub, Visitors, Status)
+  blog/             # Blog em MDX
+  galeria/          # UI da galeria e previews
+  components/       # Componentes da aplicação
+src/
+  core/             # Interfaces/contratos
+  strategies/       # Estratégias de geração SVG e temas
+  services/         # Serviços de domínio
+lib/                # Handlers, hooks e utilitários
+public/svg/         # Coleção de SVGs estáticos
+content/posts/      # Conteúdo do blog
+scripts/            # Scripts auxiliares
 ```
 
----
+## CMS (Decap)
+
+Para editar conteúdo localmente:
+
+1. Terminal 1: `npm run dev`
+2. Terminal 2: `npm run decap-server`
+3. Abrir: `http://localhost:3000/admin/index.html`
+
+## Limitações Conhecidas
+
+- Renderização de SVG em README do GitHub pode variar conforme sanitização/caching; use `compat=github` nos cards dinâmicos.
+- O pipeline de CI atual merece revisão (há etapas herdadas que podem não refletir o fluxo real de build/teste deste app).
 
 ## Contribuição
 
-Contribuições são bem-vindas! Siga o guia em [CONTRIBUTING.md](./CONTRIBUTING.md).
+Consulte [CONTRIBUTING.md](./CONTRIBUTING.md).
 
-### Fluxo básico
+Fluxo recomendado:
 
-1. **Fork** o repositório
-2. **Crie uma branch** para sua feature: `git checkout -b feature/descricao`
-3. **Faça commits** com Conventional Commits: `git commit -m "feat: descrição"`
-4. **Valide** o código: `npm run fix:all && npm run lint`
-5. **Abra um Pull Request** com descrição clara
-
----
-
-## Troubleshooting
-
-### HTTP 429 — Rate Limit do GitHub
-
-**Problema:** Sem `GITHUB_TOKEN`, o limite é apenas 60 requisições/hora.
-
-**Solução:**
-
-1. Crie um [Personal Access Token](https://github.com/settings/tokens) com escopo `public_repo`
-2. Configure no Vercel: **Settings → Environment Variables**
-3. Redeploy a aplicação
-
-### Outros Problemas
-
-Consulte a [documentação de debugging](./docs) ou [abra uma issue](https://github.com/i-c-l-5-5-5/kitsune/issues).
-
----
-
-## Roadmap
-
-- Integrações com GitLab e Bitbucket
-- Temas customizáveis via API
-- Sistema de templates para badges
-- Analytics integrado
-- Suporte a múltiplos idiomas
-- App mobile
-
----
+1. Criar branch a partir de `dev`
+2. Implementar mudanças
+3. Rodar checks locais (`type-check`, `test`, `build`)
+4. Abrir PR com descrição objetiva
 
 ## Licença
 
-MIT — veja [LICENSE](./LICENSE)
-
-Auditoria de dependências: [docs/AUDITORIA-LICENCAS.md](./docs/AUDITORIA-LICENCAS.md)
-
----
-
-## Contato
-
-- **Site:** https://galeria-tau-ten.vercel.app
-- **GitHub:** https://github.com/i-c-l-5-5-5/kitsune
-- **Issues:** https://github.com/i-c-l-5-5-5/kitsune/issues
-
----
+MIT — ver [LICENSE](./LICENSE).

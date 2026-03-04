@@ -14,19 +14,28 @@ export default function ScrollToTop(): React.ReactElement | null {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    let frameId: number | null = null;
+
     const toggleVisibility = (): void => {
-      // Mostra o botão quando o usuário rolar mais de SCROLL_THRESHOLD px
-      if (window.scrollY > SCROLL_THRESHOLD) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
+      if (frameId !== null) {
+        cancelAnimationFrame(frameId);
       }
+
+      frameId = requestAnimationFrame(() => {
+        setIsVisible(window.scrollY > SCROLL_THRESHOLD);
+        frameId = null;
+      });
+
+      // Mostra o botão quando o usuário rolar mais de SCROLL_THRESHOLD px
     };
 
-    window.addEventListener("scroll", toggleVisibility);
+    window.addEventListener("scroll", toggleVisibility, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", toggleVisibility);
+      if (frameId !== null) {
+        cancelAnimationFrame(frameId);
+      }
     };
   }, []);
 

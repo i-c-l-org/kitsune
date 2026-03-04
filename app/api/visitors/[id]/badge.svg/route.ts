@@ -92,7 +92,7 @@ export async function GET(
     if (shouldIncrement) {
       count = await redis.incr(key);
     } else {
-      count = (await redis.get<number>(key)) ?? 0;
+      count = (await redis.get(key)) ?? 0;
     }
   } catch (err) {
     console.error('Visitors badge operation error:', err);

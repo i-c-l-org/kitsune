@@ -58,6 +58,7 @@ export interface GitHubCommonParams {
   LARGURA_BORDA?: number;
   LARGURA?: number;
   ALTURA?: number;
+  COMPAT_GITHUB?: boolean;
 }
 export interface GitHubStatsThemeConfig {
   bgGradient: [string, string];

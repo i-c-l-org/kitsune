@@ -8,25 +8,33 @@ export type { GitHubStats };
 async function fetchGitHubStats(
   username: string,
   theme: string,
+  signal?: AbortSignal,
   width?: string,
   height?: string,
 ): Promise<string> {
-  const baseUrl = getBaseUrl();
-  const params = new URLSearchParams();
-  params.set('username', username);
-  params.set('theme', theme);
-  if (width) params.set('width', width);
-  if (height) params.set('height', height);
+  try {
+    const baseUrl = getBaseUrl();
+    const params = new URLSearchParams();
+    params.set('username', username);
+    params.set('theme', theme);
+    if (width) params.set('width', width);
+    if (height) params.set('height', height);
 
-  const response = await fetch(
-    `${baseUrl}/api/github-stats?${params.toString()}`,
-  );
+    const response = await fetch(
+      `${baseUrl}/api/github-stats?${params.toString()}`,
+      { signal: signal ?? null },
+    );
 
-  if (!response.ok) {
-    throw new Error('Failed to fetch GitHub stats');
+    if (!response.ok) {
+      throw new Error('Failed to fetch GitHub stats');
+    }
+
+    return response.text();
+  } catch (error) {
+    throw error instanceof Error
+      ? error
+      : new Error('Failed to fetch GitHub stats');
   }
-
-  return response.text();
 }
 
 export function useGitHubStats({
@@ -38,7 +46,8 @@ export function useGitHubStats({
 }: UseGitHubStatsOptions) {
   return useQuery({
     queryKey: ['github-stats', username, theme, width, height],
-    queryFn: () => fetchGitHubStats(username, theme, width, height),
+    queryFn: ({ signal }) =>
+      fetchGitHubStats(username, theme, signal, width, height),
     enabled: enabled && username.length > 0,
     staleTime: 5 * 60 * 1000,
   });
@@ -51,21 +60,28 @@ export function useGitHubStatsPreview(
 ) {
   return useQuery({
     queryKey: ['github-stats-preview', theme, width, height],
-    queryFn: async () => {
-      const baseUrl = getBaseUrl();
-      const params = new URLSearchParams();
-      if (width) params.set('width', width);
-      if (height) params.set('height', height);
+    queryFn: async ({ signal }) => {
+      try {
+        const baseUrl = getBaseUrl();
+        const params = new URLSearchParams();
+        if (width) params.set('width', width);
+        if (height) params.set('height', height);
 
-      const response = await fetch(
-        `${baseUrl}/api/github-stats/preview/${theme}${params.toString() ? `?${params.toString()}` : ''}`,
-      );
+        const response = await fetch(
+          `${baseUrl}/api/github-stats/preview/${theme}${params.toString() ? `?${params.toString()}` : ''}`,
+          { signal: signal ?? null },
+        );
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch preview');
+        if (!response.ok) {
+          throw new Error('Failed to fetch preview');
+        }
+
+        return response.text();
+      } catch (error) {
+        throw error instanceof Error
+          ? error
+          : new Error('Failed to fetch preview');
       }
-
-      return response.text();
     },
     staleTime: 10 * 60 * 1000,
   });

@@ -3,6 +3,7 @@ import type {
   ISVGGeneratorService,
 } from '@/core/interfaces/ISVGStrategy';
 import type { CardConfig, ThemeName } from '@/core/interfaces/IThemeStrategy';
+import type { SVGStrategyPayload } from '@/tipos/svg-strategy';
 import {
   ESTRATEGIA_ESTATISTICAS_GITHUB,
   ESTRATEGIA_LINGUAS_GITHUB,
@@ -21,7 +22,7 @@ class SVGGeneratorServiceImpl implements ISVGGeneratorService {
   }
   generate(
     type: string,
-    DADOS: unknown,
+    DADOS: SVGStrategyPayload,
     username: string,
     config?: CardConfig,
   ): string {

@@ -37,6 +37,8 @@ function getClientBaseUrl(): string {
   return '';
 }
 
+const DEFAULT_VISITORS_BADGE_PATH = '/api/visitors/{id}/badge.svg';
+
 export default function VisitorsBadgeGrid(): React.ReactElement {
   const [notification, setNotification] = useState<string>('');
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -63,6 +65,8 @@ export default function VisitorsBadgeGrid(): React.ReactElement {
   };
 
   const visitorIdPlaceholder = 'seu-usuario';
+  const repoOwnerPlaceholder = 'seu-owner';
+  const repoNamePlaceholder = 'seu-repo';
 
   const variants = useMemo<VisitorVariant[]>(
     () => [
@@ -153,14 +157,37 @@ export default function VisitorsBadgeGrid(): React.ReactElement {
           increment: '0',
         },
       },
+      {
+        id: 'clones-14d-default',
+        title: 'GitHub Clones 14d',
+        alt: 'Badge de clones oficiais dos últimos 14 dias',
+        labelForMarkdown: 'Clones 14d',
+        path: '/api/github-traffic/clones/badge.svg',
+        query: { owner: repoOwnerPlaceholder, repo: repoNamePlaceholder },
+        previewQuery: { owner: 'i-c-l-5-5-5', repo: 'kitsune' },
+      },
+      {
+        id: 'clones-14d-custom-repo',
+        title: 'GitHub Clones 14d (repo customizado)',
+        alt: 'Badge de clones 14d com owner/repo customizados',
+        labelForMarkdown: 'Clones 14d',
+        path: '/api/github-traffic/clones/badge.svg',
+        query: { owner: repoOwnerPlaceholder, repo: repoNamePlaceholder },
+        previewQuery: { owner: 'vercel', repo: 'next.js' },
+      },
     ],
-    [],
+    [repoNamePlaceholder, repoOwnerPlaceholder],
   );
+
+  const resolveBadgePath = (variant: VisitorVariant): string => {
+    const pathTemplate = variant.path ?? DEFAULT_VISITORS_BADGE_PATH;
+    return pathTemplate.replace('{id}', visitorIdPlaceholder);
+  };
 
   const generateMarkdownCode = (variant: VisitorVariant): string => {
     const baseUrl = getClientBaseUrl();
     const queryString = toQueryString(variant.query);
-    const imageUrl = `${baseUrl}/api/visitors/${visitorIdPlaceholder}/badge.svg${queryString}`;
+    const imageUrl = `${baseUrl}${resolveBadgePath(variant)}${queryString}`;
     return `![${variant.labelForMarkdown}](${imageUrl})`;
   };
 
@@ -200,12 +227,13 @@ export default function VisitorsBadgeGrid(): React.ReactElement {
           Visitors
         </h1>
         <p className="text-[var(--text-muted)]">
-          Exemplos visuais do badge de visitors. Copie o código e troque{' '}
-          <code>seu-usuario</code> pelo seu usuário.
+          Exemplos visuais de badges de visitors e de clones do GitHub (14d).
+          Copie o código e ajuste os placeholders conforme seu
+          perfil/repositório.
         </p>
         <p className="mt-2 text-sm text-[var(--text-muted)]">
-          Observação: os previews usam <code>increment=0</code> para não inflar
-          o contador.
+          Observação: os previews de visitors usam <code>increment=0</code> para
+          não inflar o contador.
         </p>
       </div>
 
@@ -213,7 +241,7 @@ export default function VisitorsBadgeGrid(): React.ReactElement {
         {variants.map((variant, index) => {
           const previewQuery = variant.previewQuery ?? variant.query;
           const previewQueryString = toQueryString(previewQuery);
-          const previewSrc = `/api/visitors/${visitorIdPlaceholder}/badge.svg${previewQueryString}`;
+          const previewSrc = `${resolveBadgePath(variant)}${previewQueryString}`;
 
           return (
             <Card

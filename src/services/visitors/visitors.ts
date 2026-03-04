@@ -3,8 +3,13 @@ import { Redis } from '@upstash/redis';
 // A small in‑memory store used when Upstash isn't configured. This allows
 // local development, testing and "safe failure" without crashing the app.
 const ARMAZENAMENTO_EM_MEMORIA: Record<string, number> = {};
-let FALLBACK_EM_MEMORIA: Redis | null = null;
-let SINGLETON_REDIS: Redis | null = null;
+let FALLBACK_EM_MEMORIA: VisitorsStore | null = null;
+let SINGLETON_REDIS: VisitorsStore | null = null;
+
+export interface VisitorsStore {
+  get(key: string): Promise<number | null>;
+  incr(key: string): Promise<number>;
+}
 function readEnv(...names: string[]): string | undefined {
   for (const NOME of names) {
     const VALOR = process.env[NOME];
@@ -40,7 +45,7 @@ export function isVisitorsRedisConfigured(): boolean {
   const TOKEN = readEnv('UPSTASH_REDIS_REST_TOKEN', 'UPSTASH_REDIS_TOKEN');
   return URL !== undefined && TOKEN !== undefined;
 }
-export function getVisitorsRedis(): Redis {
+export function getVisitorsRedis(): VisitorsStore {
   if (SINGLETON_REDIS !== null) return SINGLETON_REDIS;
 
   // environment values, if present
@@ -54,21 +59,39 @@ export function getVisitorsRedis(): Redis {
     if (FALLBACK_EM_MEMORIA === null) {
       FALLBACK_EM_MEMORIA = {
         async get(key: string) {
-          return (ARMAZENAMENTO_EM_MEMORIA[key] ?? null) as unknown as any;
+          return ARMAZENAMENTO_EM_MEMORIA[key] ?? null;
         },
         async incr(key: string) {
           ARMAZENAMENTO_EM_MEMORIA[key] =
             (ARMAZENAMENTO_EM_MEMORIA[key] ?? 0) + 1;
-          return ARMAZENAMENTO_EM_MEMORIA[key] as unknown as any;
+          return ARMAZENAMENTO_EM_MEMORIA[key];
         },
-      } as unknown as Redis;
+      };
     }
     return FALLBACK_EM_MEMORIA;
   }
-  SINGLETON_REDIS = new Redis({
+  const client = new Redis({
     url: URL,
     token: TOKEN,
   });
+  SINGLETON_REDIS = {
+    async get(key: string) {
+      try {
+        const value = await client.get<number>(key);
+        return typeof value === 'number' ? value : null;
+      } catch {
+        return null;
+      }
+    },
+    async incr(key: string) {
+      try {
+        const value = await client.incr(key);
+        return typeof value === 'number' ? value : Number(value) || 0;
+      } catch {
+        return 0;
+      }
+    },
+  };
   return SINGLETON_REDIS;
 }
 export function normalizeVisitorId(rawId: string): string | null {

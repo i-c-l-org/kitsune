@@ -76,7 +76,7 @@ export default function GalleryGrid({
     try {
       await navigator.clipboard.writeText(markdownCode);
       showNotificationMessage('✓ Código copiado com sucesso!');
-    } catch (error) {
+    } catch {
       showNotificationMessage('Não foi possível copiar o código.');
     }
   };
@@ -103,7 +103,7 @@ export default function GalleryGrid({
     try {
       await navigator.clipboard.writeText(currentCode);
       showNotificationMessage('✓ Código copiado!');
-    } catch (error) {
+    } catch {
       showNotificationMessage('Não foi possível copiar o código.');
     }
   };
