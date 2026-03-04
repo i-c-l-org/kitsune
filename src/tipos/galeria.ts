@@ -4,7 +4,7 @@
 
 export type CategoryType =
   | 'banner'
-  | 'preview'
+  | 'github-stats'
   | 'skills'
   | 'decorativos'
   | 'info'
@@ -16,7 +16,7 @@ export type CategoryType =
 export type GalleryRouteSlug =
   | ''
   | 'banners'
-  | 'preview'
+  | 'github-stats'
   | 'skills'
   | 'social'
   | 'langs'
