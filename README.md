@@ -9,10 +9,10 @@ Referências a materiais externos devem ser linkadas e reescritas com palavras p
 
 Plataforma open-source para gerar e servir SVGs (badges, banners e cards de GitHub) com foco em uso em README/perfil.
 
-[![CI](https://github.com/i-c-l-5-5-5/kitsune/actions/workflows/ci.yml/badge.svg)](https://github.com/i-c-l-5-5-5/kitsune/actions/workflows/ci.yml)
+[![CI](https://github.com/i-c-l-org/kitsune/actions/workflows/ci.yml/badge.svg)](https://github.com/i-c-l-org/kitsune/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![Node](https://img.shields.io/badge/Node-%3E%3D24.12.0-green.svg)](https://nodejs.org)
-[![Clones 14d](https://kitsune-galeria.vercel.app/api/github-traffic/clones/badge.svg?owner=i-c-l-5-5-5&repo=kitsune)](https://github.com/i-c-l-5-5-5/kitsune/graphs/traffic)
+![Clones 14d](https://kitsune-galeria.vercel.app/api/github-traffic/clones/badge.svg?owner=i-c-l-org&repo=kitsune)
 
 [Demo](https://kitsune-galeria.vercel.app) · [Galeria](https://kitsune-galeria.vercel.app/galeria) · [Blog](https://kitsune-galeria.vercel.app/blog) · [API](./docs/api.md) · [Arquitetura](./docs/arquitetura.md)
 
@@ -122,7 +122,7 @@ Exemplo:
 ### Setup local
 
 ```bash
-git clone https://github.com/i-c-l-5-5-5/kitsune.git
+git clone https://github.com/i-c-l-org/kitsune.git
 cd kitsune
 npm install
 cp .env.example .env.local
