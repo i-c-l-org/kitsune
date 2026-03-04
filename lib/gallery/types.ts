@@ -13,9 +13,9 @@ export const categoryLabels: Record<CategoryType, CategoryInfo> = {
     icon: 'fas fa-image',
     description: 'Banners decorativos para o topo do seu perfil GitHub',
   },
-  preview: {
-    title: 'Preview',
-    icon: 'fas fa-eye',
+  'github-stats': {
+    title: 'GitHub Stats',
+    icon: 'fas fa-github',
     description: 'Previsualize seus cards do GitHub antes de usar',
   },
   skills: {
