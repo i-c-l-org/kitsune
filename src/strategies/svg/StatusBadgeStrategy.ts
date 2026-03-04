@@ -1,6 +1,7 @@
 import type { SVGStrategy } from "@/core/interfaces/ISVGStrategy";
 import type { CardConfig, ThemeName } from "@/core/interfaces/IThemeStrategy";
 import type { StatusBadgeTheme } from "@/tipos/statusBadge";
+import type { SVGStrategyPayload } from "@/tipos/svg-strategy";
 const TEMAS: Record<string, StatusBadgeTheme> = {
   ocean: {
     bgGradient: ["#0F2027", "#203A43"],
@@ -75,10 +76,18 @@ function getTheme(CHAVE_TEMA: string): StatusBadgeTheme {
 }
 export class StatusBadgeStrategy implements SVGStrategy {
   readonly type = "status-badge";
-  generate(DADOS: unknown, _username: string, config?: CardConfig): string {
-    const { variant } = DADOS as {
-      variant?: string;
-    };
+  generate(
+    DADOS: SVGStrategyPayload,
+    _username: string,
+    config?: CardConfig,
+  ): string {
+    const variant =
+      typeof DADOS === "object" &&
+      DADOS !== null &&
+      "variant" in DADOS &&
+      typeof DADOS.variant === "string"
+        ? DADOS.variant
+        : undefined;
     const CHAVE_TEMA = (config?.theme ?? config?.TEMA ?? "ocean") as ThemeName;
     const TEMA = getTheme(CHAVE_TEMA);
     const ESTATISTICAS = {

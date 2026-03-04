@@ -1,6 +1,7 @@
 import type { SVGStrategy } from "@/core/interfaces/ISVGStrategy";
 import type { CardConfig } from "@/core/interfaces/IThemeStrategy";
 import type { VisitorBadgeStyleOptions } from "@/tipos/visitor";
+import type { SVGStrategyPayload } from "@/tipos/svg-strategy";
 const BASE_SVG_BADGE_VISITANTE = `<?xml version="1.0" encoding="UTF-8"?><svg viewBox="0 0 160 28" xmlns="http://www.w3.org/2000/svg" width="160" height="28" role="img" aria-label="__ARIA_LABEL__"><linearGradient id="g" x2="0" y2="100%"><stop offset="0" stop-color="#fff" stop-opacity=".12"/><stop offset="1" stop-opacity=".12"/></linearGradient><rect width="160" height="28" rx="__RX__" fill="__LABEL_BG__"/><rect x="86" width="74" height="28" rx="__RX__" fill="__VALUE_BG__"/><path fill="__VALUE_BG__" d="M86 0h6v28h-6z"/><rect width="160" height="28" rx="__RX__" fill="url(#g)"/><g fill="__TEXT_COLOR__" text-anchor="middle" font-family="Verdana,DejaVu Sans,sans-serif" font-size="12"><text x="43" y="19">__LABEL__</text><text x="123" y="19">__VALUE__</text></g></svg>`;
 function escapeXml(VALOR: string): string {
   return VALOR.replaceAll("&", "&amp;")
@@ -30,7 +31,11 @@ function resolveRx(options: VisitorBadgeStyleOptions | undefined): number {
 }
 export class VisitorBadgeStrategy implements SVGStrategy {
   readonly type = "visitor-badge";
-  generate(DADOS: unknown, _username: string, _config?: CardConfig): string {
+  generate(
+    DADOS: SVGStrategyPayload,
+    _username: string,
+    _config?: CardConfig,
+  ): string {
     const { label, VALOR, options } = DADOS as {
       label: string;
       VALOR: string;

@@ -32,6 +32,7 @@ export interface CardConfig {
   LARGURA_BORDA?: number;
   LARGURA?: number;
   ALTURA?: number;
+  COMPAT_GITHUB?: boolean;
 }
 export interface ThemeStrategy {
   readonly NOME: ThemeName;

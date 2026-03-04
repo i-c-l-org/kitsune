@@ -28,6 +28,12 @@ function parseCommonParams(searchParams: URLSearchParams): GitHubCommonParams {
     searchParams.get('border_width') ?? searchParams.get('borderWidth');
   const widthParam = searchParams.get('width') ?? searchParams.get('w');
   const heightParam = searchParams.get('height') ?? searchParams.get('h');
+  const compatParam = searchParams.get('compat') ?? searchParams.get('mode');
+  const compatNormalized = compatParam?.trim().toLowerCase();
+  const compatGithub =
+    compatNormalized === 'github' ||
+    compatNormalized === '1' ||
+    compatNormalized === 'true';
 
   return {
     theme: theme as GitHubCommonParams['theme'],
@@ -38,6 +44,7 @@ function parseCommonParams(searchParams: URLSearchParams): GitHubCommonParams {
       !Number.isNaN(Number(widthParam)) && { width: Number(widthParam) }),
     ...(heightParam !== null &&
       !Number.isNaN(Number(heightParam)) && { height: Number(heightParam) }),
+    ...(compatGithub && { COMPAT_GITHUB: true }),
   };
 }
 

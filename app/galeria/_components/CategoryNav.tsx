@@ -6,6 +6,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useCallback } from 'react';
 import type { GalleryCategory } from '@/tipos/galeria';
 
 const categories: GalleryCategory[] = [
@@ -29,12 +30,15 @@ const categories: GalleryCategory[] = [
 export default function CategoryNav(): React.ReactElement {
   const pathname = usePathname();
 
-  const isActive = (slug: string): boolean => {
-    if (slug === '') {
-      return pathname === '/galeria';
-    }
-    return pathname === `/galeria/${slug}`;
-  };
+  const isActive = useCallback(
+    (slug: string): boolean => {
+      if (slug === '') {
+        return pathname === '/galeria';
+      }
+      return pathname === `/galeria/${slug}`;
+    },
+    [pathname],
+  );
 
   return (
     <nav className="mb-8">

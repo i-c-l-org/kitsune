@@ -19,6 +19,7 @@ export interface VisitorVariant {
   title: string;
   alt: string;
   labelForMarkdown: string;
+  path?: string;
   query: Record<string, string>;
   previewQuery?: Record<string, string>;
 }

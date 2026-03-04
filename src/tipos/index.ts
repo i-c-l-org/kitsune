@@ -65,6 +65,7 @@ export type {
   ThemeStrategy,
 } from './theme';
 export type {
+  SVGStrategyPayload,
   SVGGenerationContext,
   SVGStrategy,
   ISVGGeneratorService,

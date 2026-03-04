@@ -133,6 +133,7 @@ const ThemeCard = memo(function ThemeCard({
     if (width) params.set("width", width);
     if (height) params.set("height", height);
     params.set("theme", themeName);
+    params.set("compat", "github");
     return `/api/github-stats/${username}?${params.toString()}`;
   }, [username, width, height, themeName]);
 
@@ -150,41 +151,41 @@ const ThemeCard = memo(function ThemeCard({
     copyTimeoutRef.current = timeout;
   }, [codeUrl]);
 
+  const handleMouseEnter = useCallback(() => {
+    setIsHovered(true);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setIsHovered(false);
+  }, []);
+
+  const previewDataUri = useMemo(() => {
+    if (!svgContent) return null;
+    return `data:image/svg+xml;utf8,${encodeURIComponent(svgContent)}`;
+  }, [svgContent]);
+
   // CSS variables for dynamic accents
-  const cardStyle = useMemo(
-    () =>
-      ({
-        "--theme-accent": accentColor,
-        "--theme-accent-glow": `${accentColor}${ALPHA_SUBTLE}`,
-      }) as React.CSSProperties,
-    [accentColor],
-  );
+  const cardStyle = {
+    "--theme-accent": accentColor,
+    "--theme-accent-glow": `${accentColor}${ALPHA_SUBTLE}`,
+  } as React.CSSProperties;
 
-  const accentBarStyle = useMemo(
-    () => ({
-      background: `linear-gradient(90deg, ${accentColor}, ${accentColor}${ALPHA_MID}, ${accentColor})`,
-      opacity: isHovered ? 1 : 0.5,
-    }),
-    [accentColor, isHovered],
-  );
+  const accentBarStyle = {
+    background: `linear-gradient(90deg, ${accentColor}, ${accentColor}${ALPHA_MID}, ${accentColor})`,
+    opacity: isHovered ? 1 : 0.5,
+  };
 
-  const tagPillStyle = useMemo(
-    () => ({
-      background: `${accentColor}${ALPHA_BG}`,
-      color: accentColor,
-      borderColor: `${accentColor}${ALPHA_SUBTLE}`,
-    }),
-    [accentColor],
-  );
+  const tagPillStyle = {
+    background: `${accentColor}${ALPHA_BG}`,
+    color: accentColor,
+    borderColor: `${accentColor}${ALPHA_SUBTLE}`,
+  };
 
-  const copyBtnStyle = useMemo(
-    () => ({
-      background: copied
-        ? SUCCESS_GREEN_COLOR
-        : `linear-gradient(135deg, ${accentColor}, ${accentColor}${ALPHA_BORDER})`,
-    }),
-    [accentColor, copied],
-  );
+  const copyBtnStyle = {
+    background: copied
+      ? SUCCESS_GREEN_COLOR
+      : `linear-gradient(135deg, ${accentColor}, ${accentColor}${ALPHA_BORDER})`,
+  };
 
   const renderPreview = () => {
     if (isLoading) {
@@ -211,13 +212,12 @@ const ThemeCard = memo(function ThemeCard({
       );
     }
 
-    if (svgContent) {
+    if (previewDataUri) {
       return (
-        <div
+        <img
           className="svgPreviewContainer svgPreviewAutoHeight"
-          // SVG content is sourced from internal Kitsune API (/api/github-stats/preview)
-          // and is sanitized on the server side correctly.
-          dangerouslySetInnerHTML={{ __html: svgContent }}
+          src={previewDataUri}
+          alt={`Preview do tema ${themeLabel}`}
         />
       );
     }
@@ -230,8 +230,8 @@ const ThemeCard = memo(function ThemeCard({
   return (
     <Card
       className="previewThemeCard"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       style={cardStyle}
     >
       <div className="previewThemeAccentBar" style={accentBarStyle} />

@@ -14,6 +14,7 @@ Bem-vindo à documentação do projeto Galeria I.C.L.
 - [Temas](./temas.md) — Personalização visual dos cards
 - [APIs](./api.md) — Endpoints disponíveis
 - [Arquitetura](./arquitetura.md) — Estrutura técnica do projeto
+- [Deploy e Variáveis](./deploy-env.md) — Configuração de ambiente para publicar o site
 
 ## Links Rápidos
 
