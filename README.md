@@ -1,18 +1,32 @@
+<!--
+
 Proveniência e Autoria: Este documento integra o projeto Galeria Kitsune (licença MIT).
 Nada aqui implica cessão de direitos morais/autorais.
 Conteúdos de terceiros não licenciados de forma compatível não devem ser incluídos.
 Referências a materiais externos devem ser linkadas e reescritas com palavras próprias.
 
+-->
+
+<img src="./img/verm-preto.png"/>
+
+---
+
 <div align="center">
 
-# Galeria Kitsune
+# Galeria Kitsune 🦊
 
 Plataforma open-source para gerar e servir SVGs (badges, banners e cards de GitHub) com foco em uso em README/perfil.
 
-[![CI](https://github.com/i-c-l-org/kitsune/actions/workflows/ci.yml/badge.svg)](https://github.com/i-c-l-org/kitsune/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
-[![Node](https://img.shields.io/badge/Node-%3E%3D24.12.0-green.svg)](https://nodejs.org)
-![Clones](https://kitsune-galeria.vercel.app/api/github-traffic/clones/badge.svg?owner=i-c-l-org&repo=kitsune)
+</div>
+
+---
+
+![estrelas que e bom nada!](https://kitsune-galeria.vercel.app/api/github-traffic/clones/badge.svg?owner=i-c-l-org&repo=kitsune)
+
+
+![colecionavel](https://kitsune-galeria.vercel.app/api/svg/badges/info/badge-colecionavel.svg)
+
+<div align="center">
 
 [Demo](https://kitsune-galeria.vercel.app) · [Galeria](https://kitsune-galeria.vercel.app/galeria) · [Blog](https://kitsune-galeria.vercel.app/blog) · [API](./docs/api.md) · [Arquitetura](./docs/arquitetura.md)
 
@@ -86,16 +100,23 @@ Exemplo recomendado para README do GitHub:
 ![GitHub Stats](https://kitsune-galeria.vercel.app/api/github-stats/seu-usuario?theme=ocean&width=600&compat=github)
 ```
 
-### GitHub Top Languages (SVG)
-
-- `GET /api/github-langs/[username]`
-- `GET /api/github-langs/preview/[theme]`
-
-Exemplo recomendado para README do GitHub:
-
 ```md
 ![Top Langs](https://kitsune-galeria.vercel.app/api/github-langs/seu-usuario?theme=neon&compat=github)
+
 ```
+---
+<div align="center">
+
+<a href="https://kitsune-galeria.vercel.app/api/github-stats/i-c-l-org?theme=ocean&width=600&compat=github">
+  <img src="https://kitsune-galeria.vercel.app/api/github-stats/i-c-l-org?theme=ocean&width=400&compat=github" width="400" alt="GitHub Stats" />
+</a>
+<a href="https://kitsune-galeria.vercel.app/api/github-langs/i-c-l-org?theme=neon&compat=github">
+  <img src="https://kitsune-galeria.vercel.app/api/github-langs/i-c-l-org?theme=neon&width=400&compat=github" width="400" alt="Top Langs" />
+</a>
+
+</div>
+
+---
 
 ### Visitors
 
@@ -225,4 +246,8 @@ Fluxo recomendado:
 
 ## Licença
 
-MIT — ver [LICENSE](./LICENSE).
+![MIT](https://kitsune-galeria.vercel.app/api/svg/badges/info/badge-license-mit.svg)
+
+---
+
+<img align="right" width="90" height="90" src="./img/logo-l.png"/>
