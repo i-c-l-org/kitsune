@@ -32,7 +32,8 @@ export async function GET(request: Request): Promise<NextResponse> {
   const token = process.env['GITHUB_TOKEN']?.trim();
 
   // GitHub Traffic API retorna janela de 14 dias.
-  let message = 'err 503';
+  // Sem token válido/permissão, exibimos fallback neutro.
+  let message = 'n/a';
 
   if (token !== undefined && token !== '') {
     try {
@@ -59,11 +60,9 @@ export async function GET(request: Request): Promise<NextResponse> {
             ? data.uniques
             : 0;
         message = `${count} | u:${uniques}`;
-      } else {
-        message = `err ${response.status}`;
       }
     } catch {
-      message = 'err 500';
+      message = 'n/a';
     }
   }
 
