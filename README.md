@@ -23,7 +23,6 @@ Plataforma open-source para gerar e servir SVGs (badges, banners e cards de GitH
 
 ![estrelas que e bom nada!](https://kitsune-galeria.vercel.app/api/github-traffic/clones/badge.svg?owner=i-c-l-org&repo=kitsune)
 
-
 ![colecionavel](https://kitsune-galeria.vercel.app/api/svg/badges/info/badge-colecionavel.svg)
 
 <div align="center">
@@ -102,9 +101,10 @@ Exemplo recomendado para README do GitHub:
 
 ```md
 ![Top Langs](https://kitsune-galeria.vercel.app/api/github-langs/seu-usuario?theme=neon&compat=github)
-
 ```
+
 ---
+
 <div align="center">
 
 <a href="https://kitsune-galeria.vercel.app/api/github-stats/i-c-l-org?theme=ocean&width=600&compat=github">
