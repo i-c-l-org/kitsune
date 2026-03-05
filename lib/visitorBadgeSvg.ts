@@ -44,22 +44,63 @@ function resolveRx(options: VisitorBadgeStyleOptions | undefined): number {
   }
 }
 
+function buildGradientDefs(
+  gradient: VisitorBadgeStyleOptions['gradient'],
+  id: string,
+): string {
+  if (!gradient) return '';
+
+  const valueDir = gradient.value.direction ?? 0;
+
+  return `<defs>
+    <linearGradient id="${id}-label" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="${gradient.label.start}"/>
+      <stop offset="100%" stop-color="${gradient.label.end}"/>
+    </linearGradient>
+    <linearGradient id="${id}-value" x1="0%" y1="0%" x2="${valueDir === 90 ? '100' : '0'}%" y2="${valueDir === 90 ? '0' : '100'}%">
+      <stop offset="0%" stop-color="${gradient.value.start}"/>
+      <stop offset="100%" stop-color="${gradient.value.end}"/>
+    </linearGradient>
+  </defs>`;
+}
+
+function resolveLabelBg(
+  options: VisitorBadgeStyleOptions | undefined,
+  gradientId: string,
+): string {
+  if (options?.gradient?.label) {
+    return `url(#${gradientId}-label)`;
+  }
+  return options?.labelBg ?? '#111';
+}
+
+function resolveValueBg(
+  options: VisitorBadgeStyleOptions | undefined,
+  gradientId: string,
+): string {
+  if (options?.gradient?.value) {
+    return `url(#${gradientId}-value)`;
+  }
+  return options?.valueBg ?? '#222';
+}
+
 export function renderVisitorBadgeSvg(
   label: string,
   value: string,
   options?: VisitorBadgeStyleOptions,
 ): string {
-  // Badge simples (estilo “flat”) sem depender de libs.
-  // Medidas fixas para manter previsibilidade no GitHub README.
   const safeLabel = escapeXml(label);
   const safeValue = escapeXml(value);
 
   const ariaLabel = `${safeLabel}: ${safeValue}`;
 
-  const labelBg = options?.labelBg ?? '#111';
-  const valueBg = options?.valueBg ?? '#222';
   const textColor = options?.textColor ?? '#fff';
   const rx = resolveRx(options);
+
+  const gradientId = `g${Math.random().toString(36).substring(2, 8)}`;
+  const defs = buildGradientDefs(options?.gradient, gradientId);
+  const labelBg = resolveLabelBg(options, gradientId);
+  const valueBg = resolveValueBg(options, gradientId);
 
   return BASE_SVG_BADGE_VISITANTE.replace('__ARIA_LABEL__', ariaLabel)
     .replace('__LABEL__', safeLabel)
@@ -67,5 +108,6 @@ export function renderVisitorBadgeSvg(
     .replaceAll('__LABEL_BG__', labelBg)
     .replaceAll('__VALUE_BG__', valueBg)
     .replaceAll('__TEXT_COLOR__', textColor)
-    .replaceAll('__RX__', String(rx));
+    .replaceAll('__RX__', String(rx))
+    .replace('__DEFS__', defs);
 }
