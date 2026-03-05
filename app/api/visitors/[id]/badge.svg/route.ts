@@ -88,11 +88,33 @@ export async function GET(
   const textColor = normalizeHexColor(searchParams.get('textColor'));
   const shape = normalizeShape(searchParams.get('shape'));
 
+  const labelGradientStart = normalizeGradientColor(searchParams.get('labelGradientStart'));
+  const labelGradientEnd = normalizeGradientColor(searchParams.get('labelGradientEnd'));
+  const valueGradientStart = normalizeGradientColor(searchParams.get('valueGradientStart'));
+  const valueGradientEnd = normalizeGradientColor(searchParams.get('valueGradientEnd'));
+
+  const hasLabelGradient = labelGradientStart !== undefined && labelGradientEnd !== undefined;
+  const hasValueGradient = valueGradientStart !== undefined && valueGradientEnd !== undefined;
+
   const styleOptions = {
     ...(labelBg !== undefined ? { labelBg } : {}),
     ...(valueBg !== undefined ? { valueBg } : {}),
     ...(textColor !== undefined ? { textColor } : {}),
     ...(shape !== undefined ? { shape } : {}),
+    ...(hasLabelGradient || hasValueGradient
+      ? {
+          gradient: {
+            label: {
+              start: labelGradientStart!,
+              end: labelGradientEnd!,
+            },
+            value: {
+              start: valueGradientStart!,
+              end: valueGradientEnd!,
+            },
+          },
+        }
+      : {}),
   };
 
   const configured = isVisitorsRedisConfigured();
