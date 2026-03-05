@@ -12,7 +12,7 @@ Plataforma open-source para gerar e servir SVGs (badges, banners e cards de GitH
 [![CI](https://github.com/i-c-l-org/kitsune/actions/workflows/ci.yml/badge.svg)](https://github.com/i-c-l-org/kitsune/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![Node](https://img.shields.io/badge/Node-%3E%3D24.12.0-green.svg)](https://nodejs.org)
-![Clones 14d](https://kitsune-galeria.vercel.app/api/github-traffic/clones/badge.svg?owner=i-c-l-org&repo=kitsune)
+![Clones](https://kitsune-galeria.vercel.app/api/github-traffic/clones/badge.svg?owner=i-c-l-org&repo=kitsune)
 
 [Demo](https://kitsune-galeria.vercel.app) · [Galeria](https://kitsune-galeria.vercel.app/galeria) · [Blog](https://kitsune-galeria.vercel.app/blog) · [API](./docs/api.md) · [Arquitetura](./docs/arquitetura.md)
 
