@@ -39,9 +39,7 @@ function normalizeShape(
   }
 }
 
-function normalizeGradientColor(
-  value: string | null,
-): string | undefined {
+function normalizeGradientColor(value: string | null): string | undefined {
   if (value === null) return undefined;
   const trimmed = value.trim();
   if (trimmed === '') return undefined;
@@ -88,13 +86,23 @@ export async function GET(
   const textColor = normalizeHexColor(searchParams.get('textColor'));
   const shape = normalizeShape(searchParams.get('shape'));
 
-  const labelGradientStart = normalizeGradientColor(searchParams.get('labelGradientStart'));
-  const labelGradientEnd = normalizeGradientColor(searchParams.get('labelGradientEnd'));
-  const valueGradientStart = normalizeGradientColor(searchParams.get('valueGradientStart'));
-  const valueGradientEnd = normalizeGradientColor(searchParams.get('valueGradientEnd'));
+  const labelGradientStart = normalizeGradientColor(
+    searchParams.get('labelGradientStart'),
+  );
+  const labelGradientEnd = normalizeGradientColor(
+    searchParams.get('labelGradientEnd'),
+  );
+  const valueGradientStart = normalizeGradientColor(
+    searchParams.get('valueGradientStart'),
+  );
+  const valueGradientEnd = normalizeGradientColor(
+    searchParams.get('valueGradientEnd'),
+  );
 
-  const hasLabelGradient = labelGradientStart !== undefined && labelGradientEnd !== undefined;
-  const hasValueGradient = valueGradientStart !== undefined && valueGradientEnd !== undefined;
+  const hasLabelGradient =
+    labelGradientStart !== undefined && labelGradientEnd !== undefined;
+  const hasValueGradient =
+    valueGradientStart !== undefined && valueGradientEnd !== undefined;
 
   const styleOptions = {
     ...(labelBg !== undefined ? { labelBg } : {}),

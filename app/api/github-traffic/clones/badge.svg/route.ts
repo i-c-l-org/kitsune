@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server';
-import { renderVisitorBadgeSvg } from '@/lib/visitorBadgeSvg';
+import { renderCloneBadgeSvg } from '@/lib/cloneBadgeSvg';
 
-const DEFAULT_OWNER = 'i-c-l-5-5-5';
+const DEFAULT_OWNER = 'i-c-l-org';
 const DEFAULT_REPO = 'kitsune';
 const CACHE_SECONDS = 3600;
 
 interface GitHubTrafficClonesResponse {
   count?: number;
-  uniques?: number;
 }
 
 function normalizeRepoPart(
@@ -55,18 +54,14 @@ export async function GET(request: Request): Promise<NextResponse> {
           typeof data.count === 'number' && Number.isFinite(data.count)
             ? data.count
             : 0;
-        const uniques =
-          typeof data.uniques === 'number' && Number.isFinite(data.uniques)
-            ? data.uniques
-            : 0;
-        message = `${count} | u:${uniques}`;
+        message = `${count} clones`;
       }
     } catch {
       message = 'n/a';
     }
   }
 
-  const svg = renderVisitorBadgeSvg('clones', message, {
+  const svg = renderCloneBadgeSvg('clones', message, {
     labelBg: '#0f172a',
     valueBg: '#1d4ed8',
     textColor: '#ffffff',
