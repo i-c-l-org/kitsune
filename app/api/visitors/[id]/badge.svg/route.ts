@@ -39,6 +39,16 @@ function normalizeShape(
   }
 }
 
+function normalizeGradientColor(value: string | null): string | undefined {
+  if (value === null) return undefined;
+  const trimmed = value.trim();
+  if (trimmed === '') return undefined;
+  if (/^#[0-9a-fA-F]{3}$/.test(trimmed) || /^#[0-9a-fA-F]{6}$/.test(trimmed)) {
+    return trimmed;
+  }
+  return undefined;
+}
+
 function normalizeLabel(value: string | null): string | undefined {
   if (value === null) return undefined;
   const trimmed = value.trim();
@@ -76,11 +86,43 @@ export async function GET(
   const textColor = normalizeHexColor(searchParams.get('textColor'));
   const shape = normalizeShape(searchParams.get('shape'));
 
+  const labelGradientStart = normalizeGradientColor(
+    searchParams.get('labelGradientStart'),
+  );
+  const labelGradientEnd = normalizeGradientColor(
+    searchParams.get('labelGradientEnd'),
+  );
+  const valueGradientStart = normalizeGradientColor(
+    searchParams.get('valueGradientStart'),
+  );
+  const valueGradientEnd = normalizeGradientColor(
+    searchParams.get('valueGradientEnd'),
+  );
+
+  const hasLabelGradient =
+    labelGradientStart !== undefined && labelGradientEnd !== undefined;
+  const hasValueGradient =
+    valueGradientStart !== undefined && valueGradientEnd !== undefined;
+
   const styleOptions = {
     ...(labelBg !== undefined ? { labelBg } : {}),
     ...(valueBg !== undefined ? { valueBg } : {}),
     ...(textColor !== undefined ? { textColor } : {}),
     ...(shape !== undefined ? { shape } : {}),
+    ...(hasLabelGradient || hasValueGradient
+      ? {
+          gradient: {
+            label: {
+              start: labelGradientStart!,
+              end: labelGradientEnd!,
+            },
+            value: {
+              start: valueGradientStart!,
+              end: valueGradientEnd!,
+            },
+          },
+        }
+      : {}),
   };
 
   const configured = isVisitorsRedisConfigured();

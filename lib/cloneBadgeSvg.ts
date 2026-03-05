@@ -2,16 +2,11 @@ import { BASE_SVG_BADGE_VISITANTE } from '@/services/visitors/visitorBadgeBase';
 import type {
   VisitorBadgeShape,
   VisitorBadgeStyleOptions,
+  VisitorGradient,
 } from '@/tipos/visitor';
 
-// Re-export para manter compatibilidade
 export type { VisitorBadgeShape, VisitorBadgeStyleOptions };
 
-/**
- * Escapa caracteres especiais XML/HTML para uso seguro em SVG
- * @param value - Texto a ser escapado
- * @returns Texto com caracteres especiais escapados
- */
 function escapeXml(value: string): string {
   return value
     .replaceAll('&', '&amp;')
@@ -45,46 +40,33 @@ function resolveRx(options: VisitorBadgeStyleOptions | undefined): number {
 }
 
 function buildGradientDefs(
-  gradient: VisitorBadgeStyleOptions['gradient'],
+  gradient: VisitorGradient | undefined,
   id: string,
 ): string {
   if (!gradient) return '';
 
-  const valueDir = gradient.value.direction ?? 0;
+  const direction = gradient.direction ?? 0;
 
   return `<defs>
-    <linearGradient id="${id}-label" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="${gradient.label.start}"/>
-      <stop offset="100%" stop-color="${gradient.label.end}"/>
-    </linearGradient>
-    <linearGradient id="${id}-value" x1="0%" y1="0%" x2="${valueDir === 90 ? '100' : '0'}%" y2="${valueDir === 90 ? '0' : '100'}%">
-      <stop offset="0%" stop-color="${gradient.value.start}"/>
-      <stop offset="100%" stop-color="${gradient.value.end}"/>
+    <linearGradient id="${id}" x1="0%" y1="0%" x2="${direction === 90 ? '100' : '0'}%" y2="${direction === 90 ? '0' : '100'}%">
+      <stop offset="0%" stop-color="${gradient.start}"/>
+      <stop offset="100%" stop-color="${gradient.end}"/>
     </linearGradient>
   </defs>`;
 }
 
-function resolveLabelBg(
+function resolveBg(
   options: VisitorBadgeStyleOptions | undefined,
   gradientId: string,
-): string {
-  if (options?.gradient?.label) {
-    return `url(#${gradientId}-label)`;
-  }
-  return options?.labelBg ?? '#111';
-}
-
-function resolveValueBg(
-  options: VisitorBadgeStyleOptions | undefined,
-  gradientId: string,
+  defaultColor: string,
 ): string {
   if (options?.gradient?.value) {
-    return `url(#${gradientId}-value)`;
+    return `url(#${gradientId})`;
   }
-  return options?.valueBg ?? '#222';
+  return options?.valueBg ?? defaultColor;
 }
 
-export function renderVisitorBadgeSvg(
+export function renderCloneBadgeSvg(
   label: string,
   value: string,
   options?: VisitorBadgeStyleOptions,
@@ -94,19 +76,22 @@ export function renderVisitorBadgeSvg(
 
   const ariaLabel = `${safeLabel}: ${safeValue}`;
 
-  const textColor = options?.textColor ?? '#fff';
+  const labelBg = options?.labelBg ?? '#0f172a';
+  const valueBg = resolveBg(options, 'cloneGrad', '#1d4ed8');
+  const textColor = options?.textColor ?? '#ffffff';
   const rx = resolveRx(options);
 
   const gradientId = `g${Math.random().toString(36).substring(2, 8)}`;
-  const defs = buildGradientDefs(options?.gradient, gradientId);
-  const labelBg = resolveLabelBg(options, gradientId);
-  const valueBg = resolveValueBg(options, gradientId);
+  const defs = buildGradientDefs(options?.gradient?.value, gradientId);
 
   return BASE_SVG_BADGE_VISITANTE.replace('__ARIA_LABEL__', ariaLabel)
     .replace('__LABEL__', safeLabel)
     .replace('__VALUE__', safeValue)
     .replaceAll('__LABEL_BG__', labelBg)
-    .replaceAll('__VALUE_BG__', valueBg)
+    .replaceAll(
+      '__VALUE_BG__',
+      options?.gradient?.value ? `url(#${gradientId})` : valueBg,
+    )
     .replaceAll('__TEXT_COLOR__', textColor)
     .replaceAll('__RX__', String(rx))
     .replace('__DEFS__', defs);

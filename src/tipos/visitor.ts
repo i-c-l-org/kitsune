@@ -3,12 +3,23 @@
  */
 
 export type VisitorBadgeShape = 'rounded' | 'square' | 'pill';
+
+export interface VisitorGradient {
+  start: string;
+  end: string;
+  direction?: number;
+}
+
 export interface VisitorBadgeStyleOptions {
   labelBg?: string;
   valueBg?: string;
   textColor?: string;
   rx?: number;
   shape?: VisitorBadgeShape;
+  gradient?: {
+    label: VisitorGradient;
+    value: VisitorGradient;
+  };
 }
 
 /**
