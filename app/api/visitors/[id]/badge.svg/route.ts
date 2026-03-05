@@ -39,6 +39,18 @@ function normalizeShape(
   }
 }
 
+function normalizeGradientColor(
+  value: string | null,
+): string | undefined {
+  if (value === null) return undefined;
+  const trimmed = value.trim();
+  if (trimmed === '') return undefined;
+  if (/^#[0-9a-fA-F]{3}$/.test(trimmed) || /^#[0-9a-fA-F]{6}$/.test(trimmed)) {
+    return trimmed;
+  }
+  return undefined;
+}
+
 function normalizeLabel(value: string | null): string | undefined {
   if (value === null) return undefined;
   const trimmed = value.trim();
