@@ -32,12 +32,9 @@ export async function GET(request: Request): Promise<NextResponse> {
   const token = process.env['GITHUB_TOKEN']?.trim();
 
   // GitHub Traffic API retorna janela de 14 dias.
-  let message = 'n/a';
-  let status = 200;
+  let message = 'err 503';
 
-  if (token === undefined || token === '') {
-    status = 503;
-  } else {
+  if (token !== undefined && token !== '') {
     try {
       const response = await fetch(
         `https://api.github.com/repos/${owner}/${repo}/traffic/clones`,
@@ -62,17 +59,15 @@ export async function GET(request: Request): Promise<NextResponse> {
             ? data.uniques
             : 0;
         message = `${count} | u:${uniques}`;
-      } else if (response.status === 403 || response.status === 404) {
-        status = 503;
       } else {
-        status = 502;
+        message = `err ${response.status}`;
       }
     } catch {
-      status = 502;
+      message = 'err 500';
     }
   }
 
-  const svg = renderVisitorBadgeSvg('clones 14d', message, {
+  const svg = renderVisitorBadgeSvg('clones', message, {
     labelBg: '#0f172a',
     valueBg: '#1d4ed8',
     textColor: '#ffffff',
@@ -80,7 +75,7 @@ export async function GET(request: Request): Promise<NextResponse> {
   });
 
   return new NextResponse(svg, {
-    status,
+    status: 200,
     headers: {
       'Content-Type': 'image/svg+xml; charset=utf-8',
       'Cache-Control': `public, max-age=${CACHE_SECONDS}, s-maxage=${CACHE_SECONDS}`,
