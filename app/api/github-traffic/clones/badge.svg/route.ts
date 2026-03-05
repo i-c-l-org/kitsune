@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { renderCloneBadgeSvg } from '@/lib/cloneBadgeSvg';
 
 const DEFAULT_OWNER = 'i-c-l-org';
-const DEFAULT_REPO = 'kitsune';
+const DEFAULT_REPO = 'i-c-l-org';
 const CACHE_SECONDS = 3600;
 
 interface GitHubTrafficClonesResponse {
