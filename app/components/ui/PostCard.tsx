@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Card from "./Card";
 import Badge from "./Badge";
@@ -13,19 +13,22 @@ export default function PostCard({
 }: PostCardProps): React.ReactElement {
   const router = useRouter();
 
-  const handleCardClick = (): void => {
+  const handleCardClick = useCallback((): void => {
     router.push(`/blog/${post.slug}`);
-  };
+  }, [router, post.slug]);
 
-  const handleKeyDown = (e: React.KeyboardEvent): void => {
-    if (e.key === "Enter" || e.key === " ") {
-      handleCardClick();
-    }
-  };
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent): void => {
+      if (e.key === "Enter" || e.key === " ") {
+        handleCardClick();
+      }
+    },
+    [handleCardClick],
+  );
 
-  const handleTagsClick = (e: React.MouseEvent): void => {
+  const handleTagsClick = useCallback((e: React.MouseEvent): void => {
     e.stopPropagation();
-  };
+  }, []);
 
   return (
     <Card

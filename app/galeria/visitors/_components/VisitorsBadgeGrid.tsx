@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState, useEffect, useRef } from 'react';
+import { useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import Card from '../../../components/ui/Card';
 import Button from '../../../components/ui/Button';
 import CodeModal from '../../../components/ui/CodeModal';
@@ -71,295 +71,181 @@ export default function VisitorsBadgeGrid(): React.ReactElement {
   const variants = useMemo<VisitorVariant[]>(
     () => [
       {
-        id: 'visitors-default',
-        title: 'Visitors (padrão)',
-        alt: 'Badge de visitors padrão',
-        labelForMarkdown: 'Visitors',
-        query: { label: 'visitors' },
-        previewQuery: { label: 'visitors', increment: '0' },
-      },
-      {
-        id: 'views',
-        title: 'Views',
-        alt: 'Badge de views',
-        labelForMarkdown: 'Views',
-        query: { label: 'views' },
-        previewQuery: { label: 'views', increment: '0' },
-      },
-      {
-        id: 'visitantes',
-        title: 'Visitantes (PT-BR)',
-        alt: 'Badge de visitantes',
-        labelForMarkdown: 'Visitantes',
-        query: { label: 'visitantes' },
-        previewQuery: { label: 'visitantes', increment: '0' },
-      },
-      {
-        id: 'pill-blue',
-        title: 'Pill azul',
-        alt: 'Badge pill azul',
-        labelForMarkdown: 'Visitors',
-        query: {
-          label: 'views',
-          shape: 'pill',
-          labelColor: '111111',
-          valueColor: '2563eb',
-          textColor: 'ffffff',
-        },
-        previewQuery: {
-          label: 'views',
-          shape: 'pill',
-          labelColor: '111111',
-          valueColor: '2563eb',
-          textColor: 'ffffff',
-          increment: '0',
-        },
-      },
-      {
-        id: 'square-green',
-        title: 'Square verde',
-        alt: 'Badge square verde',
+        id: 'visitors-blue',
+        title: 'Visitors (Preto + Azul)',
+        alt: 'Badge de visitors com label preto e value azul',
         labelForMarkdown: 'Visitors',
         query: {
           label: 'visitors',
-          shape: 'square',
-          labelColor: '111111',
-          valueColor: '22c55e',
-          textColor: 'ffffff',
+          labelColor: '0f172a',
+          valueColor: '1d4ed8',
         },
         previewQuery: {
           label: 'visitors',
-          shape: 'square',
-          labelColor: '111111',
-          valueColor: '22c55e',
-          textColor: 'ffffff',
+          labelColor: '0f172a',
+          valueColor: '1d4ed8',
           increment: '0',
         },
       },
       {
-        id: 'rounded-purple',
-        title: 'Rounded roxo',
-        alt: 'Badge rounded roxo',
-        labelForMarkdown: 'Visitantes',
+        id: 'visitors-violet-gradient',
+        title: 'Visitors (Violeta + Preto)',
+        alt: 'Badge de visitors com gradiente violeta no label e preto no value',
+        labelForMarkdown: 'Visitors',
         query: {
-          label: 'visitantes',
-          shape: 'rounded',
-          labelColor: '0f172a',
-          valueColor: '7c3aed',
-          textColor: 'ffffff',
+          label: 'visitors',
+          labelGradientStart: '4c1d95',
+          labelGradientEnd: '7c3aed',
+          valueGradientStart: '0f172a',
+          valueGradientEnd: '1e293b',
         },
         previewQuery: {
-          label: 'visitantes',
-          shape: 'rounded',
-          labelColor: '0f172a',
-          valueColor: '7c3aed',
-          textColor: 'ffffff',
+          label: 'visitors',
+          labelGradientStart: '4c1d95',
+          labelGradientEnd: '7c3aed',
+          valueGradientStart: '0f172a',
+          valueGradientEnd: '1e293b',
           increment: '0',
         },
       },
       {
-        id: 'clones-default',
-        title: 'GitHub Clones',
-        alt: 'Badge de clones oficiais',
+        id: 'clones-blue',
+        title: 'Clones (Preto + Azul)',
+        alt: 'Badge de clones com label preto e value azul',
         labelForMarkdown: 'Clones',
         path: '/api/github-traffic/clones/badge.svg',
-        query: { owner: repoOwnerPlaceholder, repo: repoNamePlaceholder },
-        previewQuery: { owner: 'i-c-l-org', repo: 'kitsune' },
-      },
-      {
-        id: 'clones-custom-repo',
-        title: 'GitHub Clones (repo customizado)',
-        alt: 'Badge de clones com owner/repo customizados',
-        labelForMarkdown: 'Clones',
-        path: '/api/github-traffic/clones/badge.svg',
-        query: { owner: repoOwnerPlaceholder, repo: repoNamePlaceholder },
-        previewQuery: { owner: 'vercel', repo: 'next.js' },
-      },
-      {
-        id: 'clones-unique-visits',
-        title: 'GitHub Unique Visits',
-        alt: 'Badge de unique visits (parte preta) com clones (parte azul)',
-        labelForMarkdown: 'Unique Visits',
-        path: '/api/github-traffic/clones/badge.svg',
         query: {
           owner: repoOwnerPlaceholder,
           repo: repoNamePlaceholder,
-          type: 'uniques',
-        },
-        previewQuery: {
-          owner: 'i-c-org',
-          repo: 'kitsune',
-          type: 'uniques',
-        },
-      },
-      {
-        id: 'clones-unique-visits-gradient',
-        title: 'GitHub Unique Visits (Gradiente)',
-        alt: 'Badge de unique visits com gradiente',
-        labelForMarkdown: 'Unique Visits',
-        path: '/api/github-traffic/clones/badge.svg',
-        query: {
-          owner: repoOwnerPlaceholder,
-          repo: repoNamePlaceholder,
-          type: 'uniques',
-          labelGradientStart: '0f172a',
-          labelGradientEnd: '1e293b',
-          valueGradientStart: '1d4ed8',
-          valueGradientEnd: '3b82f6',
-        },
-        previewQuery: {
-          owner: 'i-c-l-5-5-5',
-          repo: 'kitsune',
-          type: 'uniques',
-          labelGradientStart: '0f172a',
-          labelGradientEnd: '1e293b',
-          valueGradientStart: '1d4ed8',
-          valueGradientEnd: '3b82f6',
-        },
-      },
-      {
-        id: 'clones-unique-combined',
-        title: 'GitHub Clones + Unique Visits',
-        alt: 'Badge de clones (azul) com unique visits (preto)',
-        labelForMarkdown: 'Clones + Unique',
-        path: '/api/github-traffic/clones/badge.svg',
-        query: {
-          owner: repoOwnerPlaceholder,
-          repo: repoNamePlaceholder,
-          type: 'combined',
+          type: 'clones',
+          labelColor: '0f172a',
+          valueColor: '1d4ed8',
         },
         previewQuery: {
           owner: 'i-c-l-org',
           repo: 'kitsune',
-          type: 'combined',
+          type: 'clones',
+          labelColor: '0f172a',
+          valueColor: '1d4ed8',
         },
       },
       {
-        id: 'gradient-purple-blue',
-        title: 'Gradient Purple-Blue',
-        alt: 'Badge com gradiente roxo para azul',
-        labelForMarkdown: 'Visitors',
+        id: 'clones-violet-gradient',
+        title: 'Clones (Violeta + Preto)',
+        alt: 'Badge de clones com gradiente violeta no label e preto no value',
+        labelForMarkdown: 'Clones',
+        path: '/api/github-traffic/clones/badge.svg',
         query: {
-          label: 'visitors',
-          labelGradientStart: '1e1b4b',
-          labelGradientEnd: '312e81',
-          valueGradientStart: '7c3aed',
-          valueGradientEnd: '2563eb',
-          textColor: 'ffffff',
+          owner: repoOwnerPlaceholder,
+          repo: repoNamePlaceholder,
+          type: 'clones',
+          labelGradientStart: '4c1d95',
+          labelGradientEnd: '7c3aed',
+          valueGradientStart: '0f172a',
+          valueGradientEnd: '1e293b',
         },
         previewQuery: {
-          label: 'visitors',
-          labelGradientStart: '1e1b4b',
-          labelGradientEnd: '312e81',
-          valueGradientStart: '7c3aed',
-          valueGradientEnd: '2563eb',
-          textColor: 'ffffff',
-          increment: '0',
+          owner: 'i-c-l-org',
+          repo: 'kitsune',
+          type: 'clones',
+          labelGradientStart: '4c1d95',
+          labelGradientEnd: '7c3aed',
+          valueGradientStart: '0f172a',
+          valueGradientEnd: '1e293b',
         },
       },
       {
-        id: 'gradient-sunset',
-        title: 'Gradient Sunset',
-        alt: 'Badge com gradiente laranja para vermelho',
-        labelForMarkdown: 'Views',
+        id: 'uniques-blue',
+        title: 'Unique Visits (Preto + Azul)',
+        alt: 'Badge de unique visits com label preto e value azul',
+        labelForMarkdown: 'Unique Visits',
+        path: '/api/github-traffic/clones/badge.svg',
         query: {
-          label: 'views',
-          labelGradientStart: '451a03',
-          labelGradientEnd: '7c2d12',
-          valueGradientStart: 'f97316',
-          valueGradientEnd: 'dc2626',
-          textColor: 'ffffff',
+          owner: repoOwnerPlaceholder,
+          repo: repoNamePlaceholder,
+          type: 'uniques',
+          labelColor: '0f172a',
+          valueColor: '1d4ed8',
         },
         previewQuery: {
-          label: 'views',
-          labelGradientStart: '451a03',
-          labelGradientEnd: '7c2d12',
-          valueGradientStart: 'f97316',
-          valueGradientEnd: 'dc2626',
-          textColor: 'ffffff',
-          increment: '0',
+          owner: 'i-c-l-org',
+          repo: 'kitsune',
+          type: 'uniques',
+          labelColor: '0f172a',
+          valueColor: '1d4ed8',
         },
       },
       {
-        id: 'gradient-emerald',
-        title: 'Gradient Emerald',
-        alt: 'Badge com gradiente verde esmeralda',
-        labelForMarkdown: 'Visitors',
+        id: 'uniques-violet-gradient',
+        title: 'Unique Visits (Violeta + Preto)',
+        alt: 'Badge de unique visits com gradiente violeta no label e preto no value',
+        labelForMarkdown: 'Unique Visits',
+        path: '/api/github-traffic/clones/badge.svg',
         query: {
-          label: 'visitors',
-          labelGradientStart: '022c22',
-          labelGradientEnd: '064e3b',
-          valueGradientStart: '10b981',
-          valueGradientEnd: '059669',
-          textColor: 'ffffff',
+          owner: repoOwnerPlaceholder,
+          repo: repoNamePlaceholder,
+          type: 'uniques',
+          labelGradientStart: '4c1d95',
+          labelGradientEnd: '7c3aed',
+          valueGradientStart: '0f172a',
+          valueGradientEnd: '1e293b',
         },
         previewQuery: {
-          label: 'visitors',
-          labelGradientStart: '022c22',
-          labelGradientEnd: '064e3b',
-          valueGradientStart: '10b981',
-          valueGradientEnd: '059669',
-          textColor: 'ffffff',
-          increment: '0',
-        },
-      },
-      {
-        id: 'gradient-cyan',
-        title: 'Gradient Cyan',
-        alt: 'Badge com gradiente ciano',
-        labelForMarkdown: 'Visitantes',
-        query: {
-          label: 'visitantes',
-          labelGradientStart: '164e63',
-          labelGradientEnd: '0e7490',
-          valueGradientStart: '06b6d4',
-          valueGradientEnd: '3b82f6',
-          textColor: 'ffffff',
-        },
-        previewQuery: {
-          label: 'visitantes',
-          labelGradientStart: '164e63',
-          labelGradientEnd: '0e7490',
-          valueGradientStart: '06b6d4',
-          valueGradientEnd: '3b82f6',
-          textColor: 'ffffff',
-          increment: '0',
+          owner: 'i-c-l-org',
+          repo: 'kitsune',
+          type: 'uniques',
+          labelGradientStart: '4c1d95',
+          labelGradientEnd: '7c3aed',
+          valueGradientStart: '0f172a',
+          valueGradientEnd: '1e293b',
         },
       },
     ],
     [repoNamePlaceholder, repoOwnerPlaceholder],
   );
 
-  const resolveBadgePath = (variant: VisitorVariant): string => {
-    const pathTemplate = variant.path ?? DEFAULT_VISITORS_BADGE_PATH;
-    return pathTemplate.replace('{id}', visitorIdPlaceholder);
-  };
+  const resolveBadgePath = useCallback(
+    (variant: VisitorVariant): string => {
+      const pathTemplate = variant.path ?? DEFAULT_VISITORS_BADGE_PATH;
+      return pathTemplate.replace('{id}', visitorIdPlaceholder);
+    },
+    [visitorIdPlaceholder],
+  );
 
-  const generateMarkdownCode = (variant: VisitorVariant): string => {
-    const baseUrl = getClientBaseUrl();
-    const queryString = toQueryString(variant.query);
-    const imageUrl = `${baseUrl}${resolveBadgePath(variant)}${queryString}`;
-    return `![${variant.labelForMarkdown}](${imageUrl})`;
-  };
+  const generateMarkdownCode = useCallback(
+    (variant: VisitorVariant): string => {
+      const baseUrl = getClientBaseUrl();
+      const queryString = toQueryString(variant.query);
+      const imageUrl = `${baseUrl}${resolveBadgePath(variant)}${queryString}`;
+      return `![${variant.labelForMarkdown}](${imageUrl})`;
+    },
+    [resolveBadgePath],
+  );
 
-  const viewCode = (variant: VisitorVariant): void => {
-    setCurrentCode(generateMarkdownCode(variant));
-    setShowModal(true);
-  };
+  const viewCode = useCallback(
+    (variant: VisitorVariant): void => {
+      setCurrentCode(generateMarkdownCode(variant));
+      setShowModal(true);
+    },
+    [generateMarkdownCode],
+  );
 
-  const copyCode = async (variant: VisitorVariant): Promise<void> => {
-    try {
-      const code = generateMarkdownCode(variant);
-      await navigator.clipboard.writeText(code);
-      showNotificationMessage('✓ Código copiado com sucesso!');
-    } catch {
-      showNotificationMessage(
-        '✗ Não foi possível copiar (permissão do navegador).',
-      );
-    }
-  };
+  const copyCode = useCallback(
+    async (variant: VisitorVariant): Promise<void> => {
+      try {
+        const code = generateMarkdownCode(variant);
+        await navigator.clipboard.writeText(code);
+        showNotificationMessage('✓ Código copiado com sucesso!');
+      } catch {
+        showNotificationMessage(
+          '✗ Não foi possível copiar (permissão do navegador).',
+        );
+      }
+    },
+    [generateMarkdownCode, showNotificationMessage],
+  );
 
-  const copyModalCode = async (): Promise<void> => {
+  const copyModalCode = useCallback(async (): Promise<void> => {
     try {
       await navigator.clipboard.writeText(currentCode);
       showNotificationMessage('✓ Código copiado!');
@@ -368,7 +254,7 @@ export default function VisitorsBadgeGrid(): React.ReactElement {
         '✗ Não foi possível copiar (permissão do navegador).',
       );
     }
-  };
+  }, [currentCode, showNotificationMessage]);
 
   return (
     <>

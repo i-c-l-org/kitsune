@@ -4,7 +4,7 @@
  * Grid de exibição da galeria — gerencia ações de copiar, download e visualização.
  */
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import SVGCard from '../../components/ui/SVGCard';
 import CodeModal from '../../components/ui/CodeModal';
 import SVGGalleryNotification from '../../components/ui/SVGGalleryNotification';
@@ -31,7 +31,7 @@ export default function GalleryGrid({
     };
   }, []);
 
-  const showNotificationMessage = (message: string): void => {
+  const showNotificationMessage = useCallback((message: string): void => {
     if (notificationTimeoutRef.current) {
       clearTimeout(notificationTimeoutRef.current);
     }
@@ -39,9 +39,9 @@ export default function GalleryGrid({
     notificationTimeoutRef.current = setTimeout(() => {
       setNotification('');
     }, NOTIFICATION_TIMEOUT);
-  };
+  }, []);
 
-  const getBaseUrl = (): string => {
+  const getBaseUrl = useCallback((): string => {
     if (typeof window !== 'undefined') {
       return window.location.origin;
     }
@@ -60,53 +60,64 @@ export default function GalleryGrid({
       return envCanonicalUrl.replace(/\/$/, '');
     }
 
-    // Último fallback: URL relativa.
     return '';
-  };
+  }, []);
 
-  const generateMarkdownCode = (filename: string): string => {
-    const baseUrl = getBaseUrl();
-    const imageUrl = `${baseUrl}/api/svg/${filename}`;
-    return `![${filename}](${imageUrl})`;
-  };
+  const generateMarkdownCode = useCallback(
+    (filename: string): string => {
+      const baseUrl = getBaseUrl();
+      const imageUrl = `${baseUrl}/api/svg/${filename}`;
+      return `![${filename}](${imageUrl})`;
+    },
+    [getBaseUrl],
+  );
 
-  const copyCode = async (filename: string): Promise<void> => {
-    const markdownCode = generateMarkdownCode(filename);
+  const copyCode = useCallback(
+    async (filename: string): Promise<void> => {
+      const markdownCode = generateMarkdownCode(filename);
 
-    try {
-      await navigator.clipboard.writeText(markdownCode);
-      showNotificationMessage('✓ Código copiado com sucesso!');
-    } catch {
-      showNotificationMessage('Não foi possível copiar o código.');
-    }
-  };
+      try {
+        await navigator.clipboard.writeText(markdownCode);
+        showNotificationMessage('✓ Código copiado com sucesso!');
+      } catch {
+        showNotificationMessage('Não foi possível copiar o código.');
+      }
+    },
+    [generateMarkdownCode, showNotificationMessage],
+  );
 
-  const downloadSVG = (filename: string): void => {
-    const link = document.createElement('a');
-    link.href = `/api/svg/${filename}`;
-    link.download = filename;
-    link.click();
-    showNotificationMessage('✓ Download iniciado!');
-  };
+  const downloadSVG = useCallback(
+    (filename: string): void => {
+      const link = document.createElement('a');
+      link.href = `/api/svg/${filename}`;
+      link.download = filename;
+      link.click();
+      showNotificationMessage('✓ Download iniciado!');
+    },
+    [showNotificationMessage],
+  );
 
-  const viewCode = (filename: string): void => {
-    const markdownCode = generateMarkdownCode(filename);
-    setCurrentCode(markdownCode);
-    setShowModal(true);
-  };
+  const viewCode = useCallback(
+    (filename: string): void => {
+      const markdownCode = generateMarkdownCode(filename);
+      setCurrentCode(markdownCode);
+      setShowModal(true);
+    },
+    [generateMarkdownCode],
+  );
 
-  const closeModal = (): void => {
+  const closeModal = useCallback((): void => {
     setShowModal(false);
-  };
+  }, []);
 
-  const copyModalCode = async (): Promise<void> => {
+  const copyModalCode = useCallback(async (): Promise<void> => {
     try {
       await navigator.clipboard.writeText(currentCode);
       showNotificationMessage('✓ Código copiado!');
     } catch {
       showNotificationMessage('Não foi possível copiar o código.');
     }
-  };
+  }, [currentCode, showNotificationMessage]);
 
   return (
     <>

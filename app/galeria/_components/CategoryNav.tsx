@@ -6,7 +6,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import type { GalleryCategory } from '@/tipos/galeria';
 
 const categories: GalleryCategory[] = [
@@ -43,11 +43,13 @@ export default function CategoryNav(): React.ReactElement {
   return (
     <nav className="mb-8">
       <div className="flex flex-wrap justify-center category-nav-gap">
-        {categories.map((cat) => (
-          <Link
-            key={cat.slug}
-            href={cat.slug === '' ? '/galeria' : `/galeria/${cat.slug}`}
-            className={`
+        {useMemo(
+          () =>
+            categories.map((cat) => (
+              <Link
+                key={cat.slug}
+                href={cat.slug === '' ? '/galeria' : `/galeria/${cat.slug}`}
+                className={`
               inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium
               no-underline transition-all duration-200
               ${
@@ -56,11 +58,13 @@ export default function CategoryNav(): React.ReactElement {
                   : 'border border-[var(--vscode-border)] bg-[var(--vscode-editor)] text-[var(--text-muted)] hover:border-[var(--accent-cyan)] hover:text-[var(--accent-cyan)]'
               }
             `}
-          >
-            <i className={cat.icon} />
-            <span>{cat.label}</span>
-          </Link>
-        ))}
+              >
+                <i className={cat.icon} />
+                <span>{cat.label}</span>
+              </Link>
+            )),
+          [isActive],
+        )}
       </div>
     </nav>
   );
