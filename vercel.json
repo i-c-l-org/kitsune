@@ -13,18 +13,6 @@
       "destination": "/api/github-traffic/:path*"
     }
   ],
-  "routes": [
-    {
-      "src": "/api/:path*",
-      "has": [
-        {
-          "type": "query",
-          "key": "svg",
-          "value": ".*.*"
-        }
-      ]
-    }
-  ],
 
   "headers": [
     {
