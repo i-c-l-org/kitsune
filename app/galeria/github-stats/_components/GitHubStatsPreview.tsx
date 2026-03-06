@@ -278,8 +278,14 @@ export default function GitHubStatsPreview(): ReactElement {
   const [width, setWidth] = useState("600");
   const [height, setHeight] = useState("320");
 
-  const sizeWidth = width.trim() !== "" ? width.trim() : undefined;
-  const sizeHeight = height.trim() !== "" ? height.trim() : undefined;
+  const sizeWidth = useMemo(
+    () => (width.trim() !== "" ? width.trim() : undefined),
+    [width],
+  );
+  const sizeHeight = useMemo(
+    () => (height.trim() !== "" ? height.trim() : undefined),
+    [height],
+  );
 
   return (
     <div className="previewFlexCol">

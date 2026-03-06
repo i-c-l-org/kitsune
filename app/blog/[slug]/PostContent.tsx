@@ -1,5 +1,6 @@
 ﻿"use client";
 
+import { useMemo } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import Container from "../../components/ui/Container";
@@ -59,9 +60,13 @@ export default function PostContent({
               {post.description}
             </p>
             <div className="postTags flex flex-wrap gap-2">
-              {post.tags.map((tag) => (
-                <Tag key={tag} label={tag} href={`/blog/tag/${tag}`} />
-              ))}
+              {useMemo(
+                () =>
+                  post.tags.map((tag) => (
+                    <Tag key={tag} label={tag} href={`/blog/tag/${tag}`} />
+                  )),
+                [post.tags],
+              )}
             </div>
           </div>
 
