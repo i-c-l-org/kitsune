@@ -79,11 +79,11 @@ export async function GET(request: Request): Promise<NextResponse> {
             : 0;
 
         if (type === 'uniques') {
-          message = `${uniques} unique visits`;
+          message = `${uniques}`;
         } else if (type === 'combined') {
-          message = `${count} clones`;
+          message = `${count}`;
         } else {
-          message = `${count} clones`;
+          message = `${count}`;
         }
       }
     } catch {
