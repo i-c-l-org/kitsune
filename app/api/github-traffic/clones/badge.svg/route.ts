@@ -1,5 +1,9 @@
 import { NextResponse } from 'next/server';
-import { renderCloneBadgeSvg } from '@/lib/cloneBadgeSvg';
+import {
+  renderCloneBadgeSvg,
+  renderCombinedBadgeSvg,
+} from '@/lib/cloneBadgeSvg';
+import type { VisitorBadgeStyleOptions } from '@/tipos/visitor';
 
 const DEFAULT_OWNER = 'i-c-l-org';
 const DEFAULT_REPO = 'i-c-l-org';
@@ -7,6 +11,7 @@ const CACHE_SECONDS = 3600;
 
 interface GitHubTrafficClonesResponse {
   count?: number;
+  uniques?: number;
 }
 
 function normalizeRepoPart(
@@ -29,9 +34,23 @@ export async function GET(request: Request): Promise<NextResponse> {
   const owner = normalizeRepoPart(searchParams.get('owner'), DEFAULT_OWNER, 39);
   const repo = normalizeRepoPart(searchParams.get('repo'), DEFAULT_REPO, 100);
   const token = process.env['GITHUB_TOKEN']?.trim();
+  const type =
+    searchParams.get('type') === 'uniques'
+      ? 'uniques'
+      : searchParams.get('type') === 'combined'
+        ? 'combined'
+        : 'clones';
 
-  // GitHub Traffic API retorna janela de 14 dias.
-  // Sem token válido/permissão, exibimos fallback neutro.
+  const labelGradientStart =
+    searchParams.get('labelGradientStart') ?? undefined;
+  const labelGradientEnd = searchParams.get('labelGradientEnd') ?? undefined;
+  const valueGradientStart =
+    searchParams.get('valueGradientStart') ?? undefined;
+  const valueGradientEnd = searchParams.get('valueGradientEnd') ?? undefined;
+
+  const hasLabelGradient = labelGradientStart && labelGradientEnd;
+  const hasValueGradient = valueGradientStart && valueGradientEnd;
+
   let message = 'n/a';
 
   if (token !== undefined && token !== '') {
@@ -54,19 +73,98 @@ export async function GET(request: Request): Promise<NextResponse> {
           typeof data.count === 'number' && Number.isFinite(data.count)
             ? data.count
             : 0;
-        message = `${count} clones`;
+        const uniques =
+          typeof data.uniques === 'number' && Number.isFinite(data.uniques)
+            ? data.uniques
+            : 0;
+
+        if (type === 'uniques') {
+          message = `${uniques} unique visits`;
+        } else if (type === 'combined') {
+          message = `${count} clones`;
+        } else {
+          message = `${count} clones`;
+        }
       }
     } catch {
       message = 'n/a';
     }
   }
 
-  const svg = renderCloneBadgeSvg('clones', message, {
+  if (type === 'combined') {
+    let clonesMsg = 'n/a';
+    let uniquesMsg = 'n/a';
+
+    if (token !== undefined && token !== '') {
+      try {
+        const response = await fetch(
+          `https://api.github.com/repos/${owner}/${repo}/traffic/clones`,
+          {
+            headers: {
+              Accept: 'application/vnd.github+json',
+              Authorization: `Bearer ${token}`,
+              'X-GitHub-Api-Version': '2022-11-28',
+            },
+            cache: 'no-store',
+          },
+        );
+
+        if (response.ok) {
+          const data = (await response.json()) as GitHubTrafficClonesResponse;
+          const count =
+            typeof data.count === 'number' && Number.isFinite(data.count)
+              ? data.count
+              : 0;
+          const uniques =
+            typeof data.uniques === 'number' && Number.isFinite(data.uniques)
+              ? data.uniques
+              : 0;
+          clonesMsg = `${count}`;
+          uniquesMsg = `${uniques}`;
+        }
+      } catch {
+        clonesMsg = 'n/a';
+        uniquesMsg = 'n/a';
+      }
+    }
+
+    const styleOptions: VisitorBadgeStyleOptions = {
+      labelBg: '#0f172a',
+      valueBg: '#1d4ed8',
+      textColor: '#ffffff',
+      shape: 'rounded',
+    };
+
+    const svg = renderCombinedBadgeSvg(clonesMsg, uniquesMsg, styleOptions);
+
+    return new NextResponse(svg, {
+      status: 200,
+      headers: {
+        'Content-Type': 'image/svg+xml; charset=utf-8',
+        'Cache-Control': `public, max-age=${CACHE_SECONDS}, s-maxage=${CACHE_SECONDS}`,
+      },
+    });
+  }
+
+  const label = type === 'uniques' ? 'unique visits' : 'clones';
+
+  const gradient: VisitorBadgeStyleOptions['gradient'] =
+    hasLabelGradient && hasValueGradient
+      ? {
+          label: { start: labelGradientStart!, end: labelGradientEnd! },
+          value: { start: valueGradientStart!, end: valueGradientEnd! },
+        }
+      : undefined;
+
+  const styleOptions: VisitorBadgeStyleOptions = {
     labelBg: '#0f172a',
     valueBg: '#1d4ed8',
     textColor: '#ffffff',
     shape: 'rounded',
-  });
+    ...(gradient ? { gradient } : {}),
+  };
+
+  const svg = renderCloneBadgeSvg(label, message, styleOptions);
 
   return new NextResponse(svg, {
     status: 200,

@@ -7,7 +7,7 @@ Referências a materiais externos devem ser linkadas e reescritas com palavras p
 
 -->
 
-<img src="./img/verm-preto.png"/>
+<img src="./img/fox.png"/>
 
 ---
 
@@ -250,4 +250,4 @@ Fluxo recomendado:
 
 ---
 
-<img align="right" width="90" height="90" src="./img/logo-l.png"/>
+<img align="right" width="90" height="90" src="./img/logo-0.png"/>

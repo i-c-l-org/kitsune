@@ -1,4 +1,7 @@
-import { BASE_SVG_BADGE_VISITANTE } from '@/services/visitors/visitorBadgeBase';
+import {
+  BASE_SVG_BADGE_VISITANTE,
+  BASE_SVG_BADGE_COMBINED,
+} from '@/services/visitors/visitorBadgeBase';
 import type {
   VisitorBadgeShape,
   VisitorBadgeStyleOptions,
@@ -92,6 +95,34 @@ export function renderCloneBadgeSvg(
       '__VALUE_BG__',
       options?.gradient?.value ? `url(#${gradientId})` : valueBg,
     )
+    .replaceAll('__TEXT_COLOR__', textColor)
+    .replaceAll('__RX__', String(rx))
+    .replace('__DEFS__', defs);
+}
+
+export function renderCombinedBadgeSvg(
+  clonesValue: string,
+  uniqueVisitsValue: string,
+  options?: VisitorBadgeStyleOptions,
+): string {
+  const safeClonesValue = escapeXml(clonesValue);
+  const safeUniqueVisitsValue = escapeXml(uniqueVisitsValue);
+
+  const ariaLabel = `clones: ${safeClonesValue}, unique visits: ${safeUniqueVisitsValue}`;
+
+  const labelBg = options?.labelBg ?? '#0f172a';
+  const valueBg = options?.valueBg ?? '#1d4ed8';
+  const textColor = options?.textColor ?? '#ffffff';
+  const rx = resolveRx(options);
+
+  const gradientId = `g${Math.random().toString(36).substring(2, 8)}`;
+  const defs = buildGradientDefs(options?.gradient?.value, gradientId);
+
+  return BASE_SVG_BADGE_COMBINED.replace('__ARIA_LABEL__', ariaLabel)
+    .replace('__LABEL__', safeUniqueVisitsValue)
+    .replace('__VALUE__', safeClonesValue)
+    .replaceAll('__LABEL_BG__', labelBg)
+    .replaceAll('__VALUE_BG__', valueBg)
     .replaceAll('__TEXT_COLOR__', textColor)
     .replaceAll('__RX__', String(rx))
     .replace('__DEFS__', defs);
