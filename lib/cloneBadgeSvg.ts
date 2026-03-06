@@ -108,7 +108,7 @@ export function renderCombinedBadgeSvg(
   const safeClonesValue = escapeXml(clonesValue);
   const safeUniqueVisitsValue = escapeXml(uniqueVisitsValue);
 
-  const ariaLabel = `clones: ${safeClonesValue}, visitsU: ${safeUniqueVisitsValue}`;
+  const ariaLabel = `clones: ${safeClonesValue}, unique visits: ${safeUniqueVisitsValue}`;
 
   const labelBg = options?.labelBg ?? '#0f172a';
   const valueBg = options?.valueBg ?? '#1d4ed8';
