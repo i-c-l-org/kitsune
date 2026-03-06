@@ -164,7 +164,7 @@ export default function VisitorsBadgeGrid(): React.ReactElement {
         labelForMarkdown: 'Clones',
         path: '/api/github-traffic/clones/badge.svg',
         query: { owner: repoOwnerPlaceholder, repo: repoNamePlaceholder },
-        previewQuery: { owner: 'i-c-l-5-5-5', repo: 'kitsune' },
+        previewQuery: { owner: 'i-c-l-org', repo: 'kitsune' },
       },
       {
         id: 'clones-custom-repo',
@@ -181,8 +181,16 @@ export default function VisitorsBadgeGrid(): React.ReactElement {
         alt: 'Badge de unique visits (parte preta) com clones (parte azul)',
         labelForMarkdown: 'Unique Visits',
         path: '/api/github-traffic/clones/badge.svg',
-        query: { owner: repoOwnerPlaceholder, repo: repoNamePlaceholder, type: 'uniques' },
-        previewQuery: { owner: 'i-c-l-5-5-5', repo: 'kitsune', type: 'uniques' },
+        query: {
+          owner: repoOwnerPlaceholder,
+          repo: repoNamePlaceholder,
+          type: 'uniques',
+        },
+        previewQuery: {
+          owner: 'i-c-org',
+          repo: 'kitsune',
+          type: 'uniques',
+        },
       },
       {
         id: 'clones-unique-visits-gradient',
@@ -207,6 +215,23 @@ export default function VisitorsBadgeGrid(): React.ReactElement {
           labelGradientEnd: '1e293b',
           valueGradientStart: '1d4ed8',
           valueGradientEnd: '3b82f6',
+        },
+      },
+      {
+        id: 'clones-unique-combined',
+        title: 'GitHub Clones + Unique Visits',
+        alt: 'Badge de clones (azul) com unique visits (preto)',
+        labelForMarkdown: 'Clones + Unique',
+        path: '/api/github-traffic/clones/badge.svg',
+        query: {
+          owner: repoOwnerPlaceholder,
+          repo: repoNamePlaceholder,
+          type: 'combined',
+        },
+        previewQuery: {
+          owner: 'i-c-l-org',
+          repo: 'kitsune',
+          type: 'combined',
         },
       },
       {
