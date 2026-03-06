@@ -115,15 +115,11 @@ export function renderCombinedBadgeSvg(
   const textColor = options?.textColor ?? '#ffffff';
   const rx = resolveRx(options);
 
-  const gradientId = `g${Math.random().toString(36).substring(2, 8)}`;
-  const defs = buildGradientDefs(options?.gradient?.value, gradientId);
-
   return BASE_SVG_BADGE_COMBINED.replace('__ARIA_LABEL__', ariaLabel)
-    .replace('__LABEL__', safeUniqueVisitsValue)
-    .replace('__VALUE__', safeClonesValue)
+    .replace('__CLONES_VALUE__', safeClonesValue)
+    .replace('__UNIQUE_VISITS_VALUE__', safeUniqueVisitsValue)
     .replaceAll('__LABEL_BG__', labelBg)
     .replaceAll('__VALUE_BG__', valueBg)
     .replaceAll('__TEXT_COLOR__', textColor)
-    .replaceAll('__RX__', String(rx))
-    .replace('__DEFS__', defs);
+    .replaceAll('__RX__', String(rx));
 }
