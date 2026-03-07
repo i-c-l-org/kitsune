@@ -7,7 +7,7 @@ Referências a materiais externos devem ser linkadas e reescritas com palavras p
 
 -->
 
-<img src="./img/fox.png"/>
+<img src="./img/capa.png"/>
 
 ---
 
