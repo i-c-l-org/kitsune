@@ -90,7 +90,7 @@ export async function GET(
     ...(gradient ? { gradient } : {}),
   };
 
-  const svg = renderCloneBadgeSvg('unique visits', message, styleOptions);
+  const svg = renderCloneBadgeSvg('unique clones', message, styleOptions);
 
   return new NextResponse(svg, {
     status: 200,
