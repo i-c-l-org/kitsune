@@ -21,9 +21,6 @@ Plataforma open-source para gerar e servir SVGs (badges, banners e cards de GitH
 
 ---
 
-![Clones](https://kitsune-galeria.vercel.app/api/clones/i-c-l-org/kitsune/badge.svg?labelColor=0f172a&valueColor=1d4ed8)
-![Unique Visits](https://kitsune-galeria.vercel.app/api/unique-visits/i-c-l-org/kitsune/badge.svg?labelColor=0f172a&valueColor=1d4ed8)
-
 ![colecionavel](https://kitsune-galeria.vercel.app/api/svg/badges/info/badge-colecionavel.svg)
 
 <div align="center">
