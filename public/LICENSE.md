@@ -1,6 +1,6 @@
 MIT-0 No Attribution
 
-Copyright (c) 2025 Italo C Lopes
+Copyright 2025 (c) Italo C Lopes
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

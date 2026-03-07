@@ -7,7 +7,7 @@ Referências a materiais externos devem ser linkadas e reescritas com palavras p
 
 -->
 
-<img src="./img/fox.png"/>
+<img src="./img/capa.png"/>
 
 ---
 
@@ -20,6 +20,9 @@ Plataforma open-source para gerar e servir SVGs (badges, banners e cards de GitH
 </div>
 
 ---
+
+![Clones](https://kitsune-galeria.vercel.app/api/clones/i-c-l-org/kitsune/badge.svg?labelColor=0f172a&valueColor=1d4ed8)
+![Unique Clones](https://kitsune-galeria.vercel.app/api/unique-visits/i-c-l-org/kitsune/badge.svg?labelGradientStart=4c1d95&labelGradientEnd=7c3aed&valueGradientStart=0f172a&valueGradientEnd=1e293b)
 
 ![colecionavel](https://kitsune-galeria.vercel.app/api/svg/badges/info/badge-colecionavel.svg)
 
@@ -244,7 +247,7 @@ Fluxo recomendado:
 
 ## Licença
 
-![MIT](https://kitsune-galeria.vercel.app/api/svg/badges/info/badge-license-mit.svg)
+![MIT Esse é mit viu, nao mit-0. eu fiz esse de pirraça, entao vou ser chato com esse](https://kitsune-galeria.vercel.app/api/svg/badges/info/badge-license-mit.svg)
 
 ---
 

@@ -102,13 +102,13 @@ export function renderCloneBadgeSvg(
 
 export function renderCombinedBadgeSvg(
   clonesValue: string,
-  uniqueVisitsValue: string,
+  uniqueClonesValue: string,
   options?: VisitorBadgeStyleOptions,
 ): string {
   const safeClonesValue = escapeXml(clonesValue);
-  const safeUniqueVisitsValue = escapeXml(uniqueVisitsValue);
+  const safeUniqueClonesValue = escapeXml(uniqueClonesValue);
 
-  const ariaLabel = `clones: ${safeClonesValue}, unique visits: ${safeUniqueVisitsValue}`;
+  const ariaLabel = `clones: ${safeClonesValue}, unique visits: ${safeUniqueClonesValue}`;
 
   const labelBg = options?.labelBg ?? '#0f172a';
   const valueBg = options?.valueBg ?? '#1d4ed8';
@@ -117,7 +117,7 @@ export function renderCombinedBadgeSvg(
 
   return BASE_SVG_BADGE_COMBINED.replace('__ARIA_LABEL__', ariaLabel)
     .replace('__CLONES_VALUE__', safeClonesValue)
-    .replace('__UNIQUE_VISITS_VALUE__', safeUniqueVisitsValue)
+    .replace('__UNIQUE_CLONES_VALUE__', safeUniqueClonesValue)
     .replaceAll('__LABEL_BG__', labelBg)
     .replaceAll('__VALUE_BG__', valueBg)
     .replaceAll('__TEXT_COLOR__', textColor)
