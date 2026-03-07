@@ -15,7 +15,7 @@ Este guia descreve as variáveis usadas atualmente no projeto e como configurar 
 | --------------------------- | --------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `NEXT_PUBLIC_SITE_URL`      | Recomendada                       | frontend (`GalleryGrid`, `VisitorsBadgeGrid`) e `lib/getBaseUrl.ts`                       | Define URL base pública para gerar links absolutos em markdown/previews   |
 | `NEXT_PUBLIC_CANONICAL_URL` | Recomendada em produção           | frontend e `lib/getBaseUrl.ts`                                                            | URL canônica do domínio final (ex.: `https://kitsune-galeria.vercel.app`) |
-| `GITHUB_TOKEN`              | Opcional (fortemente recomendada) | `src/services/github/github-stats.ts`, `app/api/github-traffic/clones/badge.svg/route.ts` | Aumenta rate limit e habilita dados oficiais de clones (GitHub Traffic)   |
+| `GITHUB_TOKEN`              | Opcional (fortemente recomendada) | `src/services/github/github-stats.ts`, `app/api/clones/[owner]/[repo]/badge.svg/route.ts` | Aumenta rate limit e habilita dados oficiais de clones (GitHub Traffic)   |
 | `UPSTASH_REDIS_REST_URL`    | Opcional                          | `src/services/visitors/visitors.ts`                                                       | Backend do contador de visitantes persistente                             |
 | `UPSTASH_REDIS_REST_TOKEN`  | Opcional                          | `src/services/visitors/visitors.ts`                                                       | Token do Upstash Redis                                                    |
 
@@ -63,7 +63,7 @@ Após publicar, valide estes endpoints:
 ```text
 GET /api/github-stats/seu-usuario
 GET /api/github-langs/seu-usuario
-GET /api/github-traffic/clones/badge.svg?owner=i-c-l-5-5-5&repo=kitsune
+GET /api/clones/i-c-l-org/kitsune/badge.svg
 GET /api/visitors/seu-id
 GET /api/visitors/seu-id/badge.svg?label=visitors
 ```

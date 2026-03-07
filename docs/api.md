@@ -7,7 +7,7 @@ Referências a materiais externos devem ser linkadas e reescritas com palavras p
 
 # Documentação de APIs
 
-Este documento lista todas as APIs disponíveis no projeto Galeria I.C.L.
+Este documento lista todas as APIs disponíveis no projeto Galeria Kitsune
 
 ## APIs de GitHub
 
@@ -146,25 +146,43 @@ GET /api/visitors/[id]/badge.svg
 
 ### Clones Oficiais (14 dias)
 
-Retorna badge SVG com dados oficiais de clones do GitHub Traffic (`count` e `uniques`).
+Retorna badge SVG com dados oficiais de clones do GitHub Traffic (`count`).
 
 **Endpoint:**
 
 ```
-GET /api/github-traffic/clones/badge.svg
+GET /api/clones/[owner]/[repo]/badge.svg
 ```
 
 **Parâmetros de Query:**
 
-| Parâmetro | Tipo   | Padrão        | Descrição           |
-| --------- | ------ | ------------- | ------------------- |
-| `owner`   | string | `i-c-l-5-5-5` | Dono do repositório |
-| `repo`    | string | `kitsune`     | Nome do repositório |
+| Parâmetro            | Tipo   | Padrão | Descrição                         |
+| -------------------- | ------ | ------ | --------------------------------- |
+| `labelGradientStart` | string | -      | Cor inicial do gradiente do label |
+| `labelGradientEnd`   | string | -      | Cor final do gradiente do label   |
+| `valueGradientStart` | string | -      | Cor inicial do gradiente do value |
+| `valueGradientEnd`   | string | -      | Cor final do gradiente do value   |
 
 **Exemplo:**
 
 ```
-/api/github-traffic/clones/badge.svg?owner=i-c-l-5-5-5&repo=kitsune
+/api/clones/i-c-l-org/kitsune/badge.svg
+```
+
+### Unique Visits (14 dias)
+
+Retorna badge SVG com dados oficiais de unique visitors do GitHub Traffic (`uniques`).
+
+**Endpoint:**
+
+```
+GET /api/unique-visits/[owner]/[repo]/badge.svg
+```
+
+**Exemplo:**
+
+```
+/api/unique-visits/i-c-l-org/kitsune/badge.svg
 ```
 
 ## APIs de SVG
