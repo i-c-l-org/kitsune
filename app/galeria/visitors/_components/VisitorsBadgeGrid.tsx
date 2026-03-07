@@ -72,7 +72,7 @@ export default function VisitorsBadgeGrid(): React.ReactElement {
     () => [
       {
         id: 'visitors-blue',
-        title: 'Visitors (Preto + Azul)',
+        title: 'Visitors',
         alt: 'Badge de visitors com label preto e value azul',
         labelForMarkdown: 'Visitors',
         query: {
@@ -89,7 +89,7 @@ export default function VisitorsBadgeGrid(): React.ReactElement {
       },
       {
         id: 'visitors-violet-gradient',
-        title: 'Visitors (Violeta + Preto)',
+        title: 'Visitors',
         alt: 'Badge de visitors com gradiente violeta no label e preto no value',
         labelForMarkdown: 'Visitors',
         query: {
@@ -110,44 +110,32 @@ export default function VisitorsBadgeGrid(): React.ReactElement {
       },
       {
         id: 'clones-blue',
-        title: 'Clones (Preto + Azul)',
+        title: 'Clones',
         alt: 'Badge de clones com label preto e value azul',
         labelForMarkdown: 'Clones',
-        path: '/api/github-traffic/clones/badge.svg',
+        path: '/api/clones/{owner}/{repo}/badge.svg',
         query: {
-          owner: repoOwnerPlaceholder,
-          repo: repoNamePlaceholder,
-          type: 'clones',
           labelColor: '0f172a',
           valueColor: '1d4ed8',
         },
         previewQuery: {
-          owner: 'i-c-l-org',
-          repo: 'kitsune',
-          type: 'clones',
           labelColor: '0f172a',
           valueColor: '1d4ed8',
         },
       },
       {
         id: 'clones-violet-gradient',
-        title: 'Clones (Violeta + Preto)',
+        title: 'Clones',
         alt: 'Badge de clones com gradiente violeta no label e preto no value',
         labelForMarkdown: 'Clones',
-        path: '/api/github-traffic/clones/badge.svg',
+        path: '/api/clones/{owner}/{repo}/badge.svg',
         query: {
-          owner: repoOwnerPlaceholder,
-          repo: repoNamePlaceholder,
-          type: 'clones',
           labelGradientStart: '4c1d95',
           labelGradientEnd: '7c3aed',
           valueGradientStart: '0f172a',
           valueGradientEnd: '1e293b',
         },
         previewQuery: {
-          owner: 'i-c-l-org',
-          repo: 'kitsune',
-          type: 'clones',
           labelGradientStart: '4c1d95',
           labelGradientEnd: '7c3aed',
           valueGradientStart: '0f172a',
@@ -156,44 +144,32 @@ export default function VisitorsBadgeGrid(): React.ReactElement {
       },
       {
         id: 'uniques-blue',
-        title: 'Unique Visits (Preto + Azul)',
+        title: 'Unique Visits',
         alt: 'Badge de unique visits com label preto e value azul',
         labelForMarkdown: 'Unique Visits',
-        path: '/api/github-traffic/clones/badge.svg',
+        path: '/api/unique-visits/{owner}/{repo}/badge.svg',
         query: {
-          owner: repoOwnerPlaceholder,
-          repo: repoNamePlaceholder,
-          type: 'uniques',
           labelColor: '0f172a',
           valueColor: '1d4ed8',
         },
         previewQuery: {
-          owner: 'i-c-l-org',
-          repo: 'kitsune',
-          type: 'uniques',
           labelColor: '0f172a',
           valueColor: '1d4ed8',
         },
       },
       {
         id: 'uniques-violet-gradient',
-        title: 'Unique Visits (Violeta + Preto)',
+        title: 'Unique Visits',
         alt: 'Badge de unique visits com gradiente violeta no label e preto no value',
         labelForMarkdown: 'Unique Visits',
-        path: '/api/github-traffic/clones/badge.svg',
+        path: '/api/unique-visits/{owner}/{repo}/badge.svg',
         query: {
-          owner: repoOwnerPlaceholder,
-          repo: repoNamePlaceholder,
-          type: 'uniques',
           labelGradientStart: '4c1d95',
           labelGradientEnd: '7c3aed',
           valueGradientStart: '0f172a',
           valueGradientEnd: '1e293b',
         },
         previewQuery: {
-          owner: 'i-c-l-org',
-          repo: 'kitsune',
-          type: 'uniques',
           labelGradientStart: '4c1d95',
           labelGradientEnd: '7c3aed',
           valueGradientStart: '0f172a',
@@ -207,9 +183,17 @@ export default function VisitorsBadgeGrid(): React.ReactElement {
   const resolveBadgePath = useCallback(
     (variant: VisitorVariant): string => {
       const pathTemplate = variant.path ?? DEFAULT_VISITORS_BADGE_PATH;
-      return pathTemplate.replace('{id}', visitorIdPlaceholder);
+      if (pathTemplate.includes('{id}')) {
+        return pathTemplate.replace('{id}', visitorIdPlaceholder);
+      }
+      if (pathTemplate.includes('{owner}') && pathTemplate.includes('{repo}')) {
+        return pathTemplate
+          .replace('{owner}', repoOwnerPlaceholder)
+          .replace('{repo}', repoNamePlaceholder);
+      }
+      return pathTemplate;
     },
-    [visitorIdPlaceholder],
+    [visitorIdPlaceholder, repoOwnerPlaceholder, repoNamePlaceholder],
   );
 
   const generateMarkdownCode = useCallback(

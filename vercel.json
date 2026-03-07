@@ -2,27 +2,9 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
   "installCommand": "npm ci --include=dev",
-  "buildCommand": "npm run build",
+  "buildCommand": "rm -rf .next && npm run build",
   "devCommand": "npm run dev",
   "outputDirectory": ".next",
   "framework": "nextjs",
-  "regions": ["gru1"],
-  "rewrites": [
-    {
-      "source": "/api/github-traffic/:path*",
-      "destination": "/api/github-traffic/:path*"
-    }
-  ],
-
-  "headers": [
-    {
-      "source": "/api/github-traffic/:path*",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-store, max-age=0"
-        }
-      ]
-    }
-  ]
+  "regions": ["gru1"]
 }
